@@ -602,7 +602,7 @@ public class HookHotDeployListener
 						portalProperties);
 					initEvents(
 						servletContextName, portletClassLoader,
-						portalProperties);
+						portalProperties, true);
 				}
 			}
 		}
@@ -979,6 +979,17 @@ public class HookHotDeployListener
 
 		String servletContextName = servletContext.getServletContextName();
 
+		ClassLoader portletClassLoader = hotDeployEvent.getContextClassLoader();
+
+		Properties portalProperties =
+			_portalPropertiesMap.get(servletContextName);
+
+		if (portalProperties.size() > 0) {
+			initEvents(
+				servletContextName, portletClassLoader,
+				portalProperties, false);
+		}
+	
 		if (_log.isDebugEnabled()) {
 			_log.debug("Invoking undeploy for " + servletContextName);
 		}
@@ -1064,9 +1075,8 @@ public class HookHotDeployListener
 			modelListenersContainer.unregisterModelListeners();
 		}
 
-		Properties portalProperties = _portalPropertiesMap.remove(
-			servletContextName);
-
+		portalProperties = _portalPropertiesMap.remove(servletContextName);
+		
 		if (portalProperties != null) {
 			destroyPortalProperties(servletContextName, portalProperties);
 		}
@@ -1367,7 +1377,8 @@ public class HookHotDeployListener
 			ClassLoader portletClassLoader)
 		throws Exception {
 
-		if (eventName.equals(APPLICATION_STARTUP_EVENTS)) {
+		if (eventName.equals(APPLICATION_STARTUP_EVENTS) ||
+			eventName.equals(APPLICATION_SHUTDOWN_EVENTS)) {
 			SimpleAction simpleAction =
 				(SimpleAction)portletClassLoader.loadClass(
 					eventClassName).newInstance();
@@ -1423,7 +1434,7 @@ public class HookHotDeployListener
 
 	protected void initEvents(
 			String servletContextName, ClassLoader portletClassLoader,
-			Properties portalProperties)
+			Properties portalProperties, boolean deploy)
 		throws Exception {
 
 		EventsContainer eventsContainer = new EventsContainer();
@@ -1433,7 +1444,15 @@ public class HookHotDeployListener
 		for (Map.Entry<Object, Object> entry : portalProperties.entrySet()) {
 			String key = (String)entry.getKey();
 
-			if (!key.equals(APPLICATION_STARTUP_EVENTS) &&
+			if (!deploy) {
+				if (key.equals(APPLICATION_SHUTDOWN_EVENTS)) {
+					_log.info("Invoking application shutdown events");
+				}
+				else {
+					continue;
+				}
+			}
+			else if (!key.equals(APPLICATION_STARTUP_EVENTS) &&
 				!ArrayUtil.contains(_PROPS_KEYS_EVENTS, key) &&
 				!ArrayUtil.contains(_PROPS_KEYS_SESSION_EVENTS, key)) {
 
