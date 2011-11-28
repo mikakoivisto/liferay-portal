@@ -1421,6 +1421,26 @@ public class DLAppServiceUtil {
 				   .getGroupFileEntriesCount(groupId, userId, rootFolderId);
 	}
 
+	public static int getGroupFileEntriesCount(long groupId, long userId,
+		long rootFolderId, int status, java.lang.String[] mimeTypes)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getGroupFileEntriesCount(groupId, userId, rootFolderId,
+			status, mimeTypes);
+	}
+
+	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
+		long groupId, long userId, long rootFolderId, int status,
+		java.lang.String[] mimeTypes, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getGroupFileEntries(groupId, userId, rootFolderId, status,
+			mimeTypes, start, end, obc);
+	}
+
 	/**
 	* Returns all immediate subfolders of the parent folder that are used for
 	* mounting third-party repositories. This method is only supported by the

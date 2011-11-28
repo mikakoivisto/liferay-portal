@@ -32,6 +32,14 @@ public class DLFileEntryFinderUtil {
 		return getFinder().countByG_F_S(groupId, folderIds, status);
 	}
 
+	public static int countByG_U_F_S(long groupId, long userId,
+		java.util.List<java.lang.Long> folderIds, int status,
+		java.lang.String[] mimeTypes)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder()
+				   .countByG_U_F_S(groupId, userId, folderIds, status, mimeTypes);
+	}
+
 	public static com.liferay.portlet.documentlibrary.model.DLFileEntry fetchByAnyImageId(
 		long imageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -49,6 +57,15 @@ public class DLFileEntryFinderUtil {
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryException {
 		return getFinder().findByAnyImageId(imageId);
+	}
+
+	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> findByG_U_F_S(
+		long groupId, long userId, java.util.List<java.lang.Long> folderIds,
+		int status, java.lang.String[] mimeTypes, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder()
+				   .findByG_U_F_S(groupId, userId, folderIds, status,
+			mimeTypes, start, end);
 	}
 
 	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> findByExtraSettings(

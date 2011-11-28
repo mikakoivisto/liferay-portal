@@ -194,11 +194,27 @@ public class DLFileEntryServiceWrapper implements DLFileEntryService,
 			rootFolderId, start, end, obc);
 	}
 
+	public java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> getGroupFileEntries(
+		long groupId, long userId, long rootFolderId, int status,
+		java.lang.String[] mimeTypes, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _dlFileEntryService.getGroupFileEntries(groupId, userId,
+			rootFolderId, status, mimeTypes, start, end, obc);
+	}
+
 	public int getGroupFileEntriesCount(long groupId, long userId,
 		long rootFolderId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _dlFileEntryService.getGroupFileEntriesCount(groupId, userId,
 			rootFolderId);
+	}
+
+	public int getGroupFileEntriesCount(long groupId, long userId,
+		long rootFolderId, int status, java.lang.String[] mimeTypes)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _dlFileEntryService.getGroupFileEntriesCount(groupId, userId,
+			rootFolderId, status, mimeTypes);
 	}
 
 	public boolean hasFileEntryLock(long fileEntryId)
