@@ -69,7 +69,7 @@ public interface DLAppService {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -117,7 +117,7 @@ public interface DLAppService {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -167,7 +167,7 @@ public interface DLAppService {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1259,6 +1259,14 @@ public interface DLAppService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
+		long groupId, long userId, long rootFolderId,
+		java.lang.String[] mimeTypes, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	/**
 	* Returns the number of file entries in a group starting at the repository
 	* default parent folder that are stored within the Liferay repository. This
@@ -1300,15 +1308,7 @@ public interface DLAppService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getGroupFileEntriesCount(long groupId, long userId,
-		long rootFolderId, int status, java.lang.String[] mimeTypes)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		long groupId, long userId, long rootFolderId, int status,
-		java.lang.String[] mimeTypes, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
+		long rootFolderId, java.lang.String[] mimeTypes, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -1641,7 +1641,7 @@ public interface DLAppService {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1692,7 +1692,7 @@ public interface DLAppService {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1744,7 +1744,7 @@ public interface DLAppService {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1814,7 +1814,7 @@ public interface DLAppService {
 	* @param description the folder's new description
 	* @param serviceContext the service context to be applied. In a Liferay
 	repository, it may include:
-	
+
 	<ul>
 	<li>
 	defaultFileEntryTypeId - the file entry type to default all

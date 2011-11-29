@@ -25,10 +25,9 @@ public interface DLFileEntryFinder {
 		java.util.List<java.lang.Long> folderIds, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public int countByG_U_F_S(long groupId, long userId,
-		java.util.List<java.lang.Long> folderIds, int status,
-		java.lang.String[] mimeTypes)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	public int countByG_U_F_M_S(long groupId, long userId,
+		java.util.List<java.lang.Long> folderIds, java.lang.String[] mimeTypes,
+		int status) throws com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.portlet.documentlibrary.model.DLFileEntry fetchByAnyImageId(
 		long imageId)
@@ -43,9 +42,10 @@ public interface DLFileEntryFinder {
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 
-	public java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> findByG_U_F_S(
+	public java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> findByG_U_F_M_S(
 		long groupId, long userId, java.util.List<java.lang.Long> folderIds,
-		int status, java.lang.String[] mimeTypes, int start, int end)
+		java.lang.String[] mimeTypes, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> findByExtraSettings(

@@ -63,7 +63,7 @@ public class DLAppServiceUtil {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -115,7 +115,7 @@ public class DLAppServiceUtil {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -169,7 +169,7 @@ public class DLAppServiceUtil {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1379,6 +1379,17 @@ public class DLAppServiceUtil {
 			end, obc);
 	}
 
+	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
+		long groupId, long userId, long rootFolderId,
+		java.lang.String[] mimeTypes, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getGroupFileEntries(groupId, userId, rootFolderId,
+			mimeTypes, status, start, end, obc);
+	}
+
 	/**
 	* Returns the number of file entries in a group starting at the repository
 	* default parent folder that are stored within the Liferay repository. This
@@ -1422,23 +1433,12 @@ public class DLAppServiceUtil {
 	}
 
 	public static int getGroupFileEntriesCount(long groupId, long userId,
-		long rootFolderId, int status, java.lang.String[] mimeTypes)
+		long rootFolderId, java.lang.String[] mimeTypes, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .getGroupFileEntriesCount(groupId, userId, rootFolderId,
-			status, mimeTypes);
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		long groupId, long userId, long rootFolderId, int status,
-		java.lang.String[] mimeTypes, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getGroupFileEntries(groupId, userId, rootFolderId, status,
-			mimeTypes, start, end, obc);
+			mimeTypes, status);
 	}
 
 	/**
@@ -1807,7 +1807,7 @@ public class DLAppServiceUtil {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1862,7 +1862,7 @@ public class DLAppServiceUtil {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1918,7 +1918,7 @@ public class DLAppServiceUtil {
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -2007,7 +2007,7 @@ public class DLAppServiceUtil {
 	* @param description the folder's new description
 	* @param serviceContext the service context to be applied. In a Liferay
 	repository, it may include:
-	
+
 	<ul>
 	<li>
 	defaultFileEntryTypeId - the file entry type to default all

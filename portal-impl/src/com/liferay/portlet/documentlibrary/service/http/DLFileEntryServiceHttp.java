@@ -833,7 +833,7 @@ public class DLFileEntryServiceHttp {
 
 	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> getGroupFileEntries(
 		HttpPrincipal httpPrincipal, long groupId, long userId,
-		long rootFolderId, int status, java.lang.String[] mimeTypes, int start,
+		long rootFolderId, java.lang.String[] mimeTypes, int status, int start,
 		int end, com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -841,7 +841,7 @@ public class DLFileEntryServiceHttp {
 					"getGroupFileEntries", _getGroupFileEntriesParameterTypes22);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					userId, rootFolderId, status, mimeTypes, start, end, obc);
+					userId, rootFolderId, mimeTypes, status, start, end, obc);
 
 			Object returnObj = null;
 
@@ -899,8 +899,8 @@ public class DLFileEntryServiceHttp {
 	}
 
 	public static int getGroupFileEntriesCount(HttpPrincipal httpPrincipal,
-		long groupId, long userId, long rootFolderId, int status,
-		java.lang.String[] mimeTypes)
+		long groupId, long userId, long rootFolderId,
+		java.lang.String[] mimeTypes, int status)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(DLFileEntryServiceUtil.class.getName(),
@@ -908,7 +908,7 @@ public class DLFileEntryServiceHttp {
 					_getGroupFileEntriesCountParameterTypes24);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					userId, rootFolderId, status, mimeTypes);
+					userId, rootFolderId, mimeTypes, status);
 
 			Object returnObj = null;
 
@@ -1277,16 +1277,16 @@ public class DLFileEntryServiceHttp {
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
 	private static final Class<?>[] _getGroupFileEntriesParameterTypes22 = new Class[] {
-			long.class, long.class, long.class, int.class,
-			java.lang.String[].class, int.class, int.class,
+			long.class, long.class, long.class, java.lang.String[].class,
+			int.class, int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
 	private static final Class<?>[] _getGroupFileEntriesCountParameterTypes23 = new Class[] {
 			long.class, long.class, long.class
 		};
 	private static final Class<?>[] _getGroupFileEntriesCountParameterTypes24 = new Class[] {
-			long.class, long.class, long.class, int.class,
-			java.lang.String[].class
+			long.class, long.class, long.class, java.lang.String[].class,
+			int.class
 		};
 	private static final Class<?>[] _hasFileEntryLockParameterTypes25 = new Class[] {
 			long.class

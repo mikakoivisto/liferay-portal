@@ -2057,6 +2057,45 @@ public class DLAppServiceHttp {
 		}
 	}
 
+	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
+		HttpPrincipal httpPrincipal, long groupId, long userId,
+		long rootFolderId, java.lang.String[] mimeTypes, int status, int start,
+		int end, com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			MethodKey methodKey = new MethodKey(DLAppServiceUtil.class.getName(),
+					"getGroupFileEntries", _getGroupFileEntriesParameterTypes53);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
+					userId, rootFolderId, mimeTypes, status, start, end, obc);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
+					throw (com.liferay.portal.kernel.exception.PortalException)e;
+				}
+
+				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
+					throw (com.liferay.portal.kernel.exception.SystemException)e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(e);
+			}
+
+			return (java.util.List<com.liferay.portal.kernel.repository.model.FileEntry>)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	public static int getGroupFileEntriesCount(HttpPrincipal httpPrincipal,
 		long groupId, long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -2064,7 +2103,7 @@ public class DLAppServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(DLAppServiceUtil.class.getName(),
 					"getGroupFileEntriesCount",
-					_getGroupFileEntriesCountParameterTypes53);
+					_getGroupFileEntriesCountParameterTypes54);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
 					userId);
@@ -2102,7 +2141,7 @@ public class DLAppServiceHttp {
 		try {
 			MethodKey methodKey = new MethodKey(DLAppServiceUtil.class.getName(),
 					"getGroupFileEntriesCount",
-					_getGroupFileEntriesCountParameterTypes54);
+					_getGroupFileEntriesCountParameterTypes55);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
 					userId, rootFolderId);
@@ -2134,17 +2173,17 @@ public class DLAppServiceHttp {
 	}
 
 	public static int getGroupFileEntriesCount(HttpPrincipal httpPrincipal,
-		long groupId, long userId, long rootFolderId, int status,
-		java.lang.String[] mimeTypes)
+		long groupId, long userId, long rootFolderId,
+		java.lang.String[] mimeTypes, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(DLAppServiceUtil.class.getName(),
 					"getGroupFileEntriesCount",
-					_getGroupFileEntriesCountParameterTypes55);
+					_getGroupFileEntriesCountParameterTypes56);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					userId, rootFolderId, status, mimeTypes);
+					userId, rootFolderId, mimeTypes, status);
 
 			Object returnObj = null;
 
@@ -2164,45 +2203,6 @@ public class DLAppServiceHttp {
 			}
 
 			return ((Integer)returnObj).intValue();
-		}
-		catch (com.liferay.portal.kernel.exception.SystemException se) {
-			_log.error(se, se);
-
-			throw se;
-		}
-	}
-
-	public static java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		HttpPrincipal httpPrincipal, long groupId, long userId,
-		long rootFolderId, int status, java.lang.String[] mimeTypes, int start,
-		int end, com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		try {
-			MethodKey methodKey = new MethodKey(DLAppServiceUtil.class.getName(),
-					"getGroupFileEntries", _getGroupFileEntriesParameterTypes56);
-
-			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
-					userId, rootFolderId, status, mimeTypes, start, end, obc);
-
-			Object returnObj = null;
-
-			try {
-				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
-			}
-			catch (Exception e) {
-				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
-					throw (com.liferay.portal.kernel.exception.PortalException)e;
-				}
-
-				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
-					throw (com.liferay.portal.kernel.exception.SystemException)e;
-				}
-
-				throw new com.liferay.portal.kernel.exception.SystemException(e);
-			}
-
-			return (java.util.List<com.liferay.portal.kernel.repository.model.FileEntry>)returnObj;
 		}
 		catch (com.liferay.portal.kernel.exception.SystemException se) {
 			_log.error(se, se);
@@ -3428,20 +3428,20 @@ public class DLAppServiceHttp {
 			long.class, long.class, long.class, int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
-	private static final Class<?>[] _getGroupFileEntriesCountParameterTypes53 = new Class[] {
-			long.class, long.class
+	private static final Class<?>[] _getGroupFileEntriesParameterTypes53 = new Class[] {
+			long.class, long.class, long.class, java.lang.String[].class,
+			int.class, int.class, int.class,
+			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
 	private static final Class<?>[] _getGroupFileEntriesCountParameterTypes54 = new Class[] {
-			long.class, long.class, long.class
+			long.class, long.class
 		};
 	private static final Class<?>[] _getGroupFileEntriesCountParameterTypes55 = new Class[] {
-			long.class, long.class, long.class, int.class,
-			java.lang.String[].class
+			long.class, long.class, long.class
 		};
-	private static final Class<?>[] _getGroupFileEntriesParameterTypes56 = new Class[] {
-			long.class, long.class, long.class, int.class,
-			java.lang.String[].class, int.class, int.class,
-			com.liferay.portal.kernel.util.OrderByComparator.class
+	private static final Class<?>[] _getGroupFileEntriesCountParameterTypes56 = new Class[] {
+			long.class, long.class, long.class, java.lang.String[].class,
+			int.class
 		};
 	private static final Class<?>[] _getMountFoldersParameterTypes57 = new Class[] {
 			long.class, long.class

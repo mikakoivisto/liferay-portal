@@ -640,11 +640,11 @@ public class DLAppServiceSoap {
 	}
 
 	public static int getGroupFileEntriesCount(long groupId, long userId,
-		long rootFolderId, int status, java.lang.String[] mimeTypes)
+		long rootFolderId, java.lang.String[] mimeTypes, int status)
 		throws RemoteException {
 		try {
 			int returnValue = DLAppServiceUtil.getGroupFileEntriesCount(groupId,
-					userId, rootFolderId, status, mimeTypes);
+					userId, rootFolderId, mimeTypes, status);
 
 			return returnValue;
 		}

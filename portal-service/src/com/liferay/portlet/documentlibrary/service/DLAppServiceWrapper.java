@@ -56,7 +56,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -108,7 +108,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -162,7 +162,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1353,6 +1353,16 @@ public class DLAppServiceWrapper implements DLAppService,
 			start, end, obc);
 	}
 
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
+		long groupId, long userId, long rootFolderId,
+		java.lang.String[] mimeTypes, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlAppService.getGroupFileEntries(groupId, userId, rootFolderId,
+			mimeTypes, status, start, end, obc);
+	}
+
 	/**
 	* Returns the number of file entries in a group starting at the repository
 	* default parent folder that are stored within the Liferay repository. This
@@ -1396,21 +1406,11 @@ public class DLAppServiceWrapper implements DLAppService,
 	}
 
 	public int getGroupFileEntriesCount(long groupId, long userId,
-		long rootFolderId, int status, java.lang.String[] mimeTypes)
+		long rootFolderId, java.lang.String[] mimeTypes, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlAppService.getGroupFileEntriesCount(groupId, userId,
-			rootFolderId, status, mimeTypes);
-	}
-
-	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getGroupFileEntries(
-		long groupId, long userId, long rootFolderId, int status,
-		java.lang.String[] mimeTypes, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _dlAppService.getGroupFileEntries(groupId, userId, rootFolderId,
-			status, mimeTypes, start, end, obc);
+			rootFolderId, mimeTypes, status);
 	}
 
 	/**
@@ -1774,7 +1774,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1829,7 +1829,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1885,7 +1885,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param serviceContext the service context to be applied. Can specify the
 	file entry's asset category IDs, asset tag names, and expando
 	bridge attributes. In a Liferay repository, it may include:
-	
+
 	<ul>
 	<li>
 	fileEntryTypeId - ID for a custom file entry type
@@ -1970,7 +1970,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param description the folder's new description
 	* @param serviceContext the service context to be applied. In a Liferay
 	repository, it may include:
-	
+
 	<ul>
 	<li>
 	defaultFileEntryTypeId - the file entry type to default all
