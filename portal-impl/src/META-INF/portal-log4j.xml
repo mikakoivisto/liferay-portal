@@ -330,6 +330,14 @@
 		<priority value="INFO" />
 	</category>
 
+	<category name="com.liferay.portal.kernel.servlet.ServletRequestUtil">
+		<priority value="INFO" />
+	</category>
+
+	<category name="com.liferay.portal.kernel.servlet.ServletResponseUtil">
+		<priority value="INFO" />
+	</category>
+
 	<category name="com.liferay.portal.lar">
 		<priority value="ERROR" />
 	</category>
@@ -626,6 +634,10 @@
 		<priority value="ERROR" />
 	</category>
 
+	<category name="com.liferay.portal.struts.JSONAction">
+		<priority value="ERROR" />
+	</category>
+
 	<category name="com.liferay.portal.struts.MultiMessageResources">
 		<priority value="ERROR" />
 	</category>
@@ -914,6 +926,10 @@
 		<priority value="INFO" />
 	</category>
 
+	<category name="com.liferay.util.Encryptor">
+		<priority value="WARN" />
+	</category>
+
 	<category name="com.liferay.util.JNDIUtil">
 		<priority value="ERROR" />
 	</category>
@@ -932,14 +948,6 @@
 
 	<category name="com.liferay.util.portlet.PortletRequestUtil">
 		<priority value="INFO" />
-	</category>
-
-	<category name="com.liferay.util.servlet.ServletRequestUtil">
-		<priority value="INFO" />
-	</category>
-
-	<category name="com.liferay.util.servlet.ServletResponseUtil">
-		<priority value="ERROR" />
 	</category>
 
 	<category name="com.mchange">

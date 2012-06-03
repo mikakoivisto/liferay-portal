@@ -1182,7 +1182,7 @@ rerun this task.
 
 		<mkdir dir="${tstamp.value}" />
 
-		<echo file="${tstamp.value}/create-weblogic-domain.py">readTemplate('${app.server.weblogic.wlserver.dir.unix}/common/templates/domains/wls.jar')
+		<echo file="${tstamp.value}/create-weblogic-domain.py">readTemplate('${app.server.weblogic.wlserver.dir}/common/templates/domains/wls.jar')
 
 set('Name', '${app.server.weblogic.instance.name}')
 
@@ -1195,7 +1195,7 @@ cd('/Servers/AdminServer')
 set('ListenAddress', '')
 set('ListenPort', 8080)
 
-writeDomain('${app.server.weblogic.instance.dir.unix}')
+writeDomain('${app.server.weblogic.instance.dir}')
 
 closeTemplate()</echo>
 
@@ -1203,7 +1203,7 @@ closeTemplate()</echo>
 			<os family="windows" />
 			<then>
 				<exec dir="${app.server.weblogic.dir}" executable="cmd">
-					<env key="MW_HOME" value="${app.server.weblogic.dir}" />
+					<env key="MW_HOME" value="${app.server.weblogic.dir.windows}" />
 					<arg value="/c" />
 					<arg value="configure.cmd" />
 				</exec>
@@ -1212,9 +1212,9 @@ closeTemplate()</echo>
 
 set "USER_MEM_ARGS=-Xmx1024m -XX:PermSize=256m"
 
-set "MW_HOME=${app.server.weblogic.dir}"
+set "MW_HOME=${app.server.weblogic.dir.windows}"
 
-set "WL_HOME=${app.server.weblogic.wlserver.dir}"
+set "WL_HOME=${app.server.weblogic.wlserver.dir.windows}"
 
 call %WL_HOME%/common/bin/commEnv.cmd
 
@@ -1231,7 +1231,7 @@ set "CLASSPATH=%FMWCONFIG_CLASSPATH%"
 
 set "USER_MEM_ARGS=-Xmx1024m -XX:PermSize=512m"
 
-set "MW_HOME=${app.server.weblogic.dir}"
+set "MW_HOME=${app.server.weblogic.dir.windows}"
 
 call startWebLogic.cmd</echo>
 			</then>
@@ -1366,7 +1366,7 @@ them in ${app.server.parent.dir}. Then rerun this task.
 		/>
 
 		<echo file="${tstamp.value}/updi/UpdateInstaller/liferay-responsefile.txt">
-			-OPT installLocation="${app.server.websphere.dir}\UpdateInstaller"
+			-OPT installLocation="${app.server.websphere.dir}/UpdateInstaller"
 			-OPT silentInstallLicenseAcceptance="true"
 			-OPT skipStartMenu=true
 		</echo>
@@ -1378,7 +1378,7 @@ them in ${app.server.parent.dir}. Then rerun this task.
 		</exec>
 
 		<echo file="${app.server.websphere.dir}/UpdateInstaller/liferay-responsefile.txt">
-			-W maintenance.package="${app.server.parent.dir}\${app.server.websphere.fix.pack.jdk.name};${app.server.parent.dir}\${app.server.websphere.fix.pack.was.name}"
+			-W maintenance.package="${app.server.parent.dir}/${app.server.websphere.fix.pack.jdk.name};${app.server.parent.dir}/${app.server.websphere.fix.pack.was.name}"
 			-W product.location="${app.server.websphere.dir}"
 			-W update.type="install"
 		</echo>

@@ -822,9 +822,9 @@ appManager = AdminControl.queryNames('type=ApplicationManager,process=server1,*'
 if isAppInstalled('liferay-portal'):
 	print AdminControl.invoke(appManager, 'stopApplication', 'liferay-portal')
 
-	print AdminApp.update('liferay-portal', 'app', '[-contents ${app.server.websphere.instance.dir.unix}/wsadmin-deploy/liferay-portal.war -contextroot / -operation update]')
+	print AdminApp.update('liferay-portal', 'app', '[-contents ${app.server.websphere.instance.dir}/wsadmin-deploy/liferay-portal.war -contextroot / -operation update]')
 else:
-	print AdminApp.install('${app.server.websphere.instance.dir.unix}/wsadmin-deploy/liferay-portal.war', '[-appname liferay-portal -contextroot /]')
+	print AdminApp.install('${app.server.websphere.instance.dir}/wsadmin-deploy/liferay-portal.war', '[-appname liferay-portal -contextroot /]')
 
 print AdminConfig.save()
 
