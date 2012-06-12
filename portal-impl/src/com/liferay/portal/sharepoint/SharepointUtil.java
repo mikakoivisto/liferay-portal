@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -46,29 +45,13 @@ public class SharepointUtil {
 	public static long getGroupId(String path) {
 		long groupId = 0;
 
-		String[] pathArray = getPathArray(path);
+		long companyId = CompanyThreadLocal.getCompanyId();
 
-		String groupFolderName = pathArray[0];
-
-		if (groupFolderName != null) {
-			int pos = groupFolderName.lastIndexOf(CharPool.OPEN_BRACKET);
-
-			if (pos != -1) {
-				 groupId = GetterUtil.getLong(
-					groupFolderName.substring(
-						pos, groupFolderName.length() - 1));
-			}
-			else {
-				long companyId = CompanyThreadLocal.getCompanyId();
-
-				try {
-					groupId = WebDAVUtil.getGroupId(companyId, path);
-				}
-				catch (WebDAVException wde) {
-					_log.warn("Unable to get groupId for path " + path);
-				}
-			}
-
+		try {
+			groupId = WebDAVUtil.getGroupId(companyId, path);
+		}
+		catch (WebDAVException wde) {
+			_log.warn("Unable to get groupId for path " + path);
 		}
 
 		return groupId;
