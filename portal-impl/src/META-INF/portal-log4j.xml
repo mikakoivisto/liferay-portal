@@ -714,6 +714,10 @@
 		<priority value="ERROR" />
 	</category>
 
+	<category name="com.liferay.portal.sharepoint">
+		<priority value="ERROR" />
+	</category>
+
 	<category name="com.liferay.portal.spring">
 		<priority value="ERROR" />
 	</category>
@@ -940,6 +944,10 @@
 
 	<category name="com.liferay.portlet.documentlibrary.util.DLIndexer">
 		<priority value="ERROR" />
+	</category>
+
+	<category name="com.liferay.portlet.documentlibrary.sharepoint">
+		<priority value="WARN" />
 	</category>
 
 	<category name="com.liferay.portlet.documentlibrary.webdav">
