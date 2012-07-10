@@ -81,6 +81,7 @@ create index IX_BB0C2905 on BlogsEntry (companyId, displayDate, status);
 create index IX_EB2DCE27 on BlogsEntry (companyId, status);
 create index IX_8CACE77B on BlogsEntry (companyId, userId);
 create index IX_A5F57B61 on BlogsEntry (companyId, userId, status);
+create index IX_2672F77F on BlogsEntry (displayDate, status);
 create index IX_81A50303 on BlogsEntry (groupId);
 create index IX_621E19D on BlogsEntry (groupId, displayDate);
 create index IX_F0E73383 on BlogsEntry (groupId, displayDate, status);
@@ -791,6 +792,7 @@ create index IX_B2468446 on Ticket (key_);
 create unique index IX_B35F73D5 on TrashEntry (classNameId, classPK);
 create index IX_2674F2A8 on TrashEntry (companyId);
 create index IX_526A032A on TrashEntry (groupId);
+create index IX_6CAAE2E8 on TrashEntry (groupId, createDate);
 
 create index IX_630A643B on TrashVersion (classNameId, classPK);
 create index IX_55D44577 on TrashVersion (entryId);

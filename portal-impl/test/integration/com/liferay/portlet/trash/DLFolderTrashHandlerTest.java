@@ -16,11 +16,11 @@ package com.liferay.portlet.trash;
 
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.repository.liferayrepository.model.LiferayFileVersion;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.test.EnvironmentExecutionTestListener;
 import com.liferay.portal.test.ExecutionTestListeners;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
-import com.liferay.portal.util.TestPropsValues;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
@@ -36,6 +36,25 @@ import org.junit.runner.RunWith;
 @ExecutionTestListeners(listeners = {EnvironmentExecutionTestListener.class})
 @RunWith(LiferayIntegrationJUnitTestRunner.class)
 public class DLFolderTrashHandlerTest extends BaseDLTrashHandlerTestCase {
+
+	@Test
+	public void testFileIsInTrashFolder() throws Exception {
+		Folder folder = addFolder(false, "Test Folder");
+
+		Folder subfolder = addFolder(folder.getFolderId(), "Test Subfolder");
+
+		FileEntry fileEntry = addFileEntry(
+			subfolder.getFolderId(), "Test File.txt");
+
+		LiferayFileVersion liferayFileVersion =
+			(LiferayFileVersion)fileEntry.getFileVersion();
+
+		Assert.assertFalse(liferayFileVersion.isInTrashFolder());
+
+		DLAppServiceUtil.moveFolderToTrash(folder.getFolderId());
+
+		Assert.assertTrue(liferayFileVersion.isInTrashFolder());
+	}
 
 	@Test
 	public void testTrashAndDelete() throws Exception {
@@ -95,8 +114,6 @@ public class DLFolderTrashHandlerTest extends BaseDLTrashHandlerTestCase {
 
 			addFileRank(fileEntryId);
 
-			Thread.sleep(1000 * TestPropsValues.JUNIT_DELAY_FACTOR);
-
 			Assert.assertEquals(
 				initialSearchFileEntriesCount + 1, searchFileEntriesCount());
 			Assert.assertTrue(
@@ -132,8 +149,6 @@ public class DLFolderTrashHandlerTest extends BaseDLTrashHandlerTestCase {
 				initialTrashEntriesCount + 1, getTrashEntriesCount());
 		}
 
-		Thread.sleep(1000 * TestPropsValues.JUNIT_DELAY_FACTOR);
-
 		Assert.assertEquals(
 			initialSearchFileEntriesCount, searchFileEntriesCount());
 
@@ -146,8 +161,6 @@ public class DLFolderTrashHandlerTest extends BaseDLTrashHandlerTestCase {
 
 		if (delete) {
 			TrashEntryServiceUtil.deleteEntries(folder.getGroupId());
-
-			Thread.sleep(1000 * TestPropsValues.JUNIT_DELAY_FACTOR);
 
 			Assert.assertEquals(initialNotInTrashCount, getNotInTrashCount());
 			Assert.assertEquals(
@@ -164,8 +177,6 @@ public class DLFolderTrashHandlerTest extends BaseDLTrashHandlerTestCase {
 				fileEntryId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 				ServiceTestUtil.getServiceContext());
 
-			Thread.sleep(1000 * TestPropsValues.JUNIT_DELAY_FACTOR);
-
 			Assert.assertTrue(
 				isAssetEntryVisible(
 					DLFileEntryConstants.getClassName(), fileEntryId));
@@ -175,8 +186,6 @@ public class DLFolderTrashHandlerTest extends BaseDLTrashHandlerTestCase {
 		}
 		else {
 			DLAppServiceUtil.restoreFolderFromTrash(folder.getFolderId());
-
-			Thread.sleep(1000 * TestPropsValues.JUNIT_DELAY_FACTOR);
 
 			Assert.assertEquals(
 				initialNotInTrashCount + 1, getNotInTrashCount());
@@ -210,6 +219,8 @@ public class DLFolderTrashHandlerTest extends BaseDLTrashHandlerTestCase {
 		if (moveFileFromTrash) {
 			Assert.assertEquals(
 				initialTrashEntriesCount +1, getTrashEntriesCount());
+
+			DLAppServiceUtil.deleteFileEntry(fileEntryId);
 		}
 		else {
 			Assert.assertEquals(

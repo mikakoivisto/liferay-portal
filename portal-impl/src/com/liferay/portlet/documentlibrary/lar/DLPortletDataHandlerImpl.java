@@ -719,6 +719,11 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 	}
 
 	@Override
+	public boolean isDataLocalized() {
+		return _DATA_LOCALIZED;
+	}
+
+	@Override
 	public boolean isPublishToLiveByDefault() {
 		return PropsValues.DL_PUBLISH_TO_LIVE_BY_DEFAULT;
 	}
@@ -1147,10 +1152,10 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 	}
 
 	/**
-	 * @see {@link PortletImporter#getAssetCategoryName(String, long, long,
-	 *	  String, int)}
-	 * @see {@link PortletImporter#getAssetVocabularyName(String, long, String,
-	 *	  int)}
+	 * @see com.liferay.portal.lar.PortletImporter#getAssetCategoryName(String,
+	 *      long, long, String, int)
+	 * @see com.liferay.portal.lar.PortletImporter#getAssetVocabularyName(
+	 *      String, long, String, int)
 	 */
 	protected static String getFileEntryTypeName(
 			String uuid, long groupId, String name, int count)
@@ -1218,10 +1223,10 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 	}
 
 	/**
-	 * @see {@link PortletImporter#getAssetCategoryName(String, long, long,
-	 *	  String, int)}
-	 * @see {@link PortletImporter#getAssetVocabularyName(String, long, String,
-	 *	  int)}
+	 * @see com.liferay.portal.lar.PortletImporter#getAssetCategoryName(String,
+	 *      long, long, String, int)
+	 * @see com.liferay.portal.lar.PortletImporter#getAssetVocabularyName(
+	 *      String, long, String, int)
 	 */
 	protected static String getFolderName(
 			String uuid, long groupId, long parentFolderId, String name,
@@ -1909,6 +1914,8 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 	}
 
 	private static final boolean _ALWAYS_EXPORTABLE = true;
+
+	private static final boolean _DATA_LOCALIZED = true;
 
 	private static final String _NAMESPACE = "document_library";
 

@@ -816,6 +816,8 @@ public class PropsValues {
 
 	public static final int LAYOUT_PARALLEL_RENDER_TIMEOUT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.LAYOUT_PARALLEL_RENDER_TIMEOUT));
 
+	public static boolean LAYOUT_PROTOTYPE_LINK_ENABLED_DEFAULT = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.LAYOUT_PROTOTYPE_LINK_ENABLED_DEFAULT));
+
 	public static final int LAYOUT_PROTOTYPE_MERGE_FAIL_THRESHOLD = GetterUtil.getInteger(PropsUtil.get(PropsKeys.LAYOUT_PROTOTYPE_MERGE_FAIL_THRESHOLD));
 
 	public static final long LAYOUT_PROTOTYPE_MERGE_LOCK_MAX_TIME = GetterUtil.getLong(PropsUtil.get(PropsKeys.LAYOUT_PROTOTYPE_MERGE_LOCK_MAX_TIME)) * Time.SECOND;
@@ -1031,6 +1033,8 @@ public class PropsValues {
 	public static final String MICROSOFT_TRANSLATOR_CLIENT_SECRET = PropsUtil.get(PropsKeys.MICROSOFT_TRANSLATOR_CLIENT_SECRET);
 
 	public static final String[] MIME_TYPES_CONTENT_DISPOSITION_INLINE = PropsUtil.getArray(PropsKeys.MIME_TYPES_CONTENT_DISPOSITION_INLINE);
+
+	public static final boolean MINIFIER_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.MINIFIER_ENABLED));
 
 	public static final int MINIFIER_FILES_LIMIT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.MINIFIER_FILES_LIMIT));
 
@@ -1568,6 +1572,10 @@ public class PropsValues {
 
 	public static final boolean TRANSLATIONS_DISABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.TRANSLATIONS_DISABLED));
 
+	public static final int TRASH_ENABLED = GetterUtil.getInteger(PropsUtil.get(PropsKeys.TRASH_ENABLED));
+
+	public static final int TRASH_ENTRIES_MAX_AGE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.TRASH_ENTRIES_MAX_AGE));
+
 	public static final int TRASH_SEARCH_LIMIT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.TRASH_SEARCH_LIMIT));
 
 	public static boolean USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.USER_GROUPS_COPY_LAYOUTS_TO_USER_PERSONAL_SITE));
@@ -1582,9 +1590,9 @@ public class PropsValues {
 
 	public static final String USERS_EMAIL_ADDRESS_GENERATOR = PropsUtil.get(PropsKeys.USERS_EMAIL_ADDRESS_GENERATOR);
 
-	public static final String USERS_EMAIL_ADDRESS_VALIDATOR = PropsUtil.get(PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR);
-
 	public static boolean USERS_EMAIL_ADDRESS_REQUIRED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED));
+
+	public static final String USERS_EMAIL_ADDRESS_VALIDATOR = PropsUtil.get(PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR);
 
 	public static final String[] USERS_EXPORT_CSV_FIELDS = PropsUtil.getArray(PropsKeys.USERS_EXPORT_CSV_FIELDS);
 
@@ -1682,8 +1690,6 @@ public class PropsValues {
 
 	public static final boolean WEB_SERVER_SERVLET_DIRECTORY_INDEXING_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.WEB_SERVER_SERVLET_DIRECTORY_INDEXING_ENABLED));
 
-	public static final boolean WEB_SERVER_SERVLET_HTTP_STATUS_CODE_STRICT = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.WEB_SERVER_SERVLET_HTTP_STATUS_CODE_STRICT));
-
 	public static final String WEB_SERVER_SERVLET_VERSION_VERBOSITY = GetterUtil.getString(PropsUtil.get(PropsKeys.WEB_SERVER_SERVLET_VERSION_VERBOSITY));
 
 	public static final String[] WEBDAV_IGNORE = PropsUtil.getArray(PropsKeys.WEBDAV_IGNORE);
@@ -1701,6 +1707,10 @@ public class PropsValues {
 	public static final String WIKI_INITIAL_NODE_NAME = PropsUtil.get(PropsKeys.WIKI_INITIAL_NODE_NAME);
 
 	public static final boolean WIKI_PAGE_COMMENTS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.WIKI_PAGE_COMMENTS_ENABLED));
+
+	public static final boolean WIKI_PAGE_MINOR_EDIT_ADD_SOCIAL_ACTIVITY = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.WIKI_PAGE_MINOR_EDIT_ADD_SOCIAL_ACTIVITY));
+
+	public static final boolean WIKI_PAGE_MINOR_EDIT_SEND_EMAIL = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.WIKI_PAGE_MINOR_EDIT_SEND_EMAIL));
 
 	public static final boolean WIKI_PAGE_RATINGS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.WIKI_PAGE_RATINGS_ENABLED));
 

@@ -19,9 +19,11 @@ import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.template.PortletDisplayTemplateHandlerRegistryUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.dynamicdatamapping.lar.DDMPortletDataHandlerImpl;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
@@ -59,10 +61,9 @@ public class PortletDisplayTemplatesPortletDataHandlerImpl
 
 		Document document = SAXReaderUtil.createDocument();
 
-		Element rootElement = document.addElement(
-			"application-display-templates");
+		Element rootElement = document.addElement("portlet-display-templates");
 
-		exportApplicationDisplayStyles(portletDataContext, rootElement);
+		exportPortletDisplayTemplates(portletDataContext, rootElement);
 
 		return document.formattedString();
 	}
@@ -77,8 +78,7 @@ public class PortletDisplayTemplatesPortletDataHandlerImpl
 
 		Element rootElement = document.getRootElement();
 
-		List<Element> ddmTemplateElements = rootElement.elements(
-			"ddm-template");
+		List<Element> ddmTemplateElements = rootElement.elements("template");
 
 		for (Element ddmTemplateElement : ddmTemplateElements) {
 			DDMPortletDataHandlerImpl.importTemplate(
@@ -88,9 +88,9 @@ public class PortletDisplayTemplatesPortletDataHandlerImpl
 		return null;
 	}
 
-	protected void exportApplicationDisplayStyles(
+	protected void exportPortletDisplayTemplates(
 			PortletDataContext portletDataContext,
-			Element applicationDisplayStylesElement)
+			Element portletDisplayTemplatesElement)
 		throws Exception {
 
 		long[] classNameIds =
@@ -103,10 +103,26 @@ public class PortletDisplayTemplatesPortletDataHandlerImpl
 
 			for (DDMTemplate ddmTemplate : ddmTemplates) {
 				DDMPortletDataHandlerImpl.exportTemplate(
-					portletDataContext, applicationDisplayStylesElement,
+					portletDataContext, portletDisplayTemplatesElement,
+					getTemplatePath(portletDataContext, ddmTemplate),
 					ddmTemplate);
 			}
 		}
+	}
+
+	protected String getTemplatePath(
+		PortletDataContext portletDataContext, DDMTemplate template) {
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(
+			portletDataContext.getPortletPath(
+				PortletKeys.PORTLET_DISPLAY_TEMPLATES));
+		sb.append("/templates/");
+		sb.append(template.getTemplateId());
+		sb.append(".xml");
+
+		return sb.toString();
 	}
 
 	private static final boolean _ALWAYS_EXPORTABLE = true;

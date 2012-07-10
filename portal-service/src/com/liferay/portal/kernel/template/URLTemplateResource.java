@@ -17,11 +17,12 @@ package com.liferay.portal.kernel.template;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -44,15 +45,30 @@ public class URLTemplateResource implements TemplateResource {
 	}
 
 	public long getLastModified() {
-		InputStream inputStream = null;
+		URLConnection urlConnection = null;
 
 		try {
-			URLConnection urlConnection = _templateURL.openConnection();
+			urlConnection = _templateURL.openConnection();
+
+			if (urlConnection instanceof JarURLConnection) {
+				JarURLConnection jarURLConnection =
+					(JarURLConnection)urlConnection;
+
+				URL url = jarURLConnection.getJarFileURL();
+
+				String protocol = url.getProtocol();
+
+				if (protocol.equals("file")) {
+					return new File(url.getFile()).lastModified();
+				}
+				else {
+					urlConnection = url.openConnection();
+				}
+			}
 
 			return urlConnection.getLastModified();
 		}
-
-		catch(IOException ioe) {
+		catch (IOException ioe) {
 			_log.error(
 				"Unable to get last modified time for template " + _templateId,
 				ioe);
@@ -60,9 +76,9 @@ public class URLTemplateResource implements TemplateResource {
 			return 0;
 		}
 		finally {
-			if (inputStream != null) {
+			if (urlConnection != null) {
 				try {
-					inputStream.close();
+					urlConnection.getInputStream().close();
 				}
 				catch (IOException ioe) {
 				}
@@ -75,8 +91,10 @@ public class URLTemplateResource implements TemplateResource {
 			return null;
 		}
 
+		URLConnection urlConnection = _templateURL.openConnection();
+
 		return new InputStreamReader(
-			_templateURL.openStream(), DEFAUT_ENCODING);
+			urlConnection.getInputStream(), DEFAUT_ENCODING);
 	}
 
 	public String getTemplateId() {

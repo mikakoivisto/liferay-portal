@@ -684,6 +684,9 @@ public class StagingImpl implements Staging {
 			PortletDataHandlerKeys.IGNORE_LAST_PUBLISH_DATE,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
+			PortletDataHandlerKeys.LAYOUT_SET_PROTOTYPE_LINK_ENABLED,
+			new String[] {Boolean.FALSE.toString()});
+		parameterMap.put(
 			PortletDataHandlerKeys.LAYOUT_SET_SETTINGS,
 			new String[] {Boolean.FALSE.toString()});
 		parameterMap.put(
@@ -747,6 +750,14 @@ public class StagingImpl implements Staging {
 
 			parameterMap.put(
 				PortletDataHandlerKeys.DELETE_PORTLET_DATA,
+				new String[] {Boolean.FALSE.toString()});
+		}
+
+		if (!parameterMap.containsKey(
+				PortletDataHandlerKeys.LAYOUT_SET_PROTOTYPE_LINK_ENABLED)) {
+
+			parameterMap.put(
+				PortletDataHandlerKeys.LAYOUT_SET_PROTOTYPE_LINK_ENABLED,
 				new String[] {Boolean.FALSE.toString()});
 		}
 

@@ -219,7 +219,7 @@ request.setAttribute("view_folders.jsp-total", String.valueOf(total));
 							<liferay-portlet:renderURL copyCurrentRenderParameters="<%= false %>" varImpl="expandURL">
 								<portlet:param name="struts_action" value="/journal/view" />
 								<portlet:param name="folderId" value="<%= String.valueOf(curFolder.getFolderId()) %>" />
-								<portlet:param name="expandFolder" value="<%= String.valueOf(Boolean.TRUE.toString()) %>" />
+								<portlet:param name="expandFolder" value="<%= Boolean.TRUE.toString() %>" />
 							</liferay-portlet:renderURL>
 
 							<li class="folder <%= (curFolder.getFolderId() == folderId) ? "selected" : StringPool.BLANK %>">

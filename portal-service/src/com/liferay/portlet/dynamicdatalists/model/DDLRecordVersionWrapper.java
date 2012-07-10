@@ -502,6 +502,15 @@ public class DDLRecordVersionWrapper implements DDLRecordVersion,
 	}
 
 	/**
+	* Returns <code>true</code> if this d d l record version is denied.
+	*
+	* @return <code>true</code> if this d d l record version is denied; <code>false</code> otherwise
+	*/
+	public boolean isDenied() {
+		return _ddlRecordVersion.isDenied();
+	}
+
+	/**
 	* Returns <code>true</code> if this d d l record version is a draft.
 	*
 	* @return <code>true</code> if this d d l record version is a draft; <code>false</code> otherwise
@@ -520,6 +529,24 @@ public class DDLRecordVersionWrapper implements DDLRecordVersion,
 	}
 
 	/**
+	* Returns <code>true</code> if this d d l record version is inactive.
+	*
+	* @return <code>true</code> if this d d l record version is inactive; <code>false</code> otherwise
+	*/
+	public boolean isInactive() {
+		return _ddlRecordVersion.isInactive();
+	}
+
+	/**
+	* Returns <code>true</code> if this d d l record version is incomplete.
+	*
+	* @return <code>true</code> if this d d l record version is incomplete; <code>false</code> otherwise
+	*/
+	public boolean isIncomplete() {
+		return _ddlRecordVersion.isIncomplete();
+	}
+
+	/**
 	* Returns <code>true</code> if this d d l record version is in the Recycle Bin.
 	*
 	* @return <code>true</code> if this d d l record version is in the Recycle Bin; <code>false</code> otherwise
@@ -535,6 +562,15 @@ public class DDLRecordVersionWrapper implements DDLRecordVersion,
 	*/
 	public boolean isPending() {
 		return _ddlRecordVersion.isPending();
+	}
+
+	/**
+	* Returns <code>true</code> if this d d l record version is scheduled.
+	*
+	* @return <code>true</code> if this d d l record version is scheduled; <code>false</code> otherwise
+	*/
+	public boolean isScheduled() {
+		return _ddlRecordVersion.isScheduled();
 	}
 
 	public boolean isNew() {

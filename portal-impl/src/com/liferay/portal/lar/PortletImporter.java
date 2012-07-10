@@ -17,10 +17,12 @@ package com.liferay.portal.lar;
 import com.liferay.portal.LARFileException;
 import com.liferay.portal.LARTypeException;
 import com.liferay.portal.LayoutImportException;
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.PortletIdException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.lar.ImportExportThreadLocal;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandler;
@@ -328,6 +330,40 @@ public class PortletImporter {
 			throw new PortletIdException("Invalid portlet id " + rootPortletId);
 		}
 
+		// Available locales
+
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(
+			portletDataContext.getCompanyId(), portletId);
+
+		PortletDataHandler portletDataHandler =
+			portlet.getPortletDataHandlerInstance();
+
+		if (portletDataHandler.isDataLocalized()) {
+			Element sourceAvailableLocalesElement = rootElement.element(
+				"locale");
+
+			Locale[] sourceAvailableLocales = LocaleUtil.fromLanguageIds(
+				StringUtil.split(
+					sourceAvailableLocalesElement.attributeValue(
+						"available-locales")));
+
+			Locale[] targetAvailableLocales =
+				LanguageUtil.getAvailableLocales();
+
+			for (Locale sourceAvailableLocale : sourceAvailableLocales) {
+				if (!ArrayUtil.contains(
+						targetAvailableLocales, sourceAvailableLocale)) {
+
+					LocaleException le = new LocaleException();
+
+					le.setSourceAvailableLocales(sourceAvailableLocales);
+					le.setTargetAvailableLocales(targetAvailableLocales);
+
+					throw le;
+				}
+			}
+		}
+
 		// Import group id
 
 		long sourceGroupId = GetterUtil.getLong(
@@ -444,10 +480,10 @@ public class PortletImporter {
 	}
 
 	/**
-	 * @see {@link DLPortletDataHandlerImpl#getFileEntryTypeName(String, long,
-	 *      String, int)}
-	 * @see {@link DLPortletDataHandlerImpl#getFolderName(String, long, long,
-	 *      String, int)}
+	 * @see com.liferay.portlet.documentlibrary.lar.DLPortletDataHandlerImpl#getFileEntryTypeName(
+	 *      String, long, String, int)
+	 * @see com.liferay.portlet.documentlibrary.lar.DLPortletDataHandlerImpl#getFolderName(
+	 *      String, long, long, String, int)
 	 */
 	protected String getAssetCategoryName(
 			String uuid, long groupId, long parentCategoryId, String name,
@@ -504,10 +540,10 @@ public class PortletImporter {
 	}
 
 	/**
-	 * @see {@link DLPortletDataHandlerImpl#getFileEntryTypeName(String, long,
-	 *      String, int)}
-	 * @see {@link DLPortletDataHandlerImpl#getFolderName(String, long, long,
-	 *      String, int)}
+	 * @see com.liferay.portlet.documentlibrary.lar.DLPortletDataHandlerImpl#getFileEntryTypeName(
+	 *      String, long, String, int)
+	 * @see com.liferay.portlet.documentlibrary.lar.DLPortletDataHandlerImpl#getFolderName(
+	 *      String, long, long, String, int)
 	 */
 	protected String getAssetVocabularyName(
 			String uuid, long groupId, String name, int count)

@@ -123,9 +123,9 @@ import javax.portlet.PortletPreferences;
  * @author Karthik Sudarshan
  * @author Wesley Gong
  * @author Hugo Huijser
- * @see	com.liferay.portal.kernel.lar.PortletDataHandler
- * @see	com.liferay.portlet.journal.lar.JournalContentPortletDataHandlerImpl
- * @see	com.liferay.portlet.journal.lar.JournalCreationStrategy
+ * @see    com.liferay.portal.kernel.lar.PortletDataHandler
+ * @see    com.liferay.portlet.journal.lar.JournalContentPortletDataHandlerImpl
+ * @see    com.liferay.portlet.journal.lar.JournalCreationStrategy
  */
 public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
@@ -1407,6 +1407,11 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 	}
 
 	@Override
+	public boolean isDataLocalized() {
+		return _DATA_LOCALIZED;
+	}
+
+	@Override
 	public boolean isPublishToLiveByDefault() {
 		return PropsValues.JOURNAL_PUBLISH_TO_LIVE_BY_DEFAULT;
 	}
@@ -2614,6 +2619,8 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 	}
 
 	private static final boolean _ALWAYS_EXPORTABLE = true;
+
+	private static final boolean _DATA_LOCALIZED = true;
 
 	private static final String _NAMESPACE = "journal";
 

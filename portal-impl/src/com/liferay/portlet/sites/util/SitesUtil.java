@@ -956,15 +956,17 @@ public class SitesUtil {
 		}
 
 		try {
-			Map<String, String[]> parameterMap = null;
-
 			boolean importData = true;
 
-			if (lastMergeTime > 0) {
+			long lastResetTime = GetterUtil.getLong(
+				settingsProperties.getProperty("last-reset-time"));
+
+			if ((lastMergeTime > 0) || (lastResetTime > 0)) {
 				importData = false;
 			}
 
-			parameterMap = getLayoutSetPrototypesParameters(importData);
+			Map<String, String[]> parameterMap =
+				getLayoutSetPrototypesParameters(importData);
 
 			importLayoutSetPrototype(
 				layoutSetPrototype, layoutSet.getGroupId(),
@@ -1009,6 +1011,9 @@ public class SitesUtil {
 			layoutSet.getSettingsProperties();
 
 		settingsProperties.remove("last-merge-time");
+
+		settingsProperties.setProperty(
+			"last-reset-time", String.valueOf(System.currentTimeMillis()));
 
 		LayoutSetLocalServiceUtil.updateLayoutSet(layoutSet, false);
 	}

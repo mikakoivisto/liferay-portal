@@ -39,10 +39,10 @@ import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
-import com.liferay.portal.kernel.servlet.FileTimestampUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.HttpMethods;
 import com.liferay.portal.kernel.servlet.PersistentHttpServletRequestWrapper;
+import com.liferay.portal.kernel.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -3833,7 +3833,8 @@ public class PortalImpl implements Portal {
 				ServletContext servletContext =
 					(ServletContext)request.getAttribute(WebKeys.CTX);
 
-				timestamp = FileTimestampUtil.getTimestamp(servletContext, uri);
+				timestamp = ServletContextUtil.getLastModified(
+					servletContext, uri, true);
 			}
 
 			if (timestamp == 0) {
@@ -3883,7 +3884,7 @@ public class PortalImpl implements Portal {
 	}
 
 	public String getUniqueElementId(
-		HttpServletRequest request, String elementId) {
+		HttpServletRequest request, String namespace, String elementId) {
 
 		String uniqueElementId = elementId;
 
@@ -3898,7 +3899,9 @@ public class PortalImpl implements Portal {
 		else {
 			int i = 1;
 
-			while (uniqueElementIds.contains(uniqueElementId)) {
+			while (uniqueElementIds.contains(
+						namespace.concat(uniqueElementId))) {
+
 				uniqueElementId = elementId.concat(StringPool.UNDERLINE).concat(
 					String.valueOf(i));
 
@@ -3906,13 +3909,16 @@ public class PortalImpl implements Portal {
 			}
 		}
 
-		uniqueElementIds.add(uniqueElementId);
+		uniqueElementIds.add(namespace.concat(uniqueElementId));
 
 		return uniqueElementId;
 	}
 
-	public String getUniqueElementId(PortletRequest request, String elementId) {
-		return getUniqueElementId(getHttpServletRequest(request), elementId);
+	public String getUniqueElementId(
+		PortletRequest request, String namespace, String elementId) {
+
+		return getUniqueElementId(
+			getHttpServletRequest(request), namespace, elementId);
 	}
 
 	public UploadPortletRequest getUploadPortletRequest(
