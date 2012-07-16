@@ -55,6 +55,10 @@ else {
 	folderIds.add(0, defaultFolderId);
 
 	folderIdsArray = StringUtil.split(StringUtil.merge(folderIds), 0L);
+
+	if (searchFolderIds > 0) {
+		folder = DLAppServiceUtil.getFolder(searchFolderIds);
+	}
 }
 
 List<Folder> mountFolders = DLAppServiceUtil.getMountFolders(scopeGroupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, QueryUtil.ALL_POS, QueryUtil.ALL_POS);

@@ -27,7 +27,7 @@ long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folder
 	<portlet:param name="repositoryId" value="<%= String.valueOf(repositoryId) %>" />
 	<portlet:param name="searchRepositoryId" value="<%= String.valueOf(folderId) %>" />
 	<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
-	<portlet:param name="searchFolderId" value="<%= String.valueOf(folderId) %>" />
+	<portlet:param name="searchFolderIds" value="<%= String.valueOf(folderId) %>" />
 </liferay-portlet:resourceURL>
 
 <div class="lfr-search-combobox search-button-container" id="<portlet:namespace />fileEntrySearchContainer">
