@@ -106,7 +106,7 @@ AUI.add(
 
 		var STR_ROW_IDS_FILE_ENTRY_CHECKBOX = 'rowIdsFileEntryCheckbox';
 
-		var STR_SEARCH_FOLDER_ID = 'searchFolderId';
+		var STR_SEARCH_FOLDER_IDS = 'searchFolderIds';
 
 		var STR_SEARCH_RESULTS_CONTAINER = 'searchResultsContainer';
 
@@ -847,12 +847,12 @@ AUI.add(
 
 						if (event.searchEverywhere) {
 							searchData[SEARCH_REPOSITORY_ID] = instance._config.repositories[0].id;
-							searchData[STR_SEARCH_FOLDER_ID] = DEFAULT_FOLDER_ID;
+							searchData[STR_SEARCH_FOLDER_IDS] = DEFAULT_FOLDER_ID;
 							searchData[STR_SHOW_REPOSITORY_TABS] = true;
 						}
 						else {
 							searchData[SEARCH_REPOSITORY_ID] = selectedFolder.repositoryId;
-							searchData[STR_SEARCH_FOLDER_ID] = selectedFolder.id;
+							searchData[STR_SEARCH_FOLDER_IDS] = selectedFolder.id;
 							searchData[STR_SHOW_REPOSITORY_TABS] = false;
 						}
 
@@ -1192,7 +1192,7 @@ AUI.add(
 							folderId: selectedFolder.id,
 							keywords: instance._keywordsNode.get('value'),
 							repositoryId: selectedFolder.repositoryId,
-							searchFolderId: selectedFolder.id,
+							searchFolderIds: selectedFolder.id,
 							searchRepositoryId: selectedFolder.repositoryId,
 							showRepositoryTabs: showTabs,
 							showSearchInfo: true
@@ -1237,7 +1237,7 @@ AUI.add(
 								folderId: selectedFolder.id,
 								keywords: instance._keywordsNode.get('value'),
 								repositoryId: selectedFolder.repositoryId,
-								searchFolderId: DEFAULT_FOLDER_ID,
+								searchFolderIds: DEFAULT_FOLDER_ID,
 								searchRepositoryId: repositoryId
 							};
 
@@ -1371,7 +1371,7 @@ AUI.add(
 						requestParams[instance.ns('repositoryId')] =  searchData.repositoryId;
 						requestParams[instance.ns(SEARCH_REPOSITORY_ID)] = searchData.searchRepositoryId;
 						requestParams[instance.ns(STR_FOLDER_ID)] = searchData.folderId;
-						requestParams[instance.ns(STR_SEARCH_FOLDER_ID)] = searchData.searchFolderId;
+						requestParams[instance.ns(STR_SEARCH_FOLDER_IDS)] = searchData.searchFolderIds;
 						requestParams[instance.ns(STR_KEYWORDS)] = searchData.keywords;
 						requestParams[instance.ns(SEARCH_TYPE)] = SEARCH_TYPE_SINGLE;
 						requestParams[instance.ns(STR_SHOW_REPOSITORY_TABS)] = searchData.showRepositoryTabs;

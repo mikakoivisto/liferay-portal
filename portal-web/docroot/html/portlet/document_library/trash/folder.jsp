@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/document_library_display/init.jsp" %>
+<%@ include file="/html/portlet/document_library/init.jsp" %>
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
@@ -31,6 +31,13 @@ long assetCategoryId = ParamUtil.getLong(request, "categoryId");
 String assetTagName = ParamUtil.getString(request, "tag");
 
 boolean useAssetEntryQuery = (assetCategoryId > 0) || Validator.isNotNull(assetTagName);
+
+String[] folderColumns = new String[] {"name", "num-of-folders", "num-of-documents", "action"};
+int foldersPerPage = SearchContainer.DEFAULT_DELTA;
+String[] fileEntryColumns = new String[] {"name","size","locked","action"};
+int fileEntriesPerPage = SearchContainer.DEFAULT_DELTA;
+boolean mergedView = false;
+boolean showSubfolders = true;
 
 PortletURL portletURL = renderResponse.createRenderURL();
 

@@ -14,11 +14,13 @@
 
 package com.liferay.portlet.trash;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.util.TestPropsValues;
 import com.liferay.portlet.asset.model.AssetEntry;
@@ -28,6 +30,7 @@ import com.liferay.portlet.documentlibrary.service.BaseDLAppTestCase;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileRankLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLIndexer;
+import com.liferay.portlet.trash.model.TrashEntryList;
 import com.liferay.portlet.trash.service.TrashEntryServiceUtil;
 
 import java.util.List;
@@ -65,10 +68,10 @@ public abstract class BaseDLTrashHandlerTestCase extends BaseDLAppTestCase {
 	}
 
 	protected int getTrashEntriesCount() throws Exception {
-		Object[] result = TrashEntryServiceUtil.getEntries(
+		TrashEntryList trashEntryList = TrashEntryServiceUtil.getEntries(
 			parentFolder.getGroupId());
 
-		return (Integer)result[1];
+		return trashEntryList.getCount();
 	}
 
 	protected boolean isAssetEntryVisible(String className, long classPK)
@@ -87,9 +90,22 @@ public abstract class BaseDLTrashHandlerTestCase extends BaseDLAppTestCase {
 
 		SearchContext searchContext = ServiceTestUtil.getSearchContext();
 
-		Hits results = indexer.search(searchContext);
+		Hits hits = indexer.search(searchContext);
 
-		return results.getLength();
+		return hits.getLength();
+	}
+
+	protected int searchTrashEntriesCount(String keywords) throws Exception {
+		Thread.sleep(1000 * TestPropsValues.JUNIT_DELAY_FACTOR);
+
+		ServiceContext serviceContext = ServiceTestUtil.getServiceContext();
+
+		Hits hits = TrashEntryServiceUtil.search(
+			serviceContext.getCompanyId(), serviceContext.getScopeGroupId(),
+			serviceContext.getUserId(), keywords, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+
+		return hits.getLength();
 	}
 
 }

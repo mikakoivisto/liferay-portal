@@ -51,6 +51,10 @@ public class LocaleUtil {
 		return getInstance()._getISOLanguages(locale);
 	}
 
+	public static Locale getMostRelevantLocale() {
+		return getInstance()._getMostRelevantLocale();
+	}
+
 	public static void setDefault(
 		String userLanguage, String userCountry, String userVariant) {
 
@@ -177,6 +181,16 @@ public class LocaleUtil {
 		}
 
 		return isoLanguages;
+	}
+
+	private Locale _getMostRelevantLocale() {
+		Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
+
+		if (locale == null) {
+			locale = _getDefault();
+		}
+
+		return locale;
 	}
 
 	private void _setDefault(

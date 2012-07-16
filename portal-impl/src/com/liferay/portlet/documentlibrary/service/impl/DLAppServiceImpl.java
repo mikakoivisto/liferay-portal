@@ -355,7 +355,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	public String addTempFileEntry(
 			long groupId, long folderId, String fileName, String tempFolderName,
 			InputStream inputStream)
-		throws IOException, PortalException, SystemException {
+		throws PortalException, SystemException {
 
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
@@ -2120,9 +2120,36 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
+	 * Moves the file shortcut from a trashed folder to the new folder.
+	 *
+	 * @param  fileShortcutId the primary key of the file shortcut
+	 * @param  newFolderId the primary key of the new folder
+	 * @param  serviceContext the service context to be applied
+	 * @return the file shortcut
+	 * @throws PortalException if the file entry or the new folder could not be
+	 *         found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public DLFileShortcut moveFileShortcutFromTrash(
+			long fileShortcutId, long newFolderId, long toFileEntryId,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		DLFileShortcut fileShortcut = getFileShortcut(fileShortcutId);
+
+		DLFileShortcutPermission.check(
+			getPermissionChecker(), fileShortcut, ActionKeys.UPDATE);
+
+		return dlAppHelperLocalService.moveFileShortcutFromTrash(
+			getUserId(), fileShortcut, newFolderId, toFileEntryId,
+			serviceContext);
+	}
+
+	/**
 	 * Moves the file shortcut with the primary key to the trash portlet.
 	 *
 	 * @param  fileShortcutId the primary key of the file shortcut
+	 * @return the file shortcut
 	 * @throws PortalException if the file shortcut could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -2179,6 +2206,38 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		return moveFolders(
 			folderId, parentFolderId, fromRepository, toRepository,
 			serviceContext);
+	}
+
+	/**
+	 * Moves the folder with the primary key from the trash portlet to the new
+	 * parent folder with the primary key.
+	 *
+	 * @param  folderId the primary key of the folder
+	 * @param  parentFolderId the primary key of the new parent folder
+	 * @param  serviceContext the service context to be applied
+	 * @return the file entry
+	 * @throws PortalException if the folder could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Folder moveFolderFromTrash(
+			long folderId, long parentFolderId, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		Repository repository = getRepository(folderId, 0, 0);
+
+		if (!(repository instanceof LiferayRepository)) {
+			throw new InvalidRepositoryException(
+				"Repository " + repository.getRepositoryId() +
+					" does not support trash operations");
+		}
+
+		Folder folder = repository.getFolder(folderId);
+
+		DLFolderPermission.check(
+			getPermissionChecker(), folder, ActionKeys.UPDATE);
+
+		return dlAppHelperLocalService.moveFolderFromTrash(
+			getUserId(), folder, parentFolderId, serviceContext);
 	}
 
 	/**
