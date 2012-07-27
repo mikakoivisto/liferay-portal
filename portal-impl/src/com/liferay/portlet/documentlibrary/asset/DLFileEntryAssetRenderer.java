@@ -249,6 +249,13 @@ public class DLFileEntryAssetRenderer
 		}
 	}
 
+	@Override
+	public String renderActions(
+		RenderRequest renderRequest, RenderResponse renderResponse) {
+
+		return "/html/portlet/document_library/file_entry_action.jsp";
+	}
+
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
 	private int _type;

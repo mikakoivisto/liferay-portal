@@ -31,13 +31,6 @@ public class MainServletExecutionTestListener
 	extends EnvironmentExecutionTestListener {
 
 	@Override
-	public void runAfterClass(TestContext testContext) {
-		super.runAfterClass(testContext);
-
-		_mainServlet.destroy();
-	}
-
-	@Override
 	public void runBeforeClass(TestContext testContext) {
 		super.runBeforeClass(testContext);
 
@@ -61,7 +54,7 @@ public class MainServletExecutionTestListener
 	protected String getResourceBasePath() {
 		File file = new File("portal-web/docroot");
 
-		return "file://" + file.getAbsolutePath();
+		return "file:" + file.getAbsolutePath();
 	}
 
 	private MainServlet _mainServlet;

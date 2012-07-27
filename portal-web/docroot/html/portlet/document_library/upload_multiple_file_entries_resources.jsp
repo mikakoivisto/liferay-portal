@@ -28,7 +28,7 @@ if (repositoryId <= 0) {
 	repositoryId = BeanParamUtil.getLong(fileEntry, request, "groupId");
 }
 
-List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeServiceUtil.getFileEntryTypes(DLUtil.getGroupIds(themeDisplay));
+List<DLFileEntryType> fileEntryTypes = DLFileEntryTypeServiceUtil.getFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay));
 
 long folderId = BeanParamUtil.getLong(fileEntry, request, "folderId");
 
@@ -126,7 +126,7 @@ long assetClassPK = 0;
 									cssClass="upload-multiple-document-types"
 									id='<%= "fileEntryType_" + String.valueOf(curFileEntryType.getFileEntryTypeId()) %>'
 									image="copy"
-									message="<%= curFileEntryType.getName() %>"
+									message="<%= HtmlUtil.escape(curFileEntryType.getName()) %>"
 									method="get"
 									url="<%= viewFileEntryTypeURL %>"
 								/>

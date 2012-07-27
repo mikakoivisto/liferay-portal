@@ -298,7 +298,7 @@ public class DLFileEntryTypeLocalServiceImpl
 		}
 
 		List<DLFileEntryType> dlFileEntryTypes = getFolderFileEntryTypes(
-			DLUtil.getGroupIds(groupId), folderId, true);
+			PortalUtil.getSiteAndCompanyGroupIds(groupId), folderId, true);
 
 		List<Long> fileEntryTypeIds = getFileEntryTypeIds(dlFileEntryTypes);
 
@@ -486,7 +486,7 @@ public class DLFileEntryTypeLocalServiceImpl
 	}
 
 	protected long getFileEntryTypesPrimaryFolderId(long folderId)
-		throws SystemException, NoSuchFolderException {
+		throws NoSuchFolderException, SystemException {
 
 		while (folderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			DLFolder dlFolder = dlFolderPersistence.findByPrimaryKey(folderId);

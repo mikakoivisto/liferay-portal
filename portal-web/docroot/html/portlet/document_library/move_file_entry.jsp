@@ -118,14 +118,16 @@ portletURL.setParameter("fileEntryId", String.valueOf(fileEntryId));
 			<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
 		</portlet:renderURL>
 
-		<aui:field-wrapper label="current-folder">
-			<liferay-ui:icon
-				image="folder"
-				label="<%= true %>"
-				message="<%= folderName %>"
-				url="<%= viewFolderURL %>"
-			/>
-		</aui:field-wrapper>
+		<c:if test="<%= !cmd.equals(Constants.MOVE_FROM_TRASH) %>">
+			<aui:field-wrapper label="current-folder">
+				<liferay-ui:icon
+					image="folder"
+					label="<%= true %>"
+					message="<%= folderName %>"
+					url="<%= viewFolderURL %>"
+				/>
+			</aui:field-wrapper>
+		</c:if>
 
 		<aui:field-wrapper label="new-folder">
 			<aui:a href="<%= viewFolderURL %>" id="folderName"><%= folderName %></aui:a>
@@ -139,7 +141,7 @@ portletURL.setParameter("fileEntryId", String.valueOf(fileEntryId));
 			String taglibOpenFolderWindow = "var folderWindow = window.open('" + selectFolderURL + "','folder', 'directories=no,height=640,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=680'); void(''); folderWindow.focus();";
 			%>
 
-			<aui:button onClick='<%= taglibOpenFolderWindow %>' value="select" />
+			<aui:button onClick="<%= taglibOpenFolderWindow %>" value="select" />
 		</aui:field-wrapper>
 
 		<aui:button-row>

@@ -178,6 +178,15 @@ if (Validator.isNotNull(content)) {
 		<liferay-ui:error exception="<%= ArticleVersionException.class %>" message="another-user-has-made-changes-since-you-started-editing-please-copy-your-changes-and-try-again" />
 		<liferay-ui:error exception="<%= DuplicateArticleIdException.class %>" message="please-enter-a-unique-id" />
 
+		<liferay-ui:error exception="<%= LocaleException.class %>">
+
+			<%
+			LocaleException le = (LocaleException)errorException;
+			%>
+
+			<liferay-ui:message arguments="<%= new String[] {StringUtil.merge(le.getSourceAvailableLocales(), StringPool.COMMA_AND_SPACE), StringUtil.merge(le.getTargetAvailableLocales(), StringPool.COMMA_AND_SPACE)} %>" key="the-default-language-x-does-not-match-the-portal's-available-languages-x" />
+		</liferay-ui:error>
+
 		<table class="lfr-table journal-article-header-edit" id="<portlet:namespace />articleHeaderEdit">
 		<tr>
 			<td>
@@ -360,7 +369,7 @@ if (Validator.isNotNull(content)) {
 
 								<a href="javascript:;" id="<portlet:namespace />changeLanguageId"><liferay-ui:message key="change" /></a>
 
-								<aui:select id="defaultLocale" inlineField="<%= true %>" inputCssClass="aui-helper-hidden" label="" name="defaultLanguageId">
+								<aui:select disabled="<%= Boolean.TRUE %>" id="defaultLocale" inlineField="<%= true %>" inputCssClass="aui-helper-hidden" label="" name="defaultLanguageId">
 
 									<%
 									Locale[] locales = LanguageUtil.getAvailableLocales();
@@ -782,6 +791,7 @@ if (Validator.isNotNull(content)) {
 			'click',
 			function(event) {
 				if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "changing-the-default-language-will-delete-all-unsaved-content") %>')) {
+					languageSelector.attr('disabled', <%= Boolean.FALSE %>);
 					languageSelector.show();
 					languageSelector.focus();
 

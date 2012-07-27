@@ -289,7 +289,7 @@ public class DiffUtil {
 			}
 
 			if (aligned) {
-				 break;
+				break;
 			}
 			else {
 				_highlightLines(
@@ -445,7 +445,7 @@ public class DiffUtil {
 		// length), consider this as not aligned yet.
 
 		if ((deletedChars > (sourceList.size() / 2)) ||
-			(addedChars > sourceList.size() / 2)) {
+			(addedChars > (sourceList.size() / 2))) {
 
 			return false;
 		}

@@ -201,6 +201,8 @@ public interface PropsKeys {
 
 	public static final String BASIC_AUTH_PASSWORD_REQUIRED = "basic.auth.password.required";
 
+	public static final String BLOGS_DISPLAY_STYLES_TEMPLATE_CONTENT = "blogs.display.styles.template.content";
+
 	public static final String BLOGS_EMAIL_ENTRY_ADDED_BODY = "blogs.email.entry.added.body";
 
 	public static final String BLOGS_EMAIL_ENTRY_ADDED_ENABLED = "blogs.email.entry.added.enabled";
@@ -542,6 +544,8 @@ public interface PropsKeys {
 	public static final String DL_FILE_ENTRY_COMMENTS_ENABLED = "dl.file.entry.comments.enabled";
 
 	public static final String DL_FILE_ENTRY_DRAFTS_ENABLED = "dl.file.entry.drafts.enabled";
+
+	public static final String DL_FILE_ENTRY_LOCK_POLICY = "dl.file.entry.lock.policy";
 
 	public static final String DL_FILE_ENTRY_PREVIEW_AUDIO = "dl.file.entry.preview.audio.";
 
@@ -1039,13 +1043,9 @@ public interface PropsKeys {
 
 	public static final String JSON_SERVICE_INVALID_CLASS_NAMES = "json.service.invalid.class.names";
 
-	public static final String JSON_SERVICE_PUBLIC_METHODS = "json.service.public.methods";
-
 	public static final String JSON_WEB_SERVICE_ENABLED = "json.web.service.enabled";
 
 	public static final String JSONWS_WEB_SERVICE_INVALID_HTTP_METHODS = "jsonws.web.service.invalid.http.methods";
-
-	public static final String JSONWS_WEB_SERVICE_PUBLIC_METHODS = "jsonws.web.service.public.methods";
 
 	public static final String JSONWS_WEB_SERVICE_STRICT_HTTP_METHOD = "jsonws.web.service.strict.http.method";
 
@@ -1277,6 +1277,8 @@ public interface PropsKeys {
 
 	public static final String LOCALES_BETA = "locales.beta";
 
+	public static final String LOCK_LISTENERS = "lock.listeners";
+
 	public static final String LOGIN_CREATE_ACCOUNT_ALLOW_CUSTOM_PASSWORD = "login.create.account.allow.custom.password";
 
 	public static final String LOGIN_EMAIL_FROM_ADDRESS = "login.email.from.address";
@@ -1446,6 +1448,8 @@ public interface PropsKeys {
 	public static final String MICROSOFT_TRANSLATOR_CLIENT_SECRET = "microsoft.translator.client.secret";
 
 	public static final String MIME_TYPES_CONTENT_DISPOSITION_INLINE = "mime.types.content.disposition.inline";
+
+	public static final String MIME_TYPES_WEB_IMAGES = "mime.types.web.images";
 
 	public static final String MINIFIER_ENABLED = "minifier.enabled";
 
@@ -1779,6 +1783,10 @@ public interface PropsKeys {
 
 	public static final String RATINGS_DEFAULT_NUMBER_OF_STARS = "ratings.default.number.of.stars";
 
+	public static final String RATINGS_MAX_SCORE = "ratings.max.score";
+
+	public static final String RATINGS_MIN_SCORE = "ratings.min.score";
+
 	public static final String REDIRECT_URL_DOMAINS_ALLOWED = "redirect.url.domains.allowed";
 
 	public static final String REDIRECT_URL_IPS_ALLOWED = "redirect.url.ips.allowed";
@@ -2077,6 +2085,8 @@ public interface PropsKeys {
 
 	public static final String STRIP_IGNORE_PATHS = "strip.ignore.paths";
 
+	public static final String STRIP_JS_LANGUAGE_ATTRIBUTE_SUPPORT_ENABLED = "strip.js.language.attribute.support.enabled";
+
 	public static final String STRUTS_PORTLET_REQUEST_PROCESSOR = "struts.portlet.request.processor";
 
 	public static final String SYSTEM_GROUPS = "system.groups";
@@ -2372,5 +2382,17 @@ public interface PropsKeys {
 	public static final String YM_LOGIN = "ym.login";
 
 	public static final String YM_PASSWORD = "ym.password";
+
+	public static final String YUI_COMPRESSOR_CSS_LINE_BREAK = "yui.compressor.css.line.break";
+
+	public static final String YUI_COMPRESSOR_JS_DISABLE_OPTIMIZATIONS = "yui.compressor.js.disable.optimizations";
+
+	public static final String YUI_COMPRESSOR_JS_LINE_BREAK = "yui.compressor.js.line.break";
+
+	public static final String YUI_COMPRESSOR_JS_MUNGE = "yui.compressor.js.munge";
+
+	public static final String YUI_COMPRESSOR_JS_PRESERVE_ALL_SEMICOLONS = "yui.compressor.js.preserve.all.semicolons";
+
+	public static final String YUI_COMPRESSOR_JS_VERBOSE = "yui.compressor.js.verbose";
 
 }

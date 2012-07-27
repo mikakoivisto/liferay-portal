@@ -272,8 +272,7 @@ public class DLAppServiceWrapper implements DLAppService,
 		java.lang.String fileName, java.lang.String tempFolderName,
 		java.io.InputStream inputStream)
 		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
+			com.liferay.portal.kernel.exception.SystemException {
 		return _dlAppService.addTempFileEntry(groupId, folderId, fileName,
 			tempFolderName, inputStream);
 	}
@@ -1670,7 +1669,8 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @return the temporary file entry names
 	* @throws PortalException if the folder was invalid
 	* @throws SystemException if a system exception occurred
-	* @see com.liferay.portlet.documentlibrary.service.impl.DLAppServiceImpl#addTempFileEntry(long, long, String, String, File)
+	* @see com.liferay.portlet.documentlibrary.service.impl.DLAppServiceImpl#addTempFileEntry(
+	long, long, String, String, File)
 	* @see com.liferay.portal.kernel.util.TempFileUtil
 	*/
 	public java.lang.String[] getTempFileEntryNames(long groupId,
@@ -1681,12 +1681,19 @@ public class DLAppServiceWrapper implements DLAppService,
 			tempFolderName);
 	}
 
+	/**
+	* @deprecated {@link #checkOutFileEntry(long, ServiceContext)}
+	*/
 	public com.liferay.portal.model.Lock lockFileEntry(long fileEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlAppService.lockFileEntry(fileEntryId);
 	}
 
+	/**
+	* @deprecated {@link #checkOutFileEntry(long, String, long,
+	ServiceContext)}
+	*/
 	public com.liferay.portal.model.Lock lockFileEntry(long fileEntryId,
 		java.lang.String owner, long expirationTime)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1789,9 +1796,30 @@ public class DLAppServiceWrapper implements DLAppService,
 	}
 
 	/**
+	* Moves the file shortcut from a trashed folder to the new folder.
+	*
+	* @param fileShortcutId the primary key of the file shortcut
+	* @param newFolderId the primary key of the new folder
+	* @param serviceContext the service context to be applied
+	* @return the file shortcut
+	* @throws PortalException if the file entry or the new folder could not be
+	found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileShortcut moveFileShortcutFromTrash(
+		long fileShortcutId, long newFolderId, long toFileEntryId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlAppService.moveFileShortcutFromTrash(fileShortcutId,
+			newFolderId, toFileEntryId, serviceContext);
+	}
+
+	/**
 	* Moves the file shortcut with the primary key to the trash portlet.
 	*
 	* @param fileShortcutId the primary key of the file shortcut
+	* @return the file shortcut
 	* @throws PortalException if the file shortcut could not be found
 	* @throws SystemException if a system exception occurred
 	*/
@@ -1818,6 +1846,26 @@ public class DLAppServiceWrapper implements DLAppService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _dlAppService.moveFolder(folderId, parentFolderId, serviceContext);
+	}
+
+	/**
+	* Moves the folder with the primary key from the trash portlet to the new
+	* parent folder with the primary key.
+	*
+	* @param folderId the primary key of the folder
+	* @param parentFolderId the primary key of the new parent folder
+	* @param serviceContext the service context to be applied
+	* @return the file entry
+	* @throws PortalException if the folder could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.kernel.repository.model.Folder moveFolderFromTrash(
+		long folderId, long parentFolderId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _dlAppService.moveFolderFromTrash(folderId, parentFolderId,
+			serviceContext);
 	}
 
 	/**
@@ -1945,12 +1993,19 @@ public class DLAppServiceWrapper implements DLAppService,
 		return _dlAppService.search(repositoryId, searchContext, query);
 	}
 
+	/**
+	* @deprecated Use {@link #checkInFileEntry(long, boolean, String,
+	ServiceContext)}.
+	*/
 	public void unlockFileEntry(long fileEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_dlAppService.unlockFileEntry(fileEntryId);
 	}
 
+	/**
+	* @deprecated Use {@link #checkInFileEntry(long, String)}.
+	*/
 	public void unlockFileEntry(long fileEntryId, java.lang.String lockUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -2195,15 +2250,15 @@ public class DLAppServiceWrapper implements DLAppService,
 	* @param serviceContext the service context to be applied. In a Liferay
 	repository, it may include:  <ul> <li> defaultFileEntryTypeId -
 	the file entry type to default all Liferay file entries to </li>
-	<li> fileEntryTypeSearchContainerPrimaryKeys - a comma-delimited
-	list of file entry type primary keys allowed in the given folder
-	and all descendants </li> <li> overrideFileEntryTypes - boolean
-	specifying whether to override ancestral folder's restriction of
-	file entry types allowed </li> <li> workflowDefinitionXYZ - the
-	workflow definition name specified per file entry type. The
-	parameter name must be the string <code>workflowDefinition</code>
-	appended by the <code>fileEntryTypeId</code> (optionally
-	<code>0</code>). </li> </ul>
+	<li> dlFileEntryTypesSearchContainerPrimaryKeys - a
+	comma-delimited list of file entry type primary keys allowed in
+	the given folder and all descendants </li> <li>
+	overrideFileEntryTypes - boolean specifying whether to override
+	ancestral folder's restriction of file entry types allowed </li>
+	<li> workflowDefinitionXYZ - the workflow definition name
+	specified per file entry type. The parameter name must be the
+	string <code>workflowDefinition</code> appended by the <code>
+	fileEntryTypeId</code> (optionally <code>0</code>). </li> </ul>
 	* @return the folder
 	* @throws PortalException if the current or new parent folder could not be
 	found or if the new parent folder's information was invalid

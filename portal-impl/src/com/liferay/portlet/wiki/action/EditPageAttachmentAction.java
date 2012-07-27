@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -43,7 +42,6 @@ import com.liferay.portlet.wiki.NoSuchNodeException;
 import com.liferay.portlet.wiki.NoSuchPageException;
 import com.liferay.portlet.wiki.service.WikiPageServiceUtil;
 
-import java.io.File;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -98,10 +96,19 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 				addTempAttachment(actionRequest);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteAttachment(actionRequest);
+				deleteAttachment(actionRequest, false);
 			}
 			else if (cmd.equals(Constants.DELETE_TEMP)) {
 				deleteTempAttachment(actionRequest, actionResponse);
+			}
+			else if (cmd.equals(Constants.EMPTY_TRASH)) {
+				emptyTrash(actionRequest);
+			}
+			else if (cmd.equals(Constants.MOVE_FROM_TRASH)) {
+				moveAttachmentFromTrash(actionRequest);
+			}
+			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
+				deleteAttachment(actionRequest, true);
 			}
 
 			if (cmd.equals(Constants.ADD_TEMP) ||
@@ -242,18 +249,17 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 		long nodeId = ParamUtil.getLong(actionRequest, "nodeId");
 		String title = ParamUtil.getString(actionRequest, "title");
 
-		File file = null;
+		String tempFileName = TempFileUtil.getTempFileName(
+			themeDisplay.getUserId(), selectedFileName, _TEMP_FOLDER_NAME);
 
 		try {
-			file = TempFileUtil.getTempFile(
-				themeDisplay.getUserId(), selectedFileName, _TEMP_FOLDER_NAME);
+			InputStream inputStream = TempFileUtil.getTempFileAsStream(
+				tempFileName);
 
-			if ((file != null) && file.exists()) {
-				WikiPageServiceUtil.addPageAttachment(
-					nodeId, title, selectedFileName, file);
+			WikiPageServiceUtil.addPageAttachment(
+				nodeId, title, selectedFileName, inputStream);
 
-				validFileNames.add(selectedFileName);
-			}
+			validFileNames.add(selectedFileName);
 		}
 		catch (Exception e) {
 			String errorMessage = getAddMultipleFileEntriesErrorMessage(
@@ -265,7 +271,7 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 			invalidFileNameKVPs.add(invalidFileNameKVP);
 		}
 		finally {
-			FileUtil.delete(file);
+			TempFileUtil.deleteTempFile(tempFileName);
 		}
 	}
 
@@ -291,14 +297,21 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 		}
 	}
 
-	protected void deleteAttachment(ActionRequest actionRequest)
+	protected void deleteAttachment(
+			ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
 		long nodeId = ParamUtil.getLong(actionRequest, "nodeId");
 		String title = ParamUtil.getString(actionRequest, "title");
 		String attachment = ParamUtil.getString(actionRequest, "fileName");
 
-		WikiPageServiceUtil.deletePageAttachment(nodeId, title, attachment);
+		if (moveToTrash) {
+			WikiPageServiceUtil.movePageAttachmentToTrash(
+				nodeId, title, attachment);
+		}
+		else {
+			WikiPageServiceUtil.deletePageAttachment(nodeId, title, attachment);
+		}
 	}
 
 	protected void deleteTempAttachment(
@@ -329,6 +342,24 @@ public class EditPageAttachmentAction extends EditFileEntryAction {
 		}
 
 		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
+	protected void emptyTrash(ActionRequest actionRequest) throws Exception {
+		long nodeId = ParamUtil.getLong(actionRequest, "nodeId");
+		String title = ParamUtil.getString(actionRequest, "title");
+
+		WikiPageServiceUtil.emptyPageAttachments(nodeId, title);
+	}
+
+	protected void moveAttachmentFromTrash(ActionRequest actionRequest)
+		throws Exception {
+
+		long nodeId = ParamUtil.getLong(actionRequest, "nodeId");
+		String title = ParamUtil.getString(actionRequest, "title");
+		String attachment = ParamUtil.getString(actionRequest, "fileName");
+
+		WikiPageServiceUtil.movePageAttachmentFromTrash(
+			nodeId, title, attachment);
 	}
 
 	private static final String _TEMP_FOLDER_NAME =

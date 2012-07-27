@@ -456,6 +456,8 @@ public class PropsValues {
 
 	public static boolean DL_FILE_ENTRY_DRAFTS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_DRAFTS_ENABLED));
 
+	public static final int DL_FILE_ENTRY_LOCK_POLICY = GetterUtil.getInteger(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_LOCK_POLICY));
+
 	public static final String[] DL_FILE_ENTRY_PREVIEW_AUDIO_CONTAINERS = PropsUtil.getArray(PropsKeys.DL_FILE_ENTRY_PREVIEW_AUDIO_CONTAINERS);
 
 	public static final String[] DL_FILE_ENTRY_PREVIEW_AUDIO_MIME_TYPES = PropsUtil.getArray(PropsKeys.DL_FILE_ENTRY_PREVIEW_AUDIO_MIME_TYPES);
@@ -762,13 +764,9 @@ public class PropsValues {
 
 	public static final String[] JSON_SERVICE_INVALID_CLASS_NAMES = PropsUtil.getArray(PropsKeys.JSON_SERVICE_INVALID_CLASS_NAMES);
 
-	public static final String[] JSON_SERVICE_PUBLIC_METHODS = PropsUtil.getArray(PropsKeys.JSON_SERVICE_PUBLIC_METHODS);
-
 	public static final boolean JSON_WEB_SERVICE_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.JSON_WEB_SERVICE_ENABLED));
 
 	public static final String[] JSONWS_WEB_SERVICE_INVALID_HTTP_METHODS = PropsUtil.getArray(PropsKeys.JSONWS_WEB_SERVICE_INVALID_HTTP_METHODS);
-
-	public static final String[] JSONWS_WEB_SERVICE_PUBLIC_METHODS = PropsUtil.getArray(PropsKeys.JSONWS_WEB_SERVICE_PUBLIC_METHODS);
 
 	public static final boolean JSONWS_WEB_SERVICE_STRICT_HTTP_METHOD = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.JSONWS_WEB_SERVICE_STRICT_HTTP_METHOD));
 
@@ -1033,6 +1031,8 @@ public class PropsValues {
 	public static final String MICROSOFT_TRANSLATOR_CLIENT_SECRET = PropsUtil.get(PropsKeys.MICROSOFT_TRANSLATOR_CLIENT_SECRET);
 
 	public static final String[] MIME_TYPES_CONTENT_DISPOSITION_INLINE = PropsUtil.getArray(PropsKeys.MIME_TYPES_CONTENT_DISPOSITION_INLINE);
+
+	public static String[] MIME_TYPES_WEB_IMAGES = PropsUtil.getArray(PropsKeys.MIME_TYPES_WEB_IMAGES);
 
 	public static final boolean MINIFIER_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.MINIFIER_ENABLED));
 
@@ -1332,6 +1332,10 @@ public class PropsValues {
 
 	public static final int RATINGS_DEFAULT_NUMBER_OF_STARS = GetterUtil.getInteger(PropsUtil.get(PropsKeys.RATINGS_DEFAULT_NUMBER_OF_STARS));
 
+	public static final int RATINGS_MAX_SCORE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.RATINGS_MAX_SCORE));
+
+	public static final int RATINGS_MIN_SCORE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.RATINGS_MIN_SCORE));
+
 	public static final String[] REDIRECT_URL_DOMAINS_ALLOWED = PropsUtil.getArray(PropsKeys.REDIRECT_URL_DOMAINS_ALLOWED);
 
 	public static final String[] REDIRECT_URL_IPS_ALLOWED = PropsUtil.getArray(PropsKeys.REDIRECT_URL_IPS_ALLOWED);
@@ -1523,6 +1527,8 @@ public class PropsValues {
 	public static boolean STRIP_CSS_SASS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.STRIP_CSS_SASS_ENABLED));
 
 	public static final String[] STRIP_IGNORE_PATHS = PropsUtil.getArray(PropsKeys.STRIP_IGNORE_PATHS);
+
+	public static boolean STRIP_JS_LANGUAGE_ATTRIBUTE_SUPPORT_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.STRIP_JS_LANGUAGE_ATTRIBUTE_SUPPORT_ENABLED));
 
 	public static final String STRUTS_PORTLET_REQUEST_PROCESSOR = PropsUtil.get(PropsKeys.STRUTS_PORTLET_REQUEST_PROCESSOR);
 
@@ -1725,6 +1731,18 @@ public class PropsValues {
 	public static final boolean XUGGLER_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.XUGGLER_ENABLED));
 
 	public static final String XUGGLER_JAR_URL = PropsUtil.get(PropsKeys.XUGGLER_JAR_URL);
+
+	public static final int YUI_COMPRESSOR_CSS_LINE_BREAK = GetterUtil.getInteger(PropsUtil.get(PropsKeys.YUI_COMPRESSOR_CSS_LINE_BREAK));
+
+	public static final boolean YUI_COMPRESSOR_JS_DISABLE_OPTIMIZATIONS = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.YUI_COMPRESSOR_JS_DISABLE_OPTIMIZATIONS));
+
+	public static final int YUI_COMPRESSOR_JS_LINE_BREAK = GetterUtil.getInteger(PropsUtil.get(PropsKeys.YUI_COMPRESSOR_JS_LINE_BREAK));
+
+	public static final boolean YUI_COMPRESSOR_JS_MUNGE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.YUI_COMPRESSOR_JS_MUNGE));
+
+	public static final boolean YUI_COMPRESSOR_JS_PRESERVE_ALL_SEMICOLONS = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.YUI_COMPRESSOR_JS_PRESERVE_ALL_SEMICOLONS));
+
+	public static final boolean YUI_COMPRESSOR_JS_VERBOSE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.YUI_COMPRESSOR_JS_VERBOSE));
 
 	static {
 		if (!LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED) {

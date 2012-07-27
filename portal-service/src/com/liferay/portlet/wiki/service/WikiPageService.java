@@ -79,6 +79,11 @@ public interface WikiPageService extends BaseService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public void addPageAttachment(long nodeId, java.lang.String title,
+		java.lang.String fileName, java.io.InputStream inputStream)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	public void addPageAttachments(long nodeId, java.lang.String title,
 		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.io.InputStream>> inputStream)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -88,8 +93,7 @@ public interface WikiPageService extends BaseService {
 		java.lang.String fileName, java.lang.String tempFolderName,
 		java.io.InputStream inputStream)
 		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException;
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public void changeParent(long nodeId, java.lang.String title,
 		java.lang.String newParentTitle,
@@ -112,6 +116,10 @@ public interface WikiPageService extends BaseService {
 
 	public void deleteTempPageAttachment(long nodeId,
 		java.lang.String fileName, java.lang.String tempFolderName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void emptyPageAttachments(long nodeId, java.lang.String title)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -166,6 +174,16 @@ public interface WikiPageService extends BaseService {
 	public void movePage(long nodeId, java.lang.String title,
 		java.lang.String newTitle,
 		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void movePageAttachmentFromTrash(long nodeId,
+		java.lang.String title, java.lang.String deletedFileName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void movePageAttachmentToTrash(long nodeId, java.lang.String title,
+		java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

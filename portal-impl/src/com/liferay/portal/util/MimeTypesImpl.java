@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypes;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -62,6 +63,9 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 	public MimeTypesImpl() {
 		_detector = new DefaultDetector(
 			org.apache.tika.mime.MimeTypes.getDefaultMimeTypes());
+
+		_webImageMimeTypes = SetUtil.fromArray(
+			PropsValues.MIME_TYPES_WEB_IMAGES);
 
 		URL url = org.apache.tika.mime.MimeTypes.class.getResource(
 			"tika-mimetypes.xml");
@@ -178,6 +182,10 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 		return extensions;
 	}
 
+	public boolean isWebImage(String mimeType) {
+		return _webImageMimeTypes.contains(mimeType);
+	}
+
 	protected void read(InputStream stream) throws Exception {
 		DocumentBuilderFactory documentBuilderFactory =
 			DocumentBuilderFactory.newInstance();
@@ -269,5 +277,6 @@ public class MimeTypesImpl implements MimeTypes, MimeTypesReaderMetKeys {
 	private Detector _detector;
 	private Map<String, Set<String>> _extensionsMap =
 		new HashMap<String, Set<String>>();
+	private Set<String> _webImageMimeTypes = new HashSet<String>();
 
 }

@@ -14,11 +14,16 @@
 
 package com.liferay.portlet.dynamicdatamapping.lar;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.xml.Document;
@@ -28,6 +33,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.dynamicdatamapping.TemplateDuplicateTemplateKeyException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
@@ -36,6 +42,7 @@ import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMStructureUt
 import com.liferay.portlet.dynamicdatamapping.service.persistence.DDMTemplateUtil;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.PortletPreferences;
@@ -106,6 +113,8 @@ public class DDMPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		DDMStructure structure =
 			(DDMStructure)portletDataContext.getZipEntryAsObject(path);
+
+		prepareLanguagesForImport(structure);
 
 		long userId = portletDataContext.getUserId(structure.getUserUuid());
 
@@ -202,13 +211,9 @@ public class DDMPortletDataHandlerImpl extends BasePortletDataHandler {
 			if (existingTemplate == null) {
 				serviceContext.setUuid(template.getUuid());
 
-				importedTemplate = DDMTemplateLocalServiceUtil.addTemplate(
-					userId, portletDataContext.getScopeGroupId(),
-					template.getClassNameId(), classPK,
-					template.getTemplateKey(), template.getNameMap(),
-					template.getDescriptionMap(), template.getType(),
-					template.getMode(), template.getLanguage(),
-					template.getScript(), serviceContext);
+				importedTemplate = addTemplate(
+					userId, portletDataContext.getScopeGroupId(), template,
+					classPK, serviceContext);
 			}
 			else {
 				importedTemplate = DDMTemplateLocalServiceUtil.updateTemplate(
@@ -219,12 +224,9 @@ public class DDMPortletDataHandlerImpl extends BasePortletDataHandler {
 			}
 		}
 		else {
-			importedTemplate = DDMTemplateLocalServiceUtil.addTemplate(
-				userId, portletDataContext.getScopeGroupId(),
-				template.getClassNameId(), classPK, template.getTemplateKey(),
-				template.getNameMap(), template.getDescriptionMap(),
-				template.getType(), template.getMode(), template.getLanguage(),
-				template.getScript(), serviceContext);
+			importedTemplate = addTemplate(
+				userId, portletDataContext.getScopeGroupId(), template, classPK,
+				serviceContext);
 		}
 
 		portletDataContext.importClassedModel(
@@ -249,6 +251,39 @@ public class DDMPortletDataHandlerImpl extends BasePortletDataHandler {
 	@Override
 	public boolean isDataLocalized() {
 		return _DATA_LOCALIZED;
+	}
+
+	protected static DDMTemplate addTemplate(
+			long userId, long groupId, DDMTemplate template, long classPK,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		DDMTemplate newTemplate = null;
+
+		try {
+			return DDMTemplateLocalServiceUtil.addTemplate(
+				userId, groupId, template.getClassNameId(), classPK,
+				template.getTemplateKey(), template.getNameMap(),
+				template.getDescriptionMap(), template.getType(),
+				template.getMode(), template.getLanguage(),
+				template.getScript(), serviceContext);
+		}
+		catch (TemplateDuplicateTemplateKeyException tdtke) {
+			newTemplate = DDMTemplateLocalServiceUtil.addTemplate(
+				userId, groupId, template.getClassNameId(), classPK, null,
+				template.getNameMap(), template.getDescriptionMap(),
+				template.getType(), template.getMode(), template.getLanguage(),
+				template.getScript(), serviceContext);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"A template with the key " + template.getTemplateKey() +
+						" already exists. The new generated key is " +
+							newTemplate.getTemplateKey());
+			}
+		}
+
+		return newTemplate;
 	}
 
 	protected static String getStructurePath(
@@ -279,6 +314,22 @@ public class DDMPortletDataHandlerImpl extends BasePortletDataHandler {
 		sb.append(".xml");
 
 		return sb.toString();
+	}
+
+	protected static void prepareLanguagesForImport(DDMStructure structure)
+		throws PortalException {
+
+		Locale structureDefaultLocale = LocaleUtil.fromLanguageId(
+			structure.getDefaultLocale());
+
+		Locale[] structureAvailableLocales = LocaleUtil.fromLanguageIds(
+			structure.getAvailableLocales());
+
+		Locale defaultImportLocale = LocalizationUtil.getDefaultImportLocale(
+			DDMStructure.class.getName(), structure.getPrimaryKey(),
+			structureDefaultLocale, structureAvailableLocales);
+
+		structure.prepareLocalizedFieldsForImport(defaultImportLocale);
 	}
 
 	@Override
@@ -394,6 +445,9 @@ public class DDMPortletDataHandlerImpl extends BasePortletDataHandler {
 	private static final boolean _DATA_LOCALIZED = true;
 
 	private static final String _NAMESPACE = "ddm";
+
+	private static Log _log = LogFactoryUtil.getLog(
+		DDMPortletDataHandlerImpl.class);
 
 	private static PortletDataHandlerBoolean _structures =
 		new PortletDataHandlerBoolean(_NAMESPACE, "structures", true, true);

@@ -355,6 +355,7 @@ public class SourceFormatter {
 		}
 
 		ifClause = _stripQuotes(ifClause);
+		ifClause = _stripRedundantParentheses(ifClause);
 
 		ifClause = StringUtil.replace(
 			ifClause, new String[] {"'('", "')'"},
@@ -1161,18 +1162,7 @@ public class SourceFormatter {
 				}
 			}
 
-			String oldContent = content;
-			String newContent = StringPool.BLANK;
-
-			for (;;) {
-				newContent = _formatJavaContent(fileName, oldContent);
-
-				if (oldContent.equals(newContent)) {
-					break;
-				}
-
-				oldContent = newContent;
-			}
+			String newContent = content;
 
 			if (newContent.contains("$\n */")) {
 				_sourceFormatterHelper.printError(fileName, "*: " + fileName);
@@ -1298,6 +1288,18 @@ public class SourceFormatter {
 				}
 			}
 
+			String oldContent = newContent;
+
+			for (;;) {
+				newContent = _formatJavaContent(fileName, oldContent);
+
+				if (oldContent.equals(newContent)) {
+					break;
+				}
+
+				oldContent = newContent;
+			}
+
 			if ((newContent != null) && !content.equals(newContent)) {
 				_fileUtil.write(file, newContent);
 
@@ -1411,6 +1413,8 @@ public class SourceFormatter {
 
 				line = StringUtil.replaceLast(line, "{", " {");
 			}
+
+			line = _sortExceptions(line);
 
 			if (trimmedLine.startsWith("if (") ||
 				trimmedLine.startsWith("else if (") ||
@@ -1537,6 +1541,19 @@ public class SourceFormatter {
 
 					trimmedLine = StringUtil.replaceLast(
 						trimmedLine, StringPool.TAB, StringPool.SPACE);
+				}
+
+				if (line.contains(StringPool.TAB + StringPool.SPACE) &&
+					!previousLine.endsWith("&&") &&
+					!previousLine.endsWith("||") &&
+					!previousLine.contains(StringPool.TAB + "((") &&
+					!previousLine.contains(StringPool.TAB + StringPool.SPACE) &&
+					!previousLine.contains(StringPool.TAB + "implements ") &&
+					!previousLine.contains(StringPool.TAB + "throws ")) {
+
+					line = StringUtil.replace(
+						line, StringPool.TAB + StringPool.SPACE,
+						StringPool.TAB);
 				}
 
 				while (trimmedLine.contains(StringPool.DOUBLE_SPACE) &&
@@ -2017,11 +2034,22 @@ public class SourceFormatter {
 					if (pos != -1) {
 						String attribute = trimmedLine.substring(0, pos);
 
-						if (Validator.isNotNull(previousAttribute)) {
+						if (!trimmedLine.endsWith(StringPool.QUOTE) &&
+							!trimmedLine.endsWith(StringPool.APOSTROPHE)) {
+
+							_sourceFormatterHelper.printError(
+								fileName,
+								"attribute: " + fileName + " " + lineCount);
+
+							readAttributes = false;
+						}
+						else if (Validator.isNotNull(previousAttribute)) {
 							if (!_isJSPAttributName(attribute)) {
 								_sourceFormatterHelper.printError(
 									fileName,
 									"attribute: " + fileName + " " + lineCount);
+
+								readAttributes = false;
 							}
 							else if (Validator.isNull(
 										previousAttributeAndValue) &&
@@ -2033,7 +2061,13 @@ public class SourceFormatter {
 							}
 						}
 
-						previousAttribute = attribute;
+						if (!readAttributes) {
+							previousAttribute = null;
+							previousAttributeAndValue = null;
+						}
+						else {
+							previousAttribute = attribute;
+						}
 					}
 				}
 				else {
@@ -3416,6 +3450,51 @@ public class SourceFormatter {
 		return newLine;
 	}
 
+	private static String _sortExceptions(String line) {
+		if (!line.endsWith(StringPool.OPEN_CURLY_BRACE) &&
+			!line.endsWith(StringPool.SEMICOLON)) {
+
+			return line;
+		}
+
+		int x = line.indexOf("throws ");
+
+		if (x == -1) {
+			return line;
+		}
+
+		String previousException = StringPool.BLANK;
+
+		String[] exceptions = StringUtil.split(
+			line.substring(x), CharPool.SPACE);
+
+		for (int i = 1; i < exceptions.length; i++) {
+			String exception = exceptions[i];
+
+			if (exception.equals(StringPool.OPEN_CURLY_BRACE)) {
+				break;
+			}
+
+			if (exception.endsWith(StringPool.COMMA) ||
+				exception.endsWith(StringPool.SEMICOLON)) {
+
+				exception = exception.substring(0, exception.length() - 1);
+			}
+
+			if (Validator.isNotNull(previousException) &&
+				(previousException.compareToIgnoreCase(exception) > 0)) {
+
+				return StringUtil.replace(
+					line, previousException + ", " + exception,
+					exception + ", " + previousException);
+			}
+
+			previousException = exception;
+		}
+
+		return line;
+	}
+
 	private static String _sortJSPAttributes(
 		String fileName, String line, int lineCount) {
 
@@ -3475,6 +3554,14 @@ public class SourceFormatter {
 			}
 
 			String value = s.substring(0, y);
+
+			if ((delimeter == CharPool.APOSTROPHE) &&
+				!value.contains(StringPool.QUOTE)) {
+
+				return StringUtil.replace(
+					line, StringPool.APOSTROPHE + value + StringPool.APOSTROPHE,
+					StringPool.QUOTE + value + StringPool.QUOTE);
+			}
 
 			if (value.contains("<%") && !value.contains("%>")) {
 				int z = s.indexOf("%>");
@@ -3596,6 +3683,28 @@ public class SourceFormatter {
 		content = beforeImports + imports + "\n" + afterImports;
 
 		return content;
+	}
+
+	private static String _stripRedundantParentheses(String s) {
+		for (int x = 0;;) {
+			x = s.indexOf(StringPool.OPEN_PARENTHESIS, x + 1);
+			int y = s.indexOf(StringPool.CLOSE_PARENTHESIS, x);
+
+			if ((x == -1) || (y == -1)) {
+				return s;
+			}
+
+			String linePart = s.substring(x + 1, y);
+
+			linePart = StringUtil.replace(
+				linePart, StringPool.COMMA, StringPool.BLANK);
+
+			if (Validator.isAlphanumericName(linePart) ||
+				Validator.isNull(linePart)) {
+
+				s = s.substring(0, x) + s.substring(y + 1);
+			}
+		}
 	}
 
 	private static String _stripQuotes(String s) {

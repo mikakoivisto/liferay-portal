@@ -201,6 +201,8 @@ public abstract class BaseRepositoryImpl implements BaseRepository {
 	public Object[] getRepositoryEntryIds(String objectId)
 		throws SystemException {
 
+		boolean newRepositoryEntry = false;
+
 		RepositoryEntry repositoryEntry = RepositoryEntryUtil.fetchByR_M(
 			getRepositoryId(), objectId);
 
@@ -214,10 +216,13 @@ public abstract class BaseRepositoryImpl implements BaseRepository {
 			repositoryEntry.setMappedId(objectId);
 
 			RepositoryEntryUtil.update(repositoryEntry, false);
+
+			newRepositoryEntry = true;
 		}
 
 		return new Object[] {
-			repositoryEntry.getRepositoryEntryId(), repositoryEntry.getUuid()
+			repositoryEntry.getRepositoryEntryId(), repositoryEntry.getUuid(),
+			newRepositoryEntry
 		};
 	}
 
@@ -261,14 +266,31 @@ public abstract class BaseRepositoryImpl implements BaseRepository {
 	public abstract void initRepository()
 		throws PortalException, SystemException;
 
-	public Lock lockFileEntry(long fileEntryId) {
-		throw new UnsupportedOperationException();
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, ServiceContext)}
+	 */
+	public Lock lockFileEntry(long fileEntryId)
+		throws PortalException, SystemException {
+
+		checkOutFileEntry(fileEntryId, new ServiceContext());
+
+		FileEntry fileEntry = getFileEntry(fileEntryId);
+
+		return fileEntry.getLock();
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, String, long,
+	 *             ServiceContext)}
+	 */
 	public Lock lockFileEntry(
-		long fileEntryId, String owner, long expirationTime) {
+			long fileEntryId, String owner, long expirationTime)
+		throws PortalException, SystemException {
 
-		throw new UnsupportedOperationException();
+		FileEntry fileEntry = checkOutFileEntry(
+			fileEntryId, owner, expirationTime, new ServiceContext());
+
+		return fileEntry.getLock();
 	}
 
 	public Hits search(SearchContext searchContext) throws SearchException {
@@ -324,14 +346,6 @@ public abstract class BaseRepositoryImpl implements BaseRepository {
 
 	public void setUserLocalService(UserLocalService userLocalService) {
 		this.userLocalService = userLocalService;
-	}
-
-	public void unlockFileEntry(long fileEntryId) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void unlockFileEntry(long fileEntryId, String lockUuid) {
-		throw new UnsupportedOperationException();
 	}
 
 	public void unlockFolder(long parentFolderId, String title, String lockUuid)
