@@ -325,10 +325,11 @@ public class UserImpl extends UserBaseImpl {
 		return getOrganizationIds(false);
 	}
 
-	public long[] getOrganizationIds(boolean includeNonUser)
+	public long[] getOrganizationIds(boolean includeAdministrative)
 		throws PortalException, SystemException {
 
-		List<Organization> organizations = getOrganizations(includeNonUser);
+		List<Organization> organizations = getOrganizations(
+			includeAdministrative);
 
 		long[] organizationIds = new long[organizations.size()];
 
@@ -347,12 +348,11 @@ public class UserImpl extends UserBaseImpl {
 		return getOrganizations(false);
 	}
 
-	public List<Organization> getOrganizations(
-			boolean includeIndirectlyAssociated)
+	public List<Organization> getOrganizations(boolean includeAdministrative)
 		throws PortalException, SystemException {
 
 		return OrganizationLocalServiceUtil.getUserOrganizations(
-			getUserId(), includeIndirectlyAssociated);
+			getUserId(), includeAdministrative);
 	}
 
 	public boolean getPasswordModified() {

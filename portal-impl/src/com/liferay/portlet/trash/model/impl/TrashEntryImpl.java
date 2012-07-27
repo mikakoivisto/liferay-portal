@@ -15,11 +15,16 @@
 package com.liferay.portlet.trash.model.impl;
 
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portlet.trash.model.TrashEntry;
 
 /**
  * @author Zsolt Berentey
  */
 public class TrashEntryImpl extends TrashEntryBaseImpl {
+
+	public TrashEntry getRootEntry() {
+		return _rootEntry;
+	}
 
 	@Override
 	public String getTypeSettings() {
@@ -53,6 +58,10 @@ public class TrashEntryImpl extends TrashEntryBaseImpl {
 		return typeSettingsProperties.getProperty(key, defaultValue);
 	}
 
+	public void setRootEntry(TrashEntry rootEntry) {
+		_rootEntry = rootEntry;
+	}
+
 	@Override
 	public void setTypeSettings(String typeSettings) {
 		_typeSettingsProperties = null;
@@ -68,6 +77,7 @@ public class TrashEntryImpl extends TrashEntryBaseImpl {
 		super.setTypeSettings(_typeSettingsProperties.toString());
 	}
 
+	private TrashEntry _rootEntry;
 	private UnicodeProperties _typeSettingsProperties;
 
 }

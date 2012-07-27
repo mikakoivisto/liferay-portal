@@ -367,8 +367,7 @@ public class WikiPageLocalServiceWrapper implements WikiPageLocalService,
 		java.lang.String fileName, java.lang.String tempFolderName,
 		java.io.InputStream inputStream)
 		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException,
-			java.io.IOException {
+			com.liferay.portal.kernel.exception.SystemException {
 		return _wikiPageLocalService.addTempPageAttachment(userId, fileName,
 			tempFolderName, inputStream);
 	}
@@ -415,9 +414,16 @@ public class WikiPageLocalServiceWrapper implements WikiPageLocalService,
 
 	public void deleteTempPageAttachment(long userId,
 		java.lang.String fileName, java.lang.String tempFolderName)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		_wikiPageLocalService.deleteTempPageAttachment(userId, fileName,
 			tempFolderName);
+	}
+
+	public void emptyPageAttachments(long nodeId, java.lang.String title)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_wikiPageLocalService.emptyPageAttachments(nodeId, title);
 	}
 
 	public java.util.List<com.liferay.portlet.wiki.model.WikiPage> getChildren(
@@ -652,6 +658,21 @@ public class WikiPageLocalServiceWrapper implements WikiPageLocalService,
 			com.liferay.portal.kernel.exception.SystemException {
 		_wikiPageLocalService.movePage(userId, nodeId, title, newTitle,
 			serviceContext);
+	}
+
+	public void movePageAttachmentFromTrash(long nodeId,
+		java.lang.String title, java.lang.String deletedFileName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_wikiPageLocalService.movePageAttachmentFromTrash(nodeId, title,
+			deletedFileName);
+	}
+
+	public void movePageAttachmentToTrash(long nodeId, java.lang.String title,
+		java.lang.String fileName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_wikiPageLocalService.movePageAttachmentToTrash(nodeId, title, fileName);
 	}
 
 	public com.liferay.portlet.wiki.model.WikiPage revertPage(long userId,

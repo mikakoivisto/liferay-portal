@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.deploy.hot.HotDeployException;
 import com.liferay.portal.kernel.deploy.hot.HotDeployListener;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
@@ -60,7 +61,9 @@ public class HotDeployImpl implements HotDeploy {
 		_hotDeployListeners = new CopyOnWriteArrayList<HotDeployListener>();
 	}
 
-	public void fireDeployEvent(final HotDeployEvent hotDeployEvent) {
+	public synchronized void fireDeployEvent(
+		final HotDeployEvent hotDeployEvent) {
+
 		PortalLifecycleUtil.register(
 			new PACLPortalLifecycle(hotDeployEvent),
 			PortalLifecycle.METHOD_INIT);
@@ -93,13 +96,22 @@ public class HotDeployImpl implements HotDeploy {
 		}
 	}
 
-	public void fireUndeployEvent(HotDeployEvent hotDeployEvent) {
+	public synchronized void fireUndeployEvent(HotDeployEvent hotDeployEvent) {
 		for (HotDeployListener hotDeployListener : _hotDeployListeners) {
 			try {
+				PortletClassLoaderUtil.setClassLoader(
+					hotDeployEvent.getContextClassLoader());
+				PortletClassLoaderUtil.setServletContextName(
+					hotDeployEvent.getServletContextName());
+
 				hotDeployListener.invokeUndeploy(hotDeployEvent);
 			}
 			catch (HotDeployException hde) {
 				_log.error(hde, hde);
+			}
+			finally {
+				PortletClassLoaderUtil.setClassLoader(null);
+				PortletClassLoaderUtil.setServletContextName(null);
 			}
 		}
 
@@ -117,14 +129,16 @@ public class HotDeployImpl implements HotDeploy {
 		_hotDeployListeners.add(hotDeployListener);
 	}
 
-	public void reset() {
+	public synchronized void reset() {
 		_capturePrematureEvents = true;
 		_dependentHotDeployEvents.clear();
 		_deployedServletContextNames.clear();
 		_hotDeployListeners.clear();
 	}
 
-	public void setCapturePrematureEvents(boolean capturePrematureEvents) {
+	public synchronized void setCapturePrematureEvents(
+		boolean capturePrematureEvents) {
+
 		_capturePrematureEvents = capturePrematureEvents;
 	}
 
@@ -164,10 +178,19 @@ public class HotDeployImpl implements HotDeploy {
 
 			for (HotDeployListener hotDeployListener : _hotDeployListeners) {
 				try {
+					PortletClassLoaderUtil.setClassLoader(
+						hotDeployEvent.getContextClassLoader());
+					PortletClassLoaderUtil.setServletContextName(
+						hotDeployEvent.getServletContextName());
+
 					hotDeployListener.invokeDeploy(hotDeployEvent);
 				}
 				catch (HotDeployException hde) {
 					_log.error(hde, hde);
+				}
+				finally {
+					PortletClassLoaderUtil.setClassLoader(null);
+					PortletClassLoaderUtil.setServletContextName(null);
 				}
 			}
 

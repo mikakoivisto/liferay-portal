@@ -148,7 +148,7 @@ if (!portletName.equals(PortletKeys.PORTLET_DISPLAY_TEMPLATES)) {
 			<liferay-ui:search-container-column-text
 				href="<%= rowHREF %>"
 				name="name"
-				value="<%= LanguageUtil.get(pageContext, template.getName(locale)) %>"
+				value="<%= HtmlUtil.escape(LanguageUtil.get(pageContext, template.getName(locale))) %>"
 			/>
 
 			<c:if test="<%= Validator.isNull(templateTypeValue) && (classNameId == 0) %>">

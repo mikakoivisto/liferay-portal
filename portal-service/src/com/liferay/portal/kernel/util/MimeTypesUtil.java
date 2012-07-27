@@ -81,6 +81,10 @@ public class MimeTypesUtil {
 		return _mimeTypes;
 	}
 
+	public static boolean isWebImage(String mimeType) {
+		return getMimeTypes().isWebImage(mimeType);
+	}
+
 	public void setMimeTypes(MimeTypes mimeTypes) {
 		PortalRuntimePermission.checkSetBeanProperty(getClass());
 

@@ -170,7 +170,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 								<c:when test="<%= versionSpecific %>">
 									<%= fileVersion.getTitle() %>
 
-									(<liferay-ui:message key="version" /> <%= fileVersion.getVersion() %>)
+									(<liferay-ui:message key="version" /> <%= HtmlUtil.escape(fileVersion.getVersion()) %>)
 								</c:when>
 								<c:otherwise>
 									<%= title %>
@@ -441,7 +441,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 				<c:if test="<%= showAssetMetadata %>">
 					<div class="asset-details-content">
 						<h3 class="version <%= fileEntry.isCheckedOut() ? "document-locked" : StringPool.BLANK %>">
-							<liferay-ui:message key="version" /> <%= fileVersion.getVersion() %>
+							<liferay-ui:message key="version" /> <%= HtmlUtil.escape(fileVersion.getVersion()) %>
 						</h3>
 
 						<div class="lfr-asset-icon lfr-asset-author">
@@ -561,7 +561,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 													}
 						%>
 
-									<liferay-ui:panel collapsible="<%= true %>" cssClass="metadata" extended="<%= true %>" id="documentLibraryMetadataPanel" persistState="<%= true %>" title="<%= ddmStructure.getName(LocaleUtil.getDefault()) %>">
+									<liferay-ui:panel collapsible="<%= true %>" cssClass="metadata" extended="<%= true %>" id="documentLibraryMetadataPanel" persistState="<%= true %>" title="<%= HtmlUtil.escape(ddmStructure.getName(LocaleUtil.getDefault())) %>">
 
 										<%=DDMXSDUtil.getHTML(pageContext, ddmStructure.getXsd(), fields, String.valueOf(ddmStructure.getPrimaryKey()), true, locale) %>
 
@@ -945,11 +945,9 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 					</portlet:renderURL>
 
 					handler: function(event) {
-						if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-move-this-entry-to-the-recycle-bin") %>')) {
-							document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.MOVE_TO_TRASH %>';
-							document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
-							submitForm(document.<portlet:namespace />fm);
-						}
+						document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.MOVE_TO_TRASH %>';
+						document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
+						submitForm(document.<portlet:namespace />fm);
 					},
 					icon: 'delete',
 					label: '<%= UnicodeLanguageUtil.get(pageContext, "move-to-the-recycle-bin") %>'

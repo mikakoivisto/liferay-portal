@@ -16,7 +16,8 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="com.liferay.portal.NoSuchLayoutException" %><%@
+<%@ page import="com.liferay.portal.LocaleException" %><%@
+page import="com.liferay.portal.NoSuchLayoutException" %><%@
 page import="com.liferay.portal.kernel.editor.EditorUtil" %><%@
 page import="com.liferay.portal.kernel.xml.Document" %><%@
 page import="com.liferay.portal.kernel.xml.Element" %><%@
@@ -111,6 +112,7 @@ page import="com.liferay.portlet.journal.service.permission.JournalStructurePerm
 page import="com.liferay.portlet.journal.service.permission.JournalTemplatePermission" %><%@
 page import="com.liferay.portlet.journal.util.JournalUtil" %><%@
 page import="com.liferay.portlet.journalcontent.util.JournalContentUtil" %><%@
+page import="com.liferay.portlet.layoutconfiguration.util.RuntimePageUtil" %><%@
 page import="com.liferay.util.RSSUtil" %>
 
 <%@ page import="java.net.URLDecoder" %>

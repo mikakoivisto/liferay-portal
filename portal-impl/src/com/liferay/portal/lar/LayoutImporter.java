@@ -700,8 +700,12 @@ public class LayoutImporter {
 
 			long portletPreferencesGroupId = groupId;
 
-			try {
+			Element portletDataElement = portletElement.element("portlet-data");
 
+			boolean importData =
+				importPortletData && (portletDataElement != null);
+
+			try {
 				if ((layout != null) && !group.isCompany()) {
 					portletPreferencesGroupId = layout.getGroupId();
 				}
@@ -712,14 +716,11 @@ public class LayoutImporter {
 					portletDataContext, layoutSet.getCompanyId(),
 					portletPreferencesGroupId, layout, null, portletElement,
 					importPortletSetup, importPortletArchivedSetups,
-					importPortletUserPreferences, false);
+					importPortletUserPreferences, false, importData);
 
 				// Portlet data
 
-				Element portletDataElement = portletElement.element(
-					"portlet-data");
-
-				if (importPortletData && (portletDataElement != null)) {
+				if (importData) {
 					_portletImporter.importPortletData(
 						portletDataContext, portletId, plid,
 						portletDataElement);
@@ -744,7 +745,7 @@ public class LayoutImporter {
 				portletDataContext, layoutSet.getCompanyId(), groupId, null,
 				null, portletElement, importPortletSetup,
 				importPortletArchivedSetups, importPortletUserPreferences,
-				false);
+				false, importData);
 		}
 
 		if (importPermissions) {
