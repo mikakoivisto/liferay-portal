@@ -14,12 +14,18 @@
 
 package com.liferay.portlet.portletdisplaytemplates.util;
 
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.staging.StagingConstants;
 import com.liferay.portal.kernel.templateparser.Transformer;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -28,15 +34,19 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.dynamicdatalists.util.DDLTransformer;
 import com.liferay.portlet.dynamicdatamapping.NoSuchTemplateException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
+import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
+import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
+import com.liferay.portlet.journal.util.JournalUtil;
+import com.liferay.util.portlet.PortletRequestUtil;
 
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 
 /**
  * @author Juan Fernández
@@ -168,6 +178,36 @@ public class PortletDisplayTemplatesUtil {
 			PortletDisplayTemplatesConstants.THEME_DISPLAY, themeDisplay);
 
 		contextObjects.putAll(_getPortletPreferences(renderRequest));
+
+		if (ddmTemplate.getLanguage().equals(
+			DDMTemplateConstants.LANG_TYPE_FTL)) {
+
+			String xmlRequest = PortletRequestUtil.toXML(
+				renderRequest, renderResponse);
+
+			if (Validator.isNull(xmlRequest)) {
+				xmlRequest = "<request />";
+			}
+
+			Map<String, String> tokens = JournalUtil.getTokens(
+				themeDisplay.getScopeGroupId(), themeDisplay, xmlRequest);
+
+			tokens.put("template_id", StringUtil.valueOf(ddmTemplateId));
+
+			Document document = SAXReaderUtil.createDocument();
+
+			Element rootElement = document.addElement("root");
+
+			Document requestDocument = SAXReaderUtil.read(xmlRequest);
+
+			rootElement.add(requestDocument.getRootElement().createCopy());
+
+			return _transformer.transform(
+				themeDisplay, tokens, StringPool.BLANK,
+				LanguageUtil.getLanguageId(renderRequest),
+				DDMXMLUtil.formatXML(document), ddmTemplate.getScript(),
+				ddmTemplate.getLanguage());
+		}
 
 		return _transformer.transform(
 			themeDisplay, contextObjects, ddmTemplate.getScript(),
