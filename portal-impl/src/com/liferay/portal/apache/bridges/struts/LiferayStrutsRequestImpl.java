@@ -15,7 +15,7 @@
 package com.liferay.portal.apache.bridges.struts;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStreamWrapper;
+import com.liferay.portal.kernel.servlet.ServletInputStreamAdapter;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.struts.StrutsUtil;
 import com.liferay.portal.util.WebKeys;
@@ -97,7 +97,7 @@ public class LiferayStrutsRequestImpl extends HttpServletRequestWrapper {
 			_bytes = FileUtil.getBytes(is);
 		}
 
-		return new UnsyncByteArrayInputStreamWrapper(
+		return new ServletInputStreamAdapter(
 			new UnsyncByteArrayInputStream(_bytes));
 	}
 

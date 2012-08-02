@@ -393,8 +393,8 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 
 			String xml = StringPool.BLANK;
 
-			if (localized){
-				if(Validator.isNotNull(bean)) {
+			if (localized) {
+				if (Validator.isNotNull(bean)) {
 					xml = BeanPropertiesUtil.getString(bean, field);
 				}
 				else {
@@ -406,7 +406,7 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 			%>
 
 			<c:choose>
-				<c:when test='<%= displayHeight.equals(ModelHintsConstants.TEXT_DISPLAY_HEIGHT) %>'>
+				<c:when test="<%= displayHeight.equals(ModelHintsConstants.TEXT_DISPLAY_HEIGHT) %>">
 
 					<%
 					if (Validator.isNotNull(value)) {

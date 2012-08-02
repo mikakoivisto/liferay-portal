@@ -299,7 +299,7 @@
 		float: right;
 	}
 
-	.syntax-help {
+	.syntax-help-content {
 		border: 1px dotted gray;
 		padding-left: 10px;
 	}
@@ -349,6 +349,10 @@
 	.subscription-info tr td {
 		border: none;
 		padding: 0.1em 10px 0.1em 0;
+	}
+
+	.trash-attachments {
+		float: right;
 	}
 
 	#wikiCommentsPanelContainer {

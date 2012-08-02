@@ -14,10 +14,14 @@
 
 package com.liferay.portlet.blogs.action;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -52,6 +56,8 @@ import com.liferay.portlet.blogs.service.BlogsEntryServiceUtil;
 import java.io.InputStream;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -73,6 +79,7 @@ import org.apache.struts.action.ActionMapping;
  * @author Thiago Moreira
  * @author Juan Fernández
  * @author Zsolt Berentey
+ * @author Levente Hudák
  */
 public class EditEntryAction extends PortletAction {
 
@@ -95,13 +102,18 @@ public class EditEntryAction extends PortletAction {
 				oldUrlTitle = ((String)returnValue[1]);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteEntries(actionRequest, false);
+				deleteEntries(
+					(LiferayPortletConfig)portletConfig, actionRequest, false);
 			}
 			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
-				deleteEntries(actionRequest, true);
+				deleteEntries(
+					(LiferayPortletConfig)portletConfig, actionRequest, true);
 			}
 			else if (cmd.equals(Constants.SUBSCRIBE)) {
 				subscribe(actionRequest);
+			}
+			else if (cmd.equals(Constants.RESTORE)) {
+				restoreEntries(actionRequest);
 			}
 			else if (cmd.equals(Constants.UNSUBSCRIBE)) {
 				unsubscribe(actionRequest);
@@ -252,6 +264,7 @@ public class EditEntryAction extends PortletAction {
 	}
 
 	protected void deleteEntries(
+			LiferayPortletConfig liferayPortletConfig,
 			ActionRequest actionRequest, boolean moveToTrash)
 		throws Exception {
 
@@ -274,6 +287,22 @@ public class EditEntryAction extends PortletAction {
 			else {
 				BlogsEntryServiceUtil.deleteEntry(deleteEntryId);
 			}
+		}
+
+		if (moveToTrash && (deleteEntryIds.length > 0)) {
+			Map<String, long[]> data = new HashMap<String, long[]>();
+
+			data.put("restoreEntryIds", deleteEntryIds);
+
+			SessionMessages.add(
+				actionRequest,
+				liferayPortletConfig.getPortletId() +
+					SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA, data);
+
+			SessionMessages.add(
+				actionRequest,
+				liferayPortletConfig.getPortletId() +
+					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
 		}
 	}
 
@@ -314,6 +343,21 @@ public class EditEntryAction extends PortletAction {
 		portletURL.setParameter("preview", String.valueOf(preview), false);
 
 		return portletURL.toString();
+	}
+
+	protected void restoreEntries(ActionRequest actionRequest)
+		throws PortalException, SystemException {
+
+		ThemeDisplay themeDislay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long[] restoreEntryIds = StringUtil.split(
+			ParamUtil.getString(actionRequest, "restoreEntryIds"), 0L);
+
+		for (long restoreEntryId : restoreEntryIds) {
+			BlogsEntryLocalServiceUtil.restoreEntryFromTrash(
+				themeDislay.getUserId(), restoreEntryId);
+		}
 	}
 
 	protected void subscribe(ActionRequest actionRequest) throws Exception {

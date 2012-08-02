@@ -332,7 +332,7 @@ if (filterManageableOrganizations) {
 							<%
 							String organizationsTitle = null;
 
-							if (Validator.isNotNull(keywords)){
+							if (Validator.isNotNull(keywords)) {
 								organizationsTitle = LanguageUtil.get(pageContext, "organizations");
 							}
 							else if (organization == null) {
@@ -360,7 +360,7 @@ if (filterManageableOrganizations) {
 							</c:if>
 						</liferay-util:buffer>
 
-						<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminOrganizationsPanel" persistState="<%= true %>" title='<%= organizationsPanelTitle %>'>
+						<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminOrganizationsPanel" persistState="<%= true %>" title="<%= organizationsPanelTitle %>">
 							<%= organizationsTree %>
 						</liferay-ui:panel>
 					</c:if>
@@ -384,10 +384,10 @@ if (filterManageableOrganizations) {
 							else if (organization == null) {
 								usersTitle = LanguageUtil.get(pageContext, "users-without-an-organization");
 							}
-							else if(usersCount == 0) {
+							else if (usersCount == 0) {
 								usersTitle = StringPool.BLANK;
 							}
-							else if(usersCount == 1) {
+							else if (usersCount == 1) {
 								usersTitle = LanguageUtil.format(pageContext, "x-user", String.valueOf(usersCount));
 							}
 							else {
@@ -412,7 +412,7 @@ if (filterManageableOrganizations) {
 								/>
 							</c:when>
 							<c:otherwise>
-								<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminUsersPanel" persistState="<%= true %>" title='<%= usersPanelTitle %>'>
+								<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="usersAdminUsersPanel" persistState="<%= true %>" title="<%= usersPanelTitle %>">
 
 									<%
 									boolean organizationContextView = true;

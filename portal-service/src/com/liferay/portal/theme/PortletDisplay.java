@@ -42,10 +42,13 @@ public class PortletDisplay implements Serializable {
 	public void copyFrom(PortletDisplay master) {
 		_access = master.isAccess();
 		_active = master.isActive();
+		_columnCount = master.getColumnCount();
 		_columnId = master.getColumnId();
+		_columnPos = master.getColumnPos();
 		_content = master.getContent();
 		_customCSSClassName = master.getCustomCSSClassName();
 		_description = master.getDescription();
+		_focused = master.isFocused();
 		_id = master.getId();
 		_instanceId = master.getInstanceId();
 		_modeAbout = master.isModeAbout();
@@ -69,6 +72,7 @@ public class PortletDisplay implements Serializable {
 		_showEditDefaultsIcon = master.isShowEditDefaultsIcon();
 		_showEditGuestIcon = master.isShowEditGuestIcon();
 		_showEditIcon = master.isShowEditIcon();
+		_showExportImportIcon = master.isShowExportImportIcon();
 		_showHelpIcon = master.isShowHelpIcon();
 		_showMaxIcon = master.isShowMaxIcon();
 		_showMinIcon = master.isShowMinIcon();
@@ -89,6 +93,7 @@ public class PortletDisplay implements Serializable {
 		_urlConfiguration = master.getURLConfiguration();
 		_urlEdit = master.getURLEdit();
 		_urlEditDefaults = master.getURLEditDefaults();
+		_urlEditGuest = master.getURLEditGuest();
 		_urlExportImport = master.getURLExportImport();
 		_urlHelp = master.getURLHelp();
 		_urlMax = master.getURLMax();
@@ -103,10 +108,13 @@ public class PortletDisplay implements Serializable {
 	public void copyTo(PortletDisplay slave) {
 		slave.setAccess(_access);
 		slave.setActive(_active);
+		slave.setColumnCount(_columnCount);
 		slave.setColumnId(_columnId);
+		slave.setColumnPos(_columnPos);
 		slave.setContent(_content);
 		slave.setCustomCSSClassName(_customCSSClassName);
 		slave.setDescription(_description);
+		slave.setFocused(_focused);
 		slave.setId(_id);
 		slave.setInstanceId(_instanceId);
 		slave.setModeAbout(_modeAbout);
@@ -130,6 +138,7 @@ public class PortletDisplay implements Serializable {
 		slave.setShowEditDefaultsIcon(_showEditDefaultsIcon);
 		slave.setShowEditGuestIcon(_showEditGuestIcon);
 		slave.setShowEditIcon(_showEditIcon);
+		slave.setShowExportImportIcon(_showExportImportIcon);
 		slave.setShowHelpIcon(_showHelpIcon);
 		slave.setShowMaxIcon(_showMaxIcon);
 		slave.setShowMinIcon(_showMinIcon);
@@ -303,6 +312,10 @@ public class PortletDisplay implements Serializable {
 		return _active;
 	}
 
+	public boolean isFocused() {
+		return _focused;
+	}
+
 	public boolean isModeAbout() {
 		return _modeAbout;
 	}
@@ -434,10 +447,13 @@ public class PortletDisplay implements Serializable {
 
 		_access = false;
 		_active = false;
+		_columnCount = 0;
 		_columnId = StringPool.BLANK;
+		_columnPos = 0;
 		_content.setIndex(0);
 		_customCSSClassName = StringPool.BLANK;
 		_description = StringPool.BLANK;
+		_focused = false;
 		_id = StringPool.BLANK;
 		_instanceId = StringPool.BLANK;
 		_modeAbout = false;
@@ -448,6 +464,7 @@ public class PortletDisplay implements Serializable {
 		_modeHelp = false;
 		_modePreview = false;
 		_modePrint = false;
+		_modeView = false;
 		_namespace = StringPool.BLANK;
 		_portletName = StringPool.BLANK;
 		_portletSetup = null;
@@ -460,6 +477,7 @@ public class PortletDisplay implements Serializable {
 		_showEditDefaultsIcon = false;
 		_showEditGuestIcon = false;
 		_showEditIcon = false;
+		_showExportImportIcon = false;
 		_showHelpIcon = false;
 		_showMaxIcon = false;
 		_showMinIcon = false;
@@ -528,6 +546,10 @@ public class PortletDisplay implements Serializable {
 		description = HtmlUtil.escape(description);
 
 		_description = description;
+	}
+
+	public void setFocused(boolean focused) {
+		_focused = focused;
 	}
 
 	public void setId(String id) {
@@ -771,6 +793,7 @@ public class PortletDisplay implements Serializable {
 	private StringBundler _content = _blankStringBundler;
 	private String _customCSSClassName = StringPool.BLANK;
 	private String _description = StringPool.BLANK;
+	private boolean _focused;
 	private String _id = StringPool.BLANK;
 	private String _instanceId = StringPool.BLANK;
 	private boolean _modeAbout;

@@ -14,24 +14,70 @@
 
 package com.liferay.portal.kernel.servlet;
 
+import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.Serializable;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Michael Young
+ * @author Shuyang Zhou
  */
 public class Header implements Serializable {
 
-	public static final int COOKIE_TYPE = 4;
+	public Header(Cookie cookie) {
+		if (cookie == null) {
+			throw new IllegalArgumentException("Cookie is null");
+		}
 
-	public static final int DATE_TYPE = 2;
+		_type = Type.COOKIE;
 
-	public static final int INTEGER_TYPE = 1;
+		_cookieValue = cookie;
+	}
 
-	public static final int STRING_TYPE = 3;
+	public Header(long date) {
+		_type = Type.DATE;
+
+		_dateValue = date;
+	}
+
+	public Header(int integer) {
+		_type = Type.INTEGER;
+
+		_intValue = integer;
+	}
+
+	public Header(String string) {
+		if (string == null) {
+			throw new IllegalArgumentException("String is null");
+		}
+
+		_type = Type.STRING;
+
+		_stringValue = string;
+	}
+
+	public void addToResponse(String key, HttpServletResponse response) {
+		if (_type == Type.COOKIE) {
+			response.addCookie(_cookieValue);
+		}
+		else if (_type == Type.DATE) {
+			response.addDateHeader(key, _dateValue);
+		}
+		else if (_type == Type.INTEGER) {
+			response.addIntHeader(key, _intValue);
+		}
+		else if (_type == Type.STRING) {
+			response.addHeader(key, _stringValue);
+		}
+		else {
+			throw new IllegalStateException("Invalid type " + _type);
+		}
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -45,58 +91,67 @@ public class Header implements Serializable {
 
 		Header header = (Header)obj;
 
-		if (_type != header.getType()) {
+		if (_type != header._type) {
 			return false;
 		}
 
-		String string = toString();
-
-		return string.equals(header.toString());
+		if (_type == Type.COOKIE) {
+			return _equals(_cookieValue, header._cookieValue);
+		}
+		else if (_type == Type.DATE) {
+			return _dateValue == header._dateValue;
+		}
+		else if (_type == Type.INTEGER) {
+			return _intValue == header._intValue;
+		}
+		else if (_type == Type.STRING) {
+			return _stringValue.equals(header._stringValue);
+		}
+		else {
+			throw new IllegalStateException("Invalid type " + _type);
+		}
 	}
 
-	public Cookie getCookieValue() {
-		return _cookieValue;
+	@Override
+	public int hashCode() {
+		if (_type == Type.COOKIE) {
+			return _hashCode(_cookieValue);
+		}
+		else if (_type == Type.DATE) {
+			return (int)(_dateValue ^ (_dateValue >>> 32));
+		}
+		else if (_type == Type.INTEGER) {
+			return _intValue;
+		}
+		else if (_type == Type.STRING) {
+			return _stringValue.hashCode();
+		}
+		else {
+			throw new IllegalStateException("Invalid type " + _type);
+		}
 	}
 
-	public long getDateValue() {
-		return _dateValue;
-	}
-
-	public int getIntValue() {
-		return _intValue;
-	}
-
-	public String getStringValue() {
-		return _stringValue;
-	}
-
-	public int getType() {
-		return _type;
-	}
-
-	public void setCookieValue(Cookie cookieValue) {
-		_cookieValue = cookieValue;
-	}
-
-	public void setDateValue(long dateValue) {
-		_dateValue = dateValue;
-	}
-
-	public void setIntValue(int intValue) {
-		_intValue = intValue;
-	}
-
-	public void setStringValue(String stringValue) {
-		_stringValue = stringValue;
-	}
-
-	public void setType(int type) {
-		_type = type;
+	public void setToResponse(String key, HttpServletResponse response) {
+		if (_type == Type.COOKIE) {
+			response.addCookie(_cookieValue);
+		}
+		else if (_type == Type.DATE) {
+			response.setDateHeader(key, _dateValue);
+		}
+		else if (_type == Type.INTEGER) {
+			response.setIntHeader(key, _intValue);
+		}
+		else if (_type == Type.STRING) {
+			response.setHeader(key, _stringValue);
+		}
+		else {
+			throw new IllegalStateException("Invalid type " + _type);
+		}
 	}
 
 	@Override
 	public String toString() {
-		if (_type == COOKIE_TYPE) {
+		if (_type == Type.COOKIE) {
 			StringBundler sb = new StringBundler(17);
 
 			sb.append("{comment=");
@@ -119,21 +174,62 @@ public class Header implements Serializable {
 
 			return sb.toString();
 		}
-		else if (_type == DATE_TYPE) {
+		else if (_type == Type.DATE) {
 			return String.valueOf(_dateValue);
 		}
-		else if (_type == INTEGER_TYPE) {
+		else if (_type == Type.INTEGER) {
 			return String.valueOf(_intValue);
 		}
-		else {
+		else if (_type == Type.STRING) {
 			return _stringValue;
 		}
+		else {
+			throw new IllegalStateException("Invalid type " + _type);
+		}
+	}
+
+	private boolean _equals(Cookie cookie1, Cookie cookie2) {
+		if (cookie1 == cookie2) {
+			return true;
+		}
+
+		if (!Validator.equals(cookie1.getComment(), cookie2.getComment()) ||
+			!Validator.equals(cookie1.getDomain(), cookie2.getDomain()) ||
+			(cookie1.getMaxAge() != cookie2.getMaxAge()) ||
+			!Validator.equals(cookie1.getName(), cookie2.getName()) ||
+			!Validator.equals(cookie1.getPath(), cookie2.getPath()) ||
+			(cookie1.getSecure() != cookie2.getSecure()) ||
+			!Validator.equals(cookie1.getValue(), cookie2.getValue()) ||
+			(cookie1.getVersion() != cookie2.getVersion())) {
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private int _hashCode(Cookie cookie) {
+		int hashCode = HashUtil.hash(0, cookie.getComment());
+
+		hashCode = HashUtil.hash(hashCode, cookie.getDomain());
+		hashCode = HashUtil.hash(hashCode, cookie.getMaxAge());
+		hashCode = HashUtil.hash(hashCode, cookie.getName());
+		hashCode = HashUtil.hash(hashCode, cookie.getPath());
+		hashCode = HashUtil.hash(hashCode, cookie.getSecure());
+		hashCode = HashUtil.hash(hashCode, cookie.getValue());
+		hashCode = HashUtil.hash(hashCode, cookie.getVersion());
+
+		return hashCode;
 	}
 
 	private Cookie _cookieValue;
 	private long _dateValue;
 	private int _intValue;
 	private String _stringValue;
-	private int _type;
+	private Type _type;
+
+	private static enum Type {
+		COOKIE, DATE, INTEGER, STRING
+	}
 
 }

@@ -4402,6 +4402,7 @@
 	<entity class="com.liferay.portlet.trash.model.impl.TrashEntryImpl" name="TrashEntry">
 		<table name="TrashEntry" />
 		<attributes>
+			<transient name="rootEntry" />
 			<transient name="typeSettingsProperties" />
 		</attributes>
 	</entity>
@@ -4417,6 +4418,7 @@
 		<table name="WikiPage" />
 		<attributes>
 			<transient name="attachmentsDir" />
+			<transient name="deletedAttachmentsDir" />
 		</attributes>
 	</entity>
 	<entity class="com.liferay.portlet.wiki.model.impl.WikiPageResourceImpl" name="WikiPageResource">

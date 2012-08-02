@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.journal.action;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -252,7 +253,8 @@ public class EditArticleAction extends PortletAction {
 				SessionErrors.add(actionRequest, e.getClass());
 			}
 			else if (e instanceof AssetCategoryException ||
-					 e instanceof AssetTagException) {
+					 e instanceof AssetTagException ||
+					 e instanceof LocaleException) {
 
 				SessionErrors.add(actionRequest, e.getClass(), e);
 			}
@@ -759,8 +761,10 @@ public class EditArticleAction extends PortletAction {
 						JournalStructureLocalServiceUtil.getStructure(
 							groupId, structureId, true);
 
+					boolean translate = cmd.equals(Constants.TRANSLATE);
+
 					content = JournalUtil.mergeArticleContent(
-						curArticle.getContent(), content, true);
+						curArticle.getContent(), content, !translate);
 					content = JournalUtil.removeOldContent(
 						content, structure.getMergedXsd());
 				}

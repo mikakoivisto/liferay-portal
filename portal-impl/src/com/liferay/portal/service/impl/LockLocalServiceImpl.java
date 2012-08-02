@@ -20,6 +20,8 @@ import com.liferay.portal.NoSuchLockException;
 import com.liferay.portal.kernel.dao.orm.LockMode;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lock.LockListener;
+import com.liferay.portal.kernel.lock.LockListenerRegistryUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.Validator;
@@ -52,7 +54,7 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 		Lock lock = lockPersistence.findByC_K(className, key);
 
 		if (lock.isExpired()) {
-			lockPersistence.remove(lock);
+			expireLock(lock);
 
 			throw new ExpiredLockException();
 		}
@@ -129,7 +131,7 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 
 		if (lock != null) {
 			if (lock.isExpired()) {
-				lockPersistence.remove(lock);
+				expireLock(lock);
 
 				lock = null;
 			}
@@ -226,18 +228,35 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 
 		Lock lock = locks.get(0);
 
-		lock.setCreateDate(now);
+		LockListener lockListener = LockListenerRegistryUtil.getLockListener(
+			lock.getClassName());
 
-		if (expirationTime == 0) {
-			lock.setExpirationDate(null);
+		String key = lock.getKey();
+
+		if (lockListener != null) {
+			lockListener.onBeforeRefresh(key);
 		}
-		else {
-			lock.setExpirationDate(new Date(now.getTime() + expirationTime));
+
+		try {
+			lock.setCreateDate(now);
+
+			if (expirationTime == 0) {
+				lock.setExpirationDate(null);
+			}
+			else {
+				lock.setExpirationDate(
+					new Date(now.getTime() + expirationTime));
+			}
+
+			lockPersistence.update(lock, false);
+
+			return lock;
 		}
-
-		lockPersistence.update(lock, false);
-
-		return lock;
+		finally {
+			if (lockListener != null) {
+				lockListener.onAfterRefresh(key);
+			}
+		}
 	}
 
 	public void unlock(String className, long key) throws SystemException {
@@ -265,7 +284,27 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 		}
 
 		if (Validator.equals(lock.getOwner(), owner)) {
-			deleteLock(lock);
+			lockPersistence.remove(lock);
+		}
+	}
+
+	protected void expireLock(Lock lock) throws SystemException {
+		LockListener lockListener = LockListenerRegistryUtil.getLockListener(
+			lock.getClassName());
+
+		String key = lock.getKey();
+
+		if (lockListener != null) {
+			lockListener.onBeforeExpire(key);
+		}
+
+		try {
+			lockPersistence.remove(lock);
+		}
+		finally {
+			if (lockListener != null) {
+				lockListener.onAfterExpire(key);
+			}
 		}
 	}
 
@@ -276,7 +315,7 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 
 		if (lock != null) {
 			if (lock.isExpired()) {
-				lockPersistence.remove(lock);
+				expireLock(lock);
 
 				lock = null;
 			}

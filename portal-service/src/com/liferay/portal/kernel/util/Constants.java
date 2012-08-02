@@ -91,6 +91,8 @@ public interface Constants {
 
 	public static final String READ = "read";
 
+	public static final String REDO = "redo";
+
 	public static final String REJECT = "reject";
 
 	public static final String RENAME = "rename";
@@ -116,6 +118,8 @@ public interface Constants {
 	public static final String TEST = "test";
 
 	public static final String TRANSLATE = "translate";
+
+	public static final String UNDO = "undo";
 
 	public static final String UNLOCK = "unlock";
 

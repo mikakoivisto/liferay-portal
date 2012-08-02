@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.process.log.ProcessOutputStream;
 import com.liferay.portal.kernel.test.BaseTestCase;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 
 import java.io.ByteArrayOutputStream;
@@ -673,6 +674,8 @@ public class ProcessExecutorTest extends BaseTestCase {
 
 		// Warn level
 
+		boolean junitCodeCoverage = Boolean.getBoolean("junit.code.coverage");
+
 		String leadingLog = "Test leading log.\n";
 		String bodyLog = "Test body log.\n";
 
@@ -702,13 +705,26 @@ public class ProcessExecutorTest extends BaseTestCase {
 
 			List<LogRecord> logRecords = captureHandler.getLogRecords();
 
-			assertEquals(1, logRecords.size());
+			if (junitCodeCoverage) {
+				assertEquals(2, logRecords.size());
+			}
+			else {
+				assertEquals(1, logRecords.size());
+			}
 
 			LogRecord logRecord = logRecords.get(0);
 
 			assertEquals(
 				"Found corrupt leading log " + leadingLog,
 				logRecord.getMessage());
+
+			if (junitCodeCoverage) {
+				logRecord = logRecords.get(1);
+
+				String message = logRecord.getMessage();
+
+				_assertBrokenPiping(message);
+			}
 		}
 		finally {
 			logger.removeHandler(captureHandler);
@@ -740,7 +756,12 @@ public class ProcessExecutorTest extends BaseTestCase {
 
 			List<LogRecord> logRecords = captureHandler.getLogRecords();
 
-			assertEquals(2, logRecords.size());
+			if (junitCodeCoverage) {
+				assertEquals(3, logRecords.size());
+			}
+			else {
+				assertEquals(2, logRecords.size());
+			}
 
 			LogRecord logRecord1 = logRecords.get(0);
 
@@ -753,6 +774,14 @@ public class ProcessExecutorTest extends BaseTestCase {
 			String message = logRecord2.getMessage();
 
 			assertTrue(message.contains("Invoked generic process callable "));
+
+			if (junitCodeCoverage) {
+				LogRecord logRecord3 = logRecords.get(2);
+
+				message = logRecord3.getMessage();
+
+				_assertBrokenPiping(message);
+			}
 		}
 		finally {
 			logger.removeHandler(captureHandler);
@@ -784,7 +813,16 @@ public class ProcessExecutorTest extends BaseTestCase {
 
 			List<LogRecord> logRecords = captureHandler.getLogRecords();
 
-			assertEquals(0, logRecords.size());
+			if (junitCodeCoverage) {
+				assertEquals(1, logRecords.size());
+
+				LogRecord logRecord = logRecords.get(0);
+
+				_assertBrokenPiping(logRecord.getMessage());
+			}
+			else {
+				assertEquals(0, logRecords.size());
+			}
 		}
 		finally {
 			logger.removeHandler(captureHandler);
@@ -993,6 +1031,21 @@ public class ProcessExecutorTest extends BaseTestCase {
 		}
 	}
 
+	private static void _assertBrokenPiping(String message) {
+		int index = message.lastIndexOf(' ');
+
+		assertTrue(index != -1);
+		assertEquals(
+			"Dumping content of corrupted object input stream to",
+			message.substring(0, index));
+
+		File file = new File(message.substring(index + 1));
+
+		assertTrue(file.exists());
+
+		file.delete();
+	}
+
 	private static List<String> _createArguments() {
 		List<String> arguments = new ArrayList<String>();
 
@@ -1144,6 +1197,13 @@ public class ProcessExecutorTest extends BaseTestCase {
 			}
 
 			return null;
+		}
+
+		@Override
+		public String toString() {
+			Class<?> clazz = getClass();
+
+			return clazz.getSimpleName();
 		}
 
 		private int _serverPort;
@@ -1348,9 +1408,13 @@ public class ProcessExecutorTest extends BaseTestCase {
 	private static class AttachParentProcessCallable
 		implements ProcessCallable<Serializable> {
 
-		public AttachParentProcessCallable(String className, int serverPort) {
-			_className = className;
+		public AttachParentProcessCallable(String className, int serverPort)
+			throws Exception {
+
 			_serverPort = serverPort;
+
+			_processCallableClass = (Class<ProcessCallable<?>>)Class.forName(
+				className);
 		}
 
 		public Serializable call() throws ProcessException {
@@ -1369,11 +1433,8 @@ public class ProcessExecutorTest extends BaseTestCase {
 
 				serverThread.start();
 
-				Class<ProcessCallable<?>> processCallableClass =
-					(Class<ProcessCallable<?>>)Class.forName(_className);
-
 				Constructor<ProcessCallable<?>> constructor =
-					processCallableClass.getConstructor(int.class);
+					_processCallableClass.getConstructor(int.class);
 
 				ProcessExecutor.execute(
 					_classPath, _createArguments(),
@@ -1392,7 +1453,25 @@ public class ProcessExecutorTest extends BaseTestCase {
 			return null;
 		}
 
-		private String _className;
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(7);
+
+			Class<?> clazz = getClass();
+
+			sb.append(clazz.getSimpleName());
+
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append("className=");
+			sb.append(_processCallableClass.getSimpleName());
+			sb.append(", serverPort=");
+			sb.append(_serverPort);
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+
+			return sb.toString();
+		}
+
+		private Class<ProcessCallable<?>> _processCallableClass;
 		private int _serverPort;
 
 	}
@@ -1436,6 +1515,13 @@ public class ProcessExecutorTest extends BaseTestCase {
 				DummyExceptionProcessCallable.class.getName());
 		}
 
+		@Override
+		public String toString() {
+			Class<?> clazz = getClass();
+
+			return clazz.getSimpleName();
+		}
+
 	}
 
 	private static class DummyJob implements Callable<Void> {
@@ -1467,6 +1553,13 @@ public class ProcessExecutorTest extends BaseTestCase {
 			return DummyReturnProcessCallable.class.getName();
 		}
 
+		@Override
+		public String toString() {
+			Class<?> clazz = getClass();
+
+			return clazz.getSimpleName();
+		}
+
 	}
 
 	private static class KillJVMProcessCallable
@@ -1480,6 +1573,22 @@ public class ProcessExecutorTest extends BaseTestCase {
 			System.exit(_exitCode);
 
 			return null;
+		}
+
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(5);
+
+			Class<?> clazz = getClass();
+
+			sb.append(clazz.getSimpleName());
+
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append("exitCode=");
+			sb.append(_exitCode);
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+
+			return sb.toString();
 		}
 
 		private int _exitCode;
@@ -1522,6 +1631,24 @@ public class ProcessExecutorTest extends BaseTestCase {
 			return null;
 		}
 
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(7);
+
+			Class<?> clazz = getClass();
+
+			sb.append(clazz.getSimpleName());
+
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append("leadingLog=");
+			sb.append(_leadingLog);
+			sb.append(", bodyLog=");
+			sb.append(_bodyLog);
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+
+			return sb.toString();
+		}
+
 		private String _bodyLog;
 		private String _leadingLog;
 
@@ -1557,6 +1684,22 @@ public class ProcessExecutorTest extends BaseTestCase {
 			}
 
 			return null;
+		}
+
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(5);
+
+			Class<?> clazz = getClass();
+
+			sb.append(clazz.getSimpleName());
+
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append("logMessage=");
+			sb.append(_logMessage);
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+
+			return sb.toString();
 		}
 
 		private String _logMessage;
@@ -1614,6 +1757,22 @@ public class ProcessExecutorTest extends BaseTestCase {
 			return System.getProperty(_propertyKey);
 		}
 
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(5);
+
+			Class<?> clazz = getClass();
+
+			sb.append(clazz.getSimpleName());
+
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append("propertyKey=");
+			sb.append(_propertyKey);
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+
+			return sb.toString();
+		}
+
 		private String _propertyKey;
 
 	}
@@ -1642,6 +1801,22 @@ public class ProcessExecutorTest extends BaseTestCase {
 			}
 
 			return null;
+		}
+
+		@Override
+		public String toString() {
+			StringBundler sb = new StringBundler(5);
+
+			Class<?> clazz = getClass();
+
+			sb.append(clazz.getSimpleName());
+
+			sb.append(StringPool.OPEN_PARENTHESIS);
+			sb.append("returnValue=");
+			sb.append(_returnValue);
+			sb.append(StringPool.CLOSE_PARENTHESIS);
+
+			return sb.toString();
 		}
 
 		private String _returnValue;
@@ -1833,6 +2008,13 @@ public class ProcessExecutorTest extends BaseTestCase {
 
 		public Serializable call() {
 			return UnserializableProcessCallable.class.getName();
+		}
+
+		@Override
+		public String toString() {
+			Class<?> clazz = getClass();
+
+			return clazz.getSimpleName();
 		}
 
 		@SuppressWarnings("unused")

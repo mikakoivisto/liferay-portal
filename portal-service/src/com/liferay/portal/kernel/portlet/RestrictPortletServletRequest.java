@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PersistentHttpServletRequestWrapper;
 import com.liferay.portal.kernel.util.Mergeable;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.Collections;
@@ -137,7 +139,7 @@ public class RestrictPortletServletRequest
 	protected void doMergeSharedAttributes(
 		ServletRequest servletRequest, String name, Object value) {
 
-		if (name.startsWith(LIFERAY_SHARED_PREFIX)) {
+		if (isSharedRequestAttribute(name)) {
 			if (value == _nullValue) {
 				servletRequest.removeAttribute(name);
 
@@ -175,7 +177,18 @@ public class RestrictPortletServletRequest
 		}
 	}
 
-	private static final String LIFERAY_SHARED_PREFIX = "LIFERAY_SHARED_";
+	protected boolean isSharedRequestAttribute(String name) {
+		for (String requestSharedAttribute : _REQUEST_SHARED_ATTRIBUTES) {
+			if (name.startsWith(requestSharedAttribute)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static final String[] _REQUEST_SHARED_ATTRIBUTES =
+		PropsUtil.getArray(PropsKeys.REQUEST_SHARED_ATTRIBUTES);
 
 	private static Log _log = LogFactoryUtil.getLog(
 		RestrictPortletServletRequest.class);

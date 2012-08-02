@@ -39,9 +39,8 @@ import java.rmi.RemoteException;
  * </p>
  *
  * <p>
- * You can see a list of services at
- * http://localhost:8080/api/secure/axis. Set the property
- * <b>axis.servlet.hosts.allowed</b> in portal.properties to configure
+ * You can see a list of services at http://localhost:8080/api/axis. Set the
+ * property <b>axis.servlet.hosts.allowed</b> in portal.properties to configure
  * security.
  * </p>
  *
@@ -1897,7 +1896,8 @@ public class DLAppServiceSoap {
 	* @return the temporary file entry names
 	* @throws PortalException if the folder was invalid
 	* @throws SystemException if a system exception occurred
-	* @see com.liferay.portlet.documentlibrary.service.impl.DLAppServiceImpl#addTempFileEntry(long, long, String, String, File)
+	* @see com.liferay.portlet.documentlibrary.service.impl.DLAppServiceImpl#addTempFileEntry(
+	long, long, String, String, File)
 	* @see com.liferay.portal.kernel.util.TempFileUtil
 	*/
 	public static java.lang.String[] getTempFileEntryNames(long groupId,
@@ -1994,9 +1994,39 @@ public class DLAppServiceSoap {
 	}
 
 	/**
+	* Moves the file shortcut from a trashed folder to the new folder.
+	*
+	* @param fileShortcutId the primary key of the file shortcut
+	* @param newFolderId the primary key of the new folder
+	* @param serviceContext the service context to be applied
+	* @return the file shortcut
+	* @throws PortalException if the file entry or the new folder could not be
+	found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileShortcutSoap moveFileShortcutFromTrash(
+		long fileShortcutId, long newFolderId, long toFileEntryId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			com.liferay.portlet.documentlibrary.model.DLFileShortcut returnValue =
+				DLAppServiceUtil.moveFileShortcutFromTrash(fileShortcutId,
+					newFolderId, toFileEntryId, serviceContext);
+
+			return com.liferay.portlet.documentlibrary.model.DLFileShortcutSoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	/**
 	* Moves the file shortcut with the primary key to the trash portlet.
 	*
 	* @param fileShortcutId the primary key of the file shortcut
+	* @return the file shortcut
 	* @throws PortalException if the file shortcut could not be found
 	* @throws SystemException if a system exception occurred
 	*/
@@ -2031,6 +2061,34 @@ public class DLAppServiceSoap {
 		throws RemoteException {
 		try {
 			com.liferay.portal.kernel.repository.model.Folder returnValue = DLAppServiceUtil.moveFolder(folderId,
+					parentFolderId, serviceContext);
+
+			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	/**
+	* Moves the folder with the primary key from the trash portlet to the new
+	* parent folder with the primary key.
+	*
+	* @param folderId the primary key of the folder
+	* @param parentFolderId the primary key of the new parent folder
+	* @param serviceContext the service context to be applied
+	* @return the file entry
+	* @throws PortalException if the folder could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.kernel.repository.model.FolderSoap moveFolderFromTrash(
+		long folderId, long parentFolderId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			com.liferay.portal.kernel.repository.model.Folder returnValue = DLAppServiceUtil.moveFolderFromTrash(folderId,
 					parentFolderId, serviceContext);
 
 			return com.liferay.portal.kernel.repository.model.FolderSoap.toSoapModel(returnValue);
@@ -2145,6 +2203,10 @@ public class DLAppServiceSoap {
 		}
 	}
 
+	/**
+	* @deprecated Use {@link #checkInFileEntry(long, boolean, String,
+	ServiceContext)}.
+	*/
 	public static void unlockFileEntry(long fileEntryId)
 		throws RemoteException {
 		try {
@@ -2157,6 +2219,9 @@ public class DLAppServiceSoap {
 		}
 	}
 
+	/**
+	* @deprecated Use {@link #checkInFileEntry(long, String)}.
+	*/
 	public static void unlockFileEntry(long fileEntryId,
 		java.lang.String lockUuid) throws RemoteException {
 		try {
@@ -2312,15 +2377,15 @@ public class DLAppServiceSoap {
 	* @param serviceContext the service context to be applied. In a Liferay
 	repository, it may include:  <ul> <li> defaultFileEntryTypeId -
 	the file entry type to default all Liferay file entries to </li>
-	<li> fileEntryTypeSearchContainerPrimaryKeys - a comma-delimited
-	list of file entry type primary keys allowed in the given folder
-	and all descendants </li> <li> overrideFileEntryTypes - boolean
-	specifying whether to override ancestral folder's restriction of
-	file entry types allowed </li> <li> workflowDefinitionXYZ - the
-	workflow definition name specified per file entry type. The
-	parameter name must be the string <code>workflowDefinition</code>
-	appended by the <code>fileEntryTypeId</code> (optionally
-	<code>0</code>). </li> </ul>
+	<li> dlFileEntryTypesSearchContainerPrimaryKeys - a
+	comma-delimited list of file entry type primary keys allowed in
+	the given folder and all descendants </li> <li>
+	overrideFileEntryTypes - boolean specifying whether to override
+	ancestral folder's restriction of file entry types allowed </li>
+	<li> workflowDefinitionXYZ - the workflow definition name
+	specified per file entry type. The parameter name must be the
+	string <code>workflowDefinition</code> appended by the <code>
+	fileEntryTypeId</code> (optionally <code>0</code>). </li> </ul>
 	* @return the folder
 	* @throws PortalException if the current or new parent folder could not be
 	found or if the new parent folder's information was invalid

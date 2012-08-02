@@ -47,9 +47,8 @@ import java.rmi.RemoteException;
  * </p>
  *
  * <p>
- * You can see a list of services at
- * http://localhost:8080/api/secure/axis. Set the property
- * <b>axis.servlet.hosts.allowed</b> in portal.properties to configure
+ * You can see a list of services at http://localhost:8080/api/axis. Set the
+ * property <b>axis.servlet.hosts.allowed</b> in portal.properties to configure
  * security.
  * </p>
  *
@@ -352,6 +351,32 @@ public class CompanyServiceSoap {
 		throws RemoteException {
 		try {
 			CompanyServiceUtil.updateDisplay(companyId, languageId, timeZoneId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	/**
+	* Updates the company's logo.
+	*
+	* @param companyId the primary key of the company
+	* @param bytes the bytes of the company's logo image
+	* @return the company with the primary key
+	* @throws PortalException if the company's logo ID could not be found or if
+	the logo's image was corrupted or if the user was an
+	administrator
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.model.CompanySoap updateLogo(
+		long companyId, byte[] bytes) throws RemoteException {
+		try {
+			com.liferay.portal.model.Company returnValue = CompanyServiceUtil.updateLogo(companyId,
+					bytes);
+
+			return com.liferay.portal.model.CompanySoap.toSoapModel(returnValue);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

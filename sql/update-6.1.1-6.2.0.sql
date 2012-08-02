@@ -1,3 +1,5 @@
+update BlogsEntry set status = 2 where status = 9;
+
 alter table Contact_ add classNameId LONG;
 alter table Contact_ add classPK LONG;
 alter table Contact_ add emailAddress VARCHAR(75) null;
@@ -271,6 +273,8 @@ create table JournalFolder (
 	name VARCHAR(100) null,
 	description STRING null
 );
+
+update MBMessage set status = 2 where status = 9;
 
 drop table OrgGroupPermission;
 
