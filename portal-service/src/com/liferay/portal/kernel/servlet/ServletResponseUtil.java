@@ -607,7 +607,7 @@ public class ServletResponseUtil {
 		response.setHeader(
 			HttpHeaders.CACHE_CONTROL, HttpHeaders.CACHE_CONTROL_PRIVATE_VALUE);
 		response.setHeader(
-			HttpHeaders.PRAGMA, HttpHeaders.PRAGMA_NO_CACHE_VALUE);
+			HttpHeaders.PRAGMA, HttpHeaders.PRAGMA_ANY_TEXT_EXEPT_NO_CACHE);
 
 		if (Validator.isNotNull(fileName)) {
 			String contentDisposition =

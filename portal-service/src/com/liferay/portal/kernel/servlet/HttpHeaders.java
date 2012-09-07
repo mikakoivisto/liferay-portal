@@ -100,6 +100,8 @@ public interface HttpHeaders {
 
 	public static final String EXPIRES_DEFAULT_VALUE = "315360000";
 
+	public static final String PRAGMA_ANY_TEXT_EXEPT_NO_CACHE = "anytextexeptno-cache, true";
+
 	public static final String PRAGMA_NO_CACHE_VALUE = "no-cache";
 
 	public static final String PRAGMA_PUBLIC_VALUE = "public";
