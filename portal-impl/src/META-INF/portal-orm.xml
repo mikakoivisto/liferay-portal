@@ -1991,6 +1991,7 @@
 			<basic name="size">
 				<column name="SIZE_" />
 			</basic>
+			<basic name="checksum" />
 			<basic name="status" />
 			<basic name="statusByUserId" />
 			<basic name="statusByUserName" />
