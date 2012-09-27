@@ -303,12 +303,6 @@ public class RepositoryPersistenceTest {
 				existingRepositoryModelImpl.getOriginalUuid()));
 		Assert.assertEquals(existingRepositoryModelImpl.getGroupId(),
 			existingRepositoryModelImpl.getOriginalGroupId());
-
-		Assert.assertEquals(existingRepositoryModelImpl.getGroupId(),
-			existingRepositoryModelImpl.getOriginalGroupId());
-		Assert.assertTrue(Validator.equals(
-				existingRepositoryModelImpl.getPortletId(),
-				existingRepositoryModelImpl.getOriginalPortletId()));
 	}
 
 	protected Repository addRepository() throws Exception {

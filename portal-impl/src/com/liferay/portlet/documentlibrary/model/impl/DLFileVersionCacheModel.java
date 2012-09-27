@@ -35,7 +35,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(51);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -77,6 +77,8 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		sb.append(version);
 		sb.append(", size=");
 		sb.append(size);
+		sb.append(", checksum=");
+		sb.append(checksum);
 		sb.append(", status=");
 		sb.append(status);
 		sb.append(", statusByUserId=");
@@ -182,6 +184,14 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 		}
 
 		dlFileVersionImpl.setSize(size);
+
+		if (checksum == null) {
+			dlFileVersionImpl.setChecksum(StringPool.BLANK);
+		}
+		else {
+			dlFileVersionImpl.setChecksum(checksum);
+		}
+
 		dlFileVersionImpl.setStatus(status);
 		dlFileVersionImpl.setStatusByUserId(statusByUserId);
 
@@ -224,6 +234,7 @@ public class DLFileVersionCacheModel implements CacheModel<DLFileVersion>,
 	public long fileEntryTypeId;
 	public String version;
 	public long size;
+	public String checksum;
 	public int status;
 	public long statusByUserId;
 	public String statusByUserName;

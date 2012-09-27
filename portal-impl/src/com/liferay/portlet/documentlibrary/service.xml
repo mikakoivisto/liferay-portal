@@ -223,10 +223,6 @@
 			<finder-column name="DDMStructureId" />
 			<finder-column name="fileVersionId" />
 		</finder>
-		<finder name="F_V" return-type="DLFileEntryMetadata">
-			<finder-column name="fileEntryId" />
-			<finder-column name="fileVersionId" />
-		</finder>
 
 		<!-- References -->
 
@@ -418,6 +414,7 @@
 		<column name="fileEntryTypeId" type="long" />
 		<column name="version" type="String" />
 		<column name="size" type="long" />
+		<column name="checksum" type="String" />
 		<column name="status" type="int" />
 		<column name="statusByUserId" type="long" />
 		<column name="statusByUserName" type="String" />
