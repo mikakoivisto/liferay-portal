@@ -246,6 +246,8 @@ COMMIT_TRANSACTION;
 
 update DLFileShortcut set active_ = TRUE;
 
+alter table DLFileVersion add checksum VARCHAR(75) null;
+
 alter table DLFolder add status INTEGER;
 alter table DLFolder add statusByUserId LONG;
 alter table DLFolder add statusByUserName VARCHAR(75) null;
