@@ -101,6 +101,9 @@ public class VerifyUUID extends VerifyProcess {
 			"MBBan", "banId"
 		},
 		new String[] {
+			"MBDiscussion", "discussionId"
+		},
+		new String[] {
 			"MBThread", "threadId"
 		},
 		new String[] {
