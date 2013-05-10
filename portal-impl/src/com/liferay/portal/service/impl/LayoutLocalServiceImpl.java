@@ -220,6 +220,8 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		layout.setUuid(serviceContext.getUuid());
 		layout.setGroupId(groupId);
 		layout.setCompanyId(user.getCompanyId());
+		layout.setUserId(user.getUserId());
+		layout.setUserName(user.getFullName());
 		layout.setCreateDate(serviceContext.getCreateDate(now));
 		layout.setModifiedDate(serviceContext.getModifiedDate(now));
 		layout.setPrivateLayout(privateLayout);
@@ -2402,6 +2404,34 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 
 		updateScopedPortletNames(
 			groupId, privateLayout, layoutId, map, locales);
+	}
+
+	public void validateImportLayoutsFile(
+			long userId, long groupId, boolean privateLayout,
+			Map<String, String[]> parameterMap, File file)
+		throws PortalException, SystemException {
+
+		try {
+			LayoutImporter layoutImporter = new LayoutImporter();
+
+			layoutImporter.validateFile(
+				userId, groupId, privateLayout, parameterMap, file);
+		}
+		catch (PortalException pe) {
+			Throwable cause = pe.getCause();
+
+			if (cause instanceof LocaleException) {
+				throw (PortalException)cause;
+			}
+
+			throw pe;
+		}
+		catch (SystemException se) {
+			throw se;
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
 	}
 
 	protected void validateTypeSettingsProperties(

@@ -18,11 +18,12 @@ import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * The utility for the layout local service. This utility wraps {@link com.liferay.portal.service.impl.LayoutLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service utility for Layout. This utility wraps
+ * {@link com.liferay.portal.service.impl.LayoutLocalServiceImpl} and is the
+ * primary access point for service operations in application layer code running
+ * on the local server. Methods of this service will not have security checks
+ * based on the propagated JAAS credentials because this service can only be
+ * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
  * @see LayoutLocalService
@@ -1516,6 +1517,17 @@ public class LayoutLocalServiceUtil {
 		getService()
 			.updateScopedPortletNames(groupId, privateLayout, layoutId, name,
 			languageId);
+	}
+
+	public static void validateImportLayoutsFile(long userId, long groupId,
+		boolean privateLayout,
+		java.util.Map<java.lang.String, java.lang.String[]> parameterMap,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.validateImportLayoutsFile(userId, groupId, privateLayout,
+			parameterMap, file);
 	}
 
 	public static LayoutLocalService getService() {

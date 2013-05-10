@@ -492,6 +492,8 @@
 		<!-- Audit fields -->
 
 		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
 		<column name="createDate" type="Date" />
 		<column name="modifiedDate" type="Date" />
 
@@ -1698,6 +1700,9 @@
 
 		<!-- Finder methods -->
 
+		<finder name="RoleId" return-type="Collection">
+			<finder-column name="roleId" />
+		</finder>
 		<finder name="R_R" return-type="ResourceBlockPermission" unique="true">
 			<finder-column name="resourceBlockId" />
 			<finder-column name="roleId" />

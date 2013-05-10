@@ -721,7 +721,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			emailAddress = emailAddress.trim().toLowerCase();
 		}
 
-		if (!PropsValues.USERS_EMAIL_ADDRESS_REQUIRED &&
+		if (!PrefsPropsUtil.getBoolean(
+				companyId, PropsKeys.USERS_EMAIL_ADDRESS_REQUIRED) &&
 			Validator.isNull(emailAddress)) {
 
 			emailAddress = emailAddressGenerator.generate(companyId, userId);
@@ -1615,10 +1616,14 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			}
 
 			user.setPassword(PasswordEncryptorUtil.encrypt(password));
-			user.setPasswordEncrypted(true);
 			user.setPasswordUnencrypted(password);
+			user.setPasswordEncrypted(true);
+			user.setPasswordModified(true);
+			user.setPasswordModifiedDate(new Date());
 
 			userPersistence.update(user);
+
+			user.setPasswordModified(false);
 		}
 
 		if (user.hasCompanyMx()) {

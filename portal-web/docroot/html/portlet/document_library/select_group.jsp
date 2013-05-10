@@ -29,31 +29,42 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 	PortletURL portletURL = renderResponse.createRenderURL();
 
 	portletURL.setParameter("struts_action", "/document_library/select_group");
+
+	List<Group> mySites = user.getMySites();
+
+	if (PortalUtil.isCompanyControlPanelPortlet(portletId, themeDisplay)) {
+		mySites = ListUtil.copy(mySites);
+
+		mySites.add(0, GroupLocalServiceUtil.getGroup(themeDisplay.getCompanyGroupId()));
+	}
 	%>
 
 	<liferay-ui:search-container
 		searchContainer="<%= new GroupSearch(renderRequest, portletURL) %>"
+		total="<%= mySites.size() %>"
 	>
 		<liferay-ui:search-form
 			page="/html/portlet/users_admin/group_search.jsp"
 			searchContainer="<%= searchContainer %>"
 		/>
 
+		<div>
+			<c:if test="<%= PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_COMMUNITY) %>">
+				<aui:button onClick='<%= renderResponse.getNamespace() + "addGroup();" %>' value="add-site" />
+			</c:if>
+		</div>
+
+		<aui:script>
+			function <portlet:namespace />addGroup() {
+				document.<portlet:namespace />fm.method = 'post';
+				submitForm(document.<portlet:namespace />fm, '<portlet:renderURL><portlet:param name="struts_action" value="/sites_admin/edit_site" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>');
+			}
+		</aui:script>
+
 		<div class="separator"><!-- --></div>
-
-		<%
-		List<Group> mySites = user.getMySites();
-
-		if (PortalUtil.isCompanyControlPanelPortlet(portletId, themeDisplay)) {
-			mySites = ListUtil.copy(mySites);
-
-			mySites.add(0, GroupLocalServiceUtil.getGroup(themeDisplay.getCompanyGroupId()));
-		}
-		%>
 
 		<liferay-ui:search-container-results
 			results="<%= mySites %>"
-			total="<%= mySites.size() %>"
 		/>
 
 		<liferay-ui:search-container-row
@@ -109,8 +120,8 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 
 			Util.getOpener().Liferay.fire('<%= HtmlUtil.escapeJS(eventName) %>', result);
 
-			Util.getWindow().close();
+			Util.getWindow().hide();
 		},
-		'.selector-button input'
+		'.selector-button'
 	);
 </aui:script>

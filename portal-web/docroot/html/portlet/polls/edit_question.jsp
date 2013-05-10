@@ -88,13 +88,16 @@ if (choiceName > 0) {
 
 		<aui:input label="polls-question" name="description" />
 
-		<aui:input disabled="<%= neverExpire %>" name="expirationDate" />
+		<aui:field-wrapper label="expiration-date">
 
-		<%
-		String taglibNeverExpireOnClick = renderResponse.getNamespace() + "disableInputDate('expirationDate', this.checked);";
-		%>
+			<%
+			String taglibNeverExpireOnClick = renderResponse.getNamespace() + "disableInputDate('expirationDate', this.checked);";
+			%>
 
-		<aui:input name="neverExpire" onClick="<%= taglibNeverExpireOnClick %>" type="checkbox" value="<%= neverExpire %>" />
+			<aui:input name="neverExpire" onClick="<%= taglibNeverExpireOnClick %>" type="checkbox" value="<%= neverExpire %>" />
+
+			<aui:input disabled="<%= neverExpire %>" label="" name="expirationDate" />
+		</aui:field-wrapper>
 
 		<aui:field-wrapper label="choices">
 
@@ -126,7 +129,7 @@ if (choiceName > 0) {
 					<aui:input fieldParam="<%= paramName %>" label="<%= c + StringPool.PERIOD %>" name="description" />
 
 					<c:if test="<%= (((question == null) && (choicesCount > 2)) || ((question != null) && (choicesCount > oldChoicesCount))) && (i == choicesCount) %>">
-						<aui:button onClick='<%= renderResponse.getNamespace() + "deletePollChoice(" + i + ");" %>' value="delete" />
+						<aui:button cssClass="btn-delete" onClick='<%= renderResponse.getNamespace() + "deletePollChoice(" + i + ");" %>' value="delete" />
 					</c:if>
 				</div>
 

@@ -54,8 +54,6 @@ int entryEnd = ParamUtil.getInteger(request, "entryEnd", entriesPerPage);
 int folderStart = ParamUtil.getInteger(request, "folderStart");
 int folderEnd = ParamUtil.getInteger(request, "folderEnd", SearchContainer.DEFAULT_DELTA);
 
-int folderRowsPerPage = folderEnd - folderStart;
-
 String orderByCol = ParamUtil.getString(request, "orderByCol");
 String orderByType = ParamUtil.getString(request, "orderByType");
 
@@ -81,14 +79,14 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 <liferay-ui:trash-undo portletURL="<%= undoTrashURL %>" />
 
 <div id="<portlet:namespace />documentLibraryContainer">
-	<aui:layout cssClass="lfr-app-column-view">
-		<aui:column columnWidth="<%= 20 %>" cssClass="navigation-pane" first="<%= true %>">
+	<aui:row cssClass="lfr-app-column-view">
+		<aui:col cssClass="navigation-pane" width="<%= 20 %>">
 			<liferay-util:include page="/html/portlet/document_library/view_folders.jsp" />
 
-			<div class="folder-paginator"></div>
-		</aui:column>
+			<div class="folder-pagination"></div>
+		</aui:col>
 
-		<aui:column columnWidth="<%= showFolderMenu ? 80 : 100 %>" cssClass="context-pane" last="<%= true %>">
+		<aui:col cssClass="context-pane" width="<%= showFolderMenu ? 80 : 100 %>">
 			<liferay-ui:app-view-toolbar
 				includeDisplayStyle="<%= true %>"
 				includeSelectAll="<%= true %>"
@@ -103,7 +101,7 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 			String cssClass = "show-sync-message-icon-container";
 
 			if (showSyncMessage || !PropsValues.DL_SHOW_LIFERAY_SYNC_MESSAGE) {
-				cssClass += " aui-helper-hidden";
+				cssClass += " hide";
 			}
 			%>
 
@@ -115,8 +113,8 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 				<liferay-util:include page="/html/portlet/document_library/breadcrumb.jsp" />
 			</div>
 
-			<div class="aui-helper-hidden" id="<portlet:namespace />syncNotification">
-				<div class="lfr-message-info sync-notification" id="<portlet:namespace />syncNotificationContent">
+			<div class="hide" id="<portlet:namespace />syncNotification">
+				<div class="alert alert-info sync-notification" id="<portlet:namespace />syncNotificationContent">
 					<a href="http://www.liferay.com/products/liferay-sync" target="_blank">
 						<liferay-ui:message key="access-these-files-offline-using-liferay-sync" />
 					</a>
@@ -149,10 +147,10 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 					</c:choose>
 				</div>
 
-				<div class="document-entries-paginator"></div>
+				<div class="document-entries-pagination"></div>
 			</aui:form>
-		</aui:column>
-	</aui:layout>
+		</aui:col>
+	</aui:row>
 </div>
 
 <span id="<portlet:namespace />displayStyleButtonsContainer">
@@ -167,6 +165,9 @@ int foldersTotal = GetterUtil.getInteger((String)request.getAttribute("view_fold
 
 entryEnd = GetterUtil.getInteger(request.getAttribute("view_entries.jsp-entryEnd"), entryEnd);
 entryStart = GetterUtil.getInteger(request.getAttribute("view_entries.jsp-entryStart"), entryStart);
+
+folderEnd = GetterUtil.getInteger(request.getAttribute("view_folders.jsp-folderEnd"), folderEnd);
+folderStart = GetterUtil.getInteger(request.getAttribute("view_folders.jsp-folderStart"), folderStart);
 
 if (folder != null) {
 	if (portletName.equals(PortletKeys.DOCUMENT_LIBRARY)) {
@@ -236,12 +237,10 @@ if (folder != null) {
 				entriesTotal: <%= entriesTotal %>,
 				entryEnd: <%= entryEnd %>,
 				entryRowsPerPage: <%= entryEnd - entryStart %>,
-				entryRowsPerPageOptions: [<%= StringUtil.merge(PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) %>],
 				entryStart: <%= entryStart %>,
 				folderEnd: <%= folderEnd %>,
 				folderId: <%= folderId %>,
-				folderRowsPerPage: <%= folderRowsPerPage %>,
-				folderRowsPerPageOptions: [<%= StringUtil.merge(PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) %>],
+				folderRowsPerPage: <%= folderEnd - folderStart %>,
 				folderStart: <%= folderStart %>,
 				foldersTotal: <%= foldersTotal %>
 			},

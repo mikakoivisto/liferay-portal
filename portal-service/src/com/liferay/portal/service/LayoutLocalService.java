@@ -21,11 +21,10 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 
 /**
- * The interface for the layout local service.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
+ * Provides the local service interface for Layout. Methods of this
+ * service will not have security checks based on the propagated JAAS
+ * credentials because this service can only be accessed from within the same
+ * VM.
  *
  * @author Brian Wing Shun Chan
  * @see LayoutLocalServiceUtil
@@ -1334,6 +1333,13 @@ public interface LayoutLocalService extends BaseLocalService,
 	*/
 	public void updateScopedPortletNames(long groupId, boolean privateLayout,
 		long layoutId, java.lang.String name, java.lang.String languageId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void validateImportLayoutsFile(long userId, long groupId,
+		boolean privateLayout,
+		java.util.Map<java.lang.String, java.lang.String[]> parameterMap,
+		java.io.File file)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 }

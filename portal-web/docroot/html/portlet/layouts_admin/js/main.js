@@ -151,30 +151,38 @@ AUI.add(
 						if (!contentDialog) {
 							contentNode.show();
 
-							contentDialog = new A.Dialog(
+							contentDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: contentNode,
-									centered: true,
-									modal: true,
-									title: instance._dialogTitle,
-									width: 400,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleContent(portletId);
+									dialog: {
+										bodyContent: contentNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function() {
+															instance._handleContent(portletId);
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															contentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok')
+												},
+												{
+													on: {
+														click: function() {
+															contentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									]
+										width: 400
+									},
+									title: instance._dialogTitle
 								}
 							).render(instance.rootNode);
 
@@ -194,30 +202,38 @@ AUI.add(
 
 							globalConfigurationNode.show();
 
-							globalConfigurationDialog = new A.Dialog(
+							globalConfigurationDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: globalConfigurationNode,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleGlobalConfiguration();
+									dialog: {
+										bodyContent: globalConfigurationNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function() {
+															instance._handleGlobalConfiguration();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															globalConfigurationDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok')
+												},
+												{
+													on: {
+														click: function() {
+															globalConfigurationDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									centered: true,
-									modal: true,
-									title: Liferay.Language.get('application-configuration'),
-									width: 400
+										width: 400
+									},
+									title: Liferay.Language.get('application-configuration')
 								}
 							).render(instance.rootNode);
 
@@ -237,30 +253,38 @@ AUI.add(
 
 							globalContentNode.show();
 
-							globalContentDialog = new A.Dialog(
+							globalContentDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleGlobalContent();
+									dialog: {
+										bodyContent: globalContentNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function() {
+															instance._handleGlobalContent();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															globalContentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok')
+												},
+												{
+													on: {
+														click: function() {
+															globalContentDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									bodyContent: globalContentNode,
-									centered: true,
-									modal: true,
-									title: instance._dialogTitle,
-									width: 400
+										width: 400
+									},
+									title: instance._dialogTitle
 								}
 							).render(instance.rootNode);
 
@@ -280,29 +304,37 @@ AUI.add(
 
 							pagesNode.show();
 
-							pagesDialog = new A.Dialog(
+							pagesDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: pagesNode,
-									buttons: [
-										{
-											handler: function() {
-												instance._handlePages();
+									dialog: {
+										bodyContent: pagesNode,
+										height: 300,
+										modal: true,
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function() {
+															instance._handlePages();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															pagesDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok')
+												},
+												{
+													on: {
+														click: function() {
+															pagesDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									modal: true,
-									title: Liferay.Language.get('pages'),
-									width: 400
+										width: 400
+									},
+									title: Liferay.Language.get('pages')
 								}
 							).render(instance.rootNode);
 
@@ -322,30 +354,38 @@ AUI.add(
 
 							rangeNode.show();
 
-							rangeDialog = new A.Dialog(
+							rangeDialog = Liferay.Util.Window.getWindow(
 								{
-									align: Liferay.Util.Window.ALIGN_CENTER,
-									bodyContent: rangeNode,
-									buttons: [
-										{
-											handler: function() {
-												instance._handleRange();
+									dialog: {
+										bodyContent: rangeNode,
+										centered: true,
+										height: 300,
+										modal: true,
+										toolbars: {
+											footer: [
+												{
+													on: {
+														click: function() {
+															instance._handleRange();
 
-												this.hide();
-											},
-											label: Liferay.Language.get('ok')
+															rangeDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('ok')
+												},
+												{
+													on: {
+														click: function() {
+															rangeDialog.hide();
+														}
+													},
+													label: Liferay.Language.get('cancel')
+												}
+											]
 										},
-										{
-											handler: function() {
-												this.hide();
-											},
-											label: Liferay.Language.get('cancel')
-										}
-									],
-									centered: true,
-									modal: true,
-									title: instance._dialogTitle,
-									width: 400
+										width: 400
+									},
+									title: instance._dialogTitle
 								}
 							).render(instance.rootNode);
 
@@ -360,7 +400,7 @@ AUI.add(
 
 						var contentNode = instance.byId('content_' + portletId);
 
-						var inputs = contentNode.all('.aui-field-input-choice');
+						var inputs = contentNode.all('.field-input-choice');
 
 						var selectedContent = [];
 
@@ -556,6 +596,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'liferay-portlet-base']
+		requires: ['aui-dialog-iframe-deprecated', 'aui-modal', 'aui-tree-view', 'liferay-portlet-base','liferay-util-window']
 	}
 );

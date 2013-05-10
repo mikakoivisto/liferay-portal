@@ -123,7 +123,7 @@
 
 								<c:if test="<%= layout.isTypePortlet() %>">
 									<div class="search-panel">
-										<aui:input cssClass="add-content-search lfr-auto-focus" label="" name="searchApplication" type="text" />
+										<aui:input cssClass="add-applications-search lfr-auto-focus" label="" name="searchApplication" type="text" />
 									</div>
 								</c:if>
 
@@ -148,7 +148,7 @@
 									%>
 
 									<div class="lfr-add-content">
-										<liferay-ui:panel collapsible="<%= layout.isTypePortlet() %>" cssClass="lfr-content-category lfr-component panel-page-category" extended="<%= true %>" id="<%= panelId %>" persistState="<%= true %>" title='<%= LanguageUtil.get(pageContext, "highlighted") %>'>
+										<liferay-ui:panel collapsible="<%= layout.isTypePortlet() %>" cssClass="lfr-content-category panel-page-category unstyled" extended="<%= true %>" id="<%= panelId %>" persistState="<%= true %>" title='<%= LanguageUtil.get(pageContext, "highlighted") %>'>
 
 											<%
 											for (Portlet portlet : portlets) {
@@ -244,7 +244,7 @@
 								%>
 
 								<c:if test="<%= layout.isTypePortlet() %>">
-									<div class="portlet-msg-info">
+									<div class="alert alert-info">
 										<liferay-ui:message key="to-add-a-portlet-to-the-page-just-drag-it" />
 									</div>
 								</c:if>

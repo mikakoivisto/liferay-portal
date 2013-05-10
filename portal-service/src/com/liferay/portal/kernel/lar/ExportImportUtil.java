@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.lar;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.model.StagedModel;
 
 /**
  * @author Zsolt Berentey
@@ -23,25 +24,28 @@ import com.liferay.portal.kernel.xml.Element;
 public class ExportImportUtil {
 
 	public static String exportContentReferences(
-			PortletDataContext portletDataContext, Element entityElement,
+			PortletDataContext portletDataContext,
+			StagedModel entityStagedModel, Element entityElement,
 			String content)
 		throws Exception {
 
 		return getExportImport().exportContentReferences(
-			portletDataContext, entityElement, content);
+			portletDataContext, entityStagedModel, entityElement, content);
 	}
 
 	public static String exportDLReferences(
-			PortletDataContext portletDataContext, Element entityElement,
+			PortletDataContext portletDataContext,
+			StagedModel entityStagedModel, Element entityElement,
 			String content)
 		throws Exception {
 
 		return getExportImport().exportDLReferences(
-			portletDataContext, entityElement, content);
+			portletDataContext, entityStagedModel, entityElement, content);
 	}
 
 	public static String exportLayoutReferences(
-		PortletDataContext portletDataContext, String content) {
+			PortletDataContext portletDataContext, String content)
+		throws Exception {
 
 		return getExportImport().exportLayoutReferences(
 			portletDataContext, content);

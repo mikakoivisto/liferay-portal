@@ -4266,15 +4266,13 @@ public class SourceFormatter {
 			"**\\service\\**\\service\\ClpSerializer.java",
 			"**\\service\\**\\service\\messaging\\*ClpMessageListener.java",
 			"**\\service\\**\\service\\persistence\\*Finder.java",
-			"**\\service\\**\\service\\persistence\\*Persistence.java",
 			"**\\service\\**\\service\\persistence\\*Util.java",
 			"**\\service\\base\\*ServiceBaseImpl.java",
 			"**\\service\\base\\*ServiceClpInvoker.java",
 			"**\\service\\http\\*JSONSerializer.java",
 			"**\\service\\http\\*ServiceHttp.java",
 			"**\\service\\http\\*ServiceJSON.java",
-			"**\\service\\http\\*ServiceSoap.java",
-			"**\\service\\persistence\\*PersistenceImpl.java", "**\\tmp\\**"
+			"**\\service\\http\\*ServiceSoap.java", "**\\tmp\\**"
 		};
 
 		excludes = ArrayUtil.append(excludes, _excludes);

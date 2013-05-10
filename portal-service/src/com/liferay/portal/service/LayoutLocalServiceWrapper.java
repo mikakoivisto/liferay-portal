@@ -15,9 +15,7 @@
 package com.liferay.portal.service;
 
 /**
- * <p>
- * This class is a wrapper for {@link LayoutLocalService}.
- * </p>
+ * Provides a wrapper for {@link LayoutLocalService}.
  *
  * @author    Brian Wing Shun Chan
  * @see       LayoutLocalService
@@ -1488,6 +1486,16 @@ public class LayoutLocalServiceWrapper implements LayoutLocalService,
 			com.liferay.portal.kernel.exception.SystemException {
 		_layoutLocalService.updateScopedPortletNames(groupId, privateLayout,
 			layoutId, name, languageId);
+	}
+
+	public void validateImportLayoutsFile(long userId, long groupId,
+		boolean privateLayout,
+		java.util.Map<java.lang.String, java.lang.String[]> parameterMap,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_layoutLocalService.validateImportLayoutsFile(userId, groupId,
+			privateLayout, parameterMap, file);
 	}
 
 	/**

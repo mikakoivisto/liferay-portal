@@ -25,13 +25,11 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * <p>
- * This class provides a SOAP utility for the
+ * Provides the SOAP utility for the
  * {@link com.liferay.portal.service.LayoutServiceUtil} service utility. The
  * static methods of this class calls the same methods of the service utility.
  * However, the signatures are different because it is difficult for SOAP to
  * support certain types.
- * </p>
  *
  * <p>
  * ServiceBuilder follows certain rules in translating the methods. For example,
@@ -274,6 +272,20 @@ public class LayoutServiceSoap {
 		}
 	}
 
+	public static void deleteTempFileEntry(long groupId,
+		java.lang.String fileName, java.lang.String tempFolderName)
+		throws RemoteException {
+		try {
+			LayoutServiceUtil.deleteTempFileEntry(groupId, fileName,
+				tempFolderName);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	/**
 	* Returns all the ancestor layouts of the layout.
 	*
@@ -465,6 +477,21 @@ public class LayoutServiceSoap {
 					privateLayout, parentLayoutId, incomplete, start, end);
 
 			return com.liferay.portal.model.LayoutSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static java.lang.String[] getTempFileEntryNames(long groupId,
+		java.lang.String tempFolderName) throws RemoteException {
+		try {
+			java.lang.String[] returnValue = LayoutServiceUtil.getTempFileEntryNames(groupId,
+					tempFolderName);
+
+			return returnValue;
 		}
 		catch (Exception e) {
 			_log.error(e, e);

@@ -15,7 +15,33 @@
 --%>
 
 <div class="export-dialog-tree">
-	<aui:input cssClass="file-selector" label="import-a-lar-file-to-overwrite-the-selected-data" name="importFileName" size="50" type="file" />
+
+	<%
+	FileEntry fileEntry = ExportImportUtil.getTempFileEntry(groupId, themeDisplay.getUserId());
+	%>
+
+	<aui:fieldset cssClass="options-group" label="file">
+		<dl class="import-file-details">
+			<dt>
+				<liferay-ui:message key="name" />
+			</dt>
+			<dd>
+				<%= fileEntry.getTitle() %>
+			</dd>
+			<dt>
+				<liferay-ui:message key="size" />
+			</dt>
+			<dd>
+				<%= fileEntry.getSize()/1024 %>k
+			</dd>
+			<dt>
+				<liferay-ui:message key="author" />
+			</dt>
+			<dd>
+				<%= fileEntry.getUserName() %>
+			</dd>
+		</dl>
+	</aui:fieldset>
 
 	<c:if test="<%= !group.isLayoutPrototype() %>">
 		<aui:fieldset cssClass="options-group" label="pages">
@@ -28,7 +54,7 @@
 
 			<aui:a cssClass="modify-link" href="javascript:;" id="pagesLink" label="change" method="get" />
 
-			<div class="aui-helper-hidden" id="<portlet:namespace />pages">
+			<div class="hide" id="<portlet:namespace />pages">
 				<aui:fieldset cssClass="portlet-data-section" label="pages">
 					<aui:input helpMessage="delete-missing-layouts-help" label="delete-missing-layouts" name="<%= PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS %>" type="checkbox" value="<%= false %>" />
 
@@ -45,7 +71,7 @@
 	</c:if>
 
 	<aui:fieldset cssClass="options-group" label="application-configuration">
-		<ul class="lfr-component lfr-tree">
+		<ul class="lfr-tree unstyled">
 			<li class="tree-item">
 				<aui:input checked="<%= true %>" helpMessage="all-applications-import-help" label="all-applications" name="<%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>" type="checkbox" value="<%= true %>" />
 
@@ -64,7 +90,7 @@
 					Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_SETUP_ALL %>Checkbox', '<portlet:namespace />showGlobalConfiguration');
 				</aui:script>
 
-				<div class="aui-helper-hidden" id="<portlet:namespace />globalConfiguration">
+				<div class="hide" id="<portlet:namespace />globalConfiguration">
 					<aui:fieldset cssClass="portlet-data-section" label="all-applications">
 						<aui:input label="archived-setups" name="<%= PortletDataHandlerKeys.PORTLET_ARCHIVED_SETUPS %>" type="checkbox" value="<%= true %>" />
 
@@ -76,7 +102,7 @@
 	</aui:fieldset>
 
 	<aui:fieldset cssClass="options-group" label="content">
-		<ul class="lfr-tree lfr-component">
+		<ul class="lfr-tree unstyled">
 			<li class="tree-item">
 				<aui:input checked="<%= true %>" helpMessage="all-content-import-help" label="all-content" name="<%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>" type="checkbox" value="<%= true %>" />
 
@@ -95,7 +121,7 @@
 					Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA_ALL %>Checkbox', '<portlet:namespace />showChangeGlobalContent');
 				</aui:script>
 
-				<div class="aui-helper-hidden" id="<portlet:namespace />globalContent">
+				<div class="hide" id="<portlet:namespace />globalContent">
 					<aui:fieldset cssClass="portlet-data-section" label="all-content">
 						<aui:input label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
 
@@ -132,7 +158,7 @@
 	</aui:fieldset>
 
 	<aui:fieldset cssClass="options-group" label="permissions">
-		<ul class="lfr-tree lfr-component">
+		<ul class="lfr-tree unstyled">
 			<li class="tree-item">
 				<aui:input label="permissions" name="<%= PortletDataHandlerKeys.PERMISSIONS %>" type="checkbox" />
 
