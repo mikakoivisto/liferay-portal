@@ -1520,12 +1520,12 @@ public class ServicePreAction extends Action {
 
 			Group userGroup = user.getGroup();
 
-			layouts = LayoutLocalServiceUtil.getLayouts(
+			layouts = LayoutServiceUtil.getLayouts(
 				userGroup.getGroupId(), true,
 				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 			if (layouts.size() == 0) {
-				layouts = LayoutLocalServiceUtil.getLayouts(
+				layouts = LayoutServiceUtil.getLayouts(
 					userGroup.getGroupId(), false,
 					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 			}
@@ -1547,12 +1547,12 @@ public class ServicePreAction extends Action {
 					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 				for (Group group : groups) {
-					layouts = LayoutLocalServiceUtil.getLayouts(
+					layouts = LayoutServiceUtil.getLayouts(
 						group.getGroupId(), true,
 						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 					if (layouts.size() == 0) {
-						layouts = LayoutLocalServiceUtil.getLayouts(
+						layouts = LayoutServiceUtil.getLayouts(
 							group.getGroupId(), false,
 							LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 					}
@@ -1635,8 +1635,8 @@ public class ServicePreAction extends Action {
 			}
 			else {
 				throw new LayoutPermissionException(
-					"No Layouts available to for the '" +
-					user.getScreenName() + "' user");
+					"No Layouts available to for the user '" +
+					user.getScreenName() + "'");
 			}
 		}
 
