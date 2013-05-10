@@ -1584,7 +1584,7 @@ public class ServicePreAction extends Action {
 					group = layout.getGroup();
 				}
 
-				if ((layout!= null) && layout.isPrivateLayout()) {
+				if ((layout != null) && layout.isPrivateLayout()) {
 					layouts = LayoutServiceUtil.getLayouts(
 						group.getGroupId(), false,
 						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
@@ -1631,12 +1631,12 @@ public class ServicePreAction extends Action {
 			}
 			else if (user.isDefaultUser()) {
 				throw new LayoutPermissionException(
-					"No Layouts available to for the GUEST user");
+					"No Layouts available to for the Guest user");
 			}
 			else {
 				throw new LayoutPermissionException(
 					"No Layouts available to for the user '" +
-					user.getScreenName() + "'");
+						user.getScreenName() + "'");
 			}
 		}
 
