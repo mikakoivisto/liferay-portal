@@ -70,6 +70,7 @@ import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
@@ -1592,29 +1593,64 @@ public class ServicePreAction extends Action {
 				WebKeys.VIRTUAL_HOST_LAYOUT_SET);
 
 			if (layoutSet != null) {
-				layouts = LayoutLocalServiceUtil.getLayouts(
+				layouts = LayoutServiceUtil.getLayouts(
 					layoutSet.getGroupId(), layoutSet.isPrivateLayout(),
 					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 				if (layouts.size() > 0) {
 					layout = layouts.get(0);
 				}
+
+				if (layout!=null && layout.isPrivateLayout()) {
+
+					Group group = layout.getGroup();
+
+					layouts = LayoutServiceUtil.getLayouts(
+						group.getGroupId(), false,
+						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+
+					if (layouts.size() > 0) {
+						layout = layouts.get(0);
+					}
+					else {
+						layout = null;
+					}
+				}
+
+				if (layout!=null && layout.getGroup().isStagingGroup()) {
+					Group group = layout.getGroup().getLiveGroup();
+
+					layouts = LayoutServiceUtil.getLayouts(
+						group.getGroupId(), false,
+						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+
+					if (layouts.size() > 0) {
+						layout = layouts.get(0);
+					}
+					else {
+						layout = null;
+					}
+				}
 			}
 		}
 
-		if ((layout == null) || layout.isPrivateLayout()) {
+		if (layout==null) {
 
 			// Check the Guest site
 
 			Group guestGroup = GroupLocalServiceUtil.getGroup(
 				user.getCompanyId(), GroupConstants.GUEST);
 
-			layouts = LayoutLocalServiceUtil.getLayouts(
+			layouts = LayoutServiceUtil.getLayouts(
 				guestGroup.getGroupId(), false,
 				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 			if (layouts.size() > 0) {
 				layout = layouts.get(0);
+			}
+			else {
+				throw new PortalException(
+					"No public pages available to for the user");
 			}
 		}
 
