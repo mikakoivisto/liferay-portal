@@ -54,12 +54,12 @@ String emailBody = PrefsParamUtil.getString(portletPreferences, request, emailBo
 String emailSignature = PrefsParamUtil.getString(portletPreferences, request, emailSignatureParam, defaultEmailSignature);
 %>
 
-<liferay-portlet:renderURL portletConfiguration="true" var="portletURL">
+<liferay-portlet:renderURL portletConfiguration="<%= true %>" var="portletURL">
 	<portlet:param name="tabs2" value="<%= tabs2 %>" />
 	<portlet:param name="redirect" value="<%= redirect %>" />
 </liferay-portlet:renderURL>
 
-<liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
+<liferay-portlet:actionURL portletConfiguration="<%= true %>" var="configurationURL" />
 
 <aui:form action="<%= configurationURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveConfiguration();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
@@ -98,18 +98,25 @@ String emailSignature = PrefsParamUtil.getString(portletPreferences, request, em
 				<aui:input helpMessage="message-boards-message-subscribe-by-default-help" label="subscribe-by-default" name="preferences--subscribeByDefault--" type="checkbox" value="<%= subscribeByDefault %>" />
 
 				<aui:select name="preferences--messageFormat--">
+					<c:choose>
+						<c:when test="<%= MBUtil.isValidMessageFormat(messageFormat) %>">
 
-					<%
-					for (int i = 0; i < MBMessageConstants.FORMATS.length; i++) {
-					%>
+							<%
+							for (int i = 0; i < MBMessageConstants.FORMATS.length; i++) {
+							%>
 
-						<aui:option label='<%= LanguageUtil.get(pageContext, "message-boards.message-formats." + MBMessageConstants.FORMATS[i]) %>' selected="<%= messageFormat.equals(MBMessageConstants.FORMATS[i]) %>" value="<%= MBMessageConstants.FORMATS[i] %>" />
+								<aui:option label='<%= LanguageUtil.get(pageContext, "message-boards.message-formats." + MBMessageConstants.FORMATS[i]) %>' selected="<%= messageFormat.equals(MBMessageConstants.FORMATS[i]) %>" value="<%= MBMessageConstants.FORMATS[i] %>" />
 
-					<%
-					}
-					%>
+							<%
+							}
+							%>
 
-				</aui:select>
+						</c:when>
+						<c:otherwise>
+							<aui:option disabled="<%= true %>" label="html" selected="<%= true %>" value="html" />
+						</c:otherwise>
+					</c:choose>
+			</aui:select>
 
 				<aui:input name="preferences--enableFlags--" type="checkbox" value="<%= enableFlags %>" />
 

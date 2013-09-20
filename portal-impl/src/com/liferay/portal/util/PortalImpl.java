@@ -3564,6 +3564,21 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
+	public String getPathContext(HttpServletRequest request) {
+		return getPathContext(request.getContextPath());
+	}
+
+	@Override
+	public String getPathContext(PortletRequest portletRequest) {
+		return getPathContext(portletRequest.getContextPath());
+	}
+
+	@Override
+	public String getPathContext(String contextPath) {
+		return _pathProxy.concat(ContextPathUtil.getContextPath(contextPath));
+	}
+
+	@Override
 	public String getPathFriendlyURLPrivateGroup() {
 		return _pathFriendlyURLPrivateGroup;
 	}
@@ -5226,11 +5241,18 @@ public class PortalImpl implements Portal {
 			request.setAttribute(WebKeys.USER, user);
 		}
 
-		for (Cookie cookie : request.getCookies()) {
-			String cookieName = cookie.getName();
+		Cookie[] cookies = request.getCookies();
 
-			if (cookieName.startsWith(CookieKeys.REMOTE_PREFERENCE_PREFIX)) {
-				user.addRemotePreference(new CookieRemotePreference(cookie));
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				String cookieName = cookie.getName();
+
+				if (cookieName.startsWith(
+						CookieKeys.REMOTE_PREFERENCE_PREFIX)) {
+
+					user.addRemotePreference(
+						new CookieRemotePreference(cookie));
+				}
 			}
 		}
 

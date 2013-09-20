@@ -420,28 +420,30 @@ public class EditEntryAction extends PortletAction {
 
 		long entryId = ParamUtil.getLong(actionRequest, "entryId");
 
+		BlogsEntry entry = BlogsEntryLocalServiceUtil.getEntry(entryId);
+
 		String content = ParamUtil.getString(actionRequest, "content");
 
-		BlogsEntry entry = BlogsEntryLocalServiceUtil.getEntry(entryId);
+		Calendar displayDateCal = CalendarFactoryUtil.getCalendar();
+
+		displayDateCal.setTime(entry.getDisplayDate());
+
+		int displayDateMonth = displayDateCal.get(Calendar.MONTH);
+		int displayDateDay = displayDateCal.get(Calendar.DATE);
+		int displayDateYear = displayDateCal.get(Calendar.YEAR);
+		int displayDateHour = displayDateCal.get(Calendar.HOUR);
+		int displayDateMinute = displayDateCal.get(Calendar.MINUTE);
+
+		if (displayDateCal.get(Calendar.AM_PM) == Calendar.PM) {
+			displayDateHour += 12;
+		}
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			actionRequest);
 
+		serviceContext.setCommand(Constants.UPDATE);
+
 		try {
-			Calendar displayDateCal = CalendarFactoryUtil.getCalendar();
-
-			displayDateCal.setTime(entry.getDisplayDate());
-
-			int displayDateMonth = displayDateCal.get(Calendar.MONTH);
-			int displayDateDay = displayDateCal.get(Calendar.DATE);
-			int displayDateYear = displayDateCal.get(Calendar.YEAR);
-			int displayDateHour = displayDateCal.get(Calendar.HOUR);
-			int displayDateMinute = displayDateCal.get(Calendar.MINUTE);
-
-			if (displayDateCal.get(Calendar.AM_PM) == Calendar.PM) {
-				displayDateHour += 12;
-			}
-
 			BlogsEntryServiceUtil.updateEntry(
 				entryId, entry.getTitle(), entry.getDescription(), content,
 				displayDateMonth, displayDateDay, displayDateYear,

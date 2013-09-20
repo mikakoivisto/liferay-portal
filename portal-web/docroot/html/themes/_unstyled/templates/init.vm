@@ -84,6 +84,7 @@
 #set ($user_login_ip = $user.getLoginIP())
 #set ($user_last_login_ip = $user.getLastLoginIP())
 
+#set ($is_login_redirect_required = $portalUtil.isLoginRedirectRequired($request))
 #set ($is_signed_in = $theme_display.isSignedIn())
 
 #set ($group_id = $theme_display.getScopeGroupId())
