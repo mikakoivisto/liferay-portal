@@ -244,6 +244,10 @@ public class DeepNamedValueScanner {
 			return false;
 		}
 
+		if (targetClassName.startsWith("org.eclipse.osgi.")) {
+			return false;
+		}
+
 		if (targetClassName.startsWith("sun.misc.")) {
 			return false;
 		}
