@@ -1117,7 +1117,7 @@ public class SeleniumBuilderFileUtil {
 				1001, fileName, ifElement, allowedIfConditionElementNames);
 		}
 
-		if (ifElement.getName() == "not") {
+		if (Validator.equals(ifElement.getName(), "not")) {
 			return;
 		}
 
