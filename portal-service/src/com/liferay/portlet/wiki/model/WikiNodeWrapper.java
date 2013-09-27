@@ -539,11 +539,6 @@ public class WikiNodeWrapper implements WikiNode, ModelWrapper<WikiNode> {
 		return _wikiNode.getTrashEntry();
 	}
 
-	/**
-	* Returns the classPK of this wiki node
-	*
-	* @return the classPK of this wiki node
-	*/
 	@Override
 	public long getTrashEntryClassPK() {
 		return _wikiNode.getTrashEntryClassPK();
@@ -681,7 +676,7 @@ public class WikiNodeWrapper implements WikiNode, ModelWrapper<WikiNode> {
 	/**
 	* Sets the container model ID of this wiki node.
 	*
-	* @param container model ID of this wiki node
+	* @param containerModelId the container model ID of this wiki node
 	*/
 	@Override
 	public void setContainerModelId(long containerModelId) {
@@ -711,7 +706,7 @@ public class WikiNodeWrapper implements WikiNode, ModelWrapper<WikiNode> {
 	/**
 	* Sets the parent container model ID of this wiki node.
 	*
-	* @param parent container model ID of this wiki node
+	* @param parentContainerModelId the parent container model ID of this wiki node
 	*/
 	@Override
 	public void setParentContainerModelId(long parentContainerModelId) {

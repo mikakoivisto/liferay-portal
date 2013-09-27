@@ -16,6 +16,9 @@ package com.liferay.portal.lar.backgroundtask;
 
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskResult;
 import com.liferay.portal.kernel.backgroundtask.BaseBackgroundTaskExecutor;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
+import com.liferay.portal.kernel.staging.StagingUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.model.BackgroundTask;
@@ -68,7 +71,29 @@ public class LayoutExportBackgroundTaskExecutor
 		BackgroundTaskLocalServiceUtil.addBackgroundTaskAttachment(
 			userId, backgroundTask.getBackgroundTaskId(), fileName, larFile);
 
+		boolean updateLastPublishDate = MapUtil.getBoolean(
+			parameterMap, PortletDataHandlerKeys.UPDATE_LAST_PUBLISH_DATE);
+
+		if (updateLastPublishDate) {
+			Date lastPublishDate = endDate;
+
+			if (lastPublishDate == null) {
+				lastPublishDate = new Date();
+			}
+
+			StagingUtil.updateLastPublishDate(
+				groupId, privateLayout, lastPublishDate);
+		}
+
 		return BackgroundTaskResult.SUCCESS;
+	}
+
+	@Override
+	public String handleException(BackgroundTask backgroundTask, Exception e) {
+		JSONObject jsonObject = StagingUtil.getExceptionMessagesJSONObject(
+			getLocale(backgroundTask), e, backgroundTask.getTaskContextMap());
+
+		return jsonObject.toString();
 	}
 
 }
