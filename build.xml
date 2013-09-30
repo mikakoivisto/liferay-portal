@@ -790,15 +790,7 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 			<arg line="rev-parse HEAD" />
 		</exec>
 
-		<if>
-			<isset property="env.JENKINS_HOME" />
-			<then>
-				<echo file="${env.JENKINS_HOME}/userContent/git-commit-portal">${git.commit.portal.rev.parse}</echo>
-			</then>
-			<else>
-				<echo file="git-commit-portal">${git.commit.portal.rev.parse}</echo>
-			</else>
-		</if>
+		<echo file="git-commit-portal">${git.commit.portal.rev.parse}</echo>
 
 		<var name="git.commit.portal.rev.parse" unset="true" />
 	</target>
