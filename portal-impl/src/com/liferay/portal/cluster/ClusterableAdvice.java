@@ -14,25 +14,17 @@
 
 package com.liferay.portal.cluster;
 
-import com.liferay.portal.bean.IdentifiableBeanInvokerUtil;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
-import com.liferay.portal.kernel.cluster.ClusterInvokeAcceptor;
 import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.cluster.ClusterMasterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.util.MethodHandler;
-import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.spring.aop.AnnotationChainableMethodAdvice;
 import com.liferay.portal.util.PropsValues;
 
-import java.io.Serializable;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -54,12 +46,13 @@ public class ClusterableAdvice
 
 		Clusterable clusterable = findAnnotation(methodInvocation);
 
-		if (clusterable == _nullClusterable) {
+		if (clusterable == NullClusterable.NULL_CLUSTERABLE) {
 			return;
 		}
 
-		MethodHandler methodHandler = createMethodHandler(
-			clusterable.acceptor(), methodInvocation);
+		MethodHandler methodHandler =
+			ClusterableInvokerUtil.createMethodHandler(
+				clusterable.acceptor(), methodInvocation);
 
 		ClusterRequest clusterRequest = ClusterRequest.createMulticastRequest(
 			methodHandler, true);
@@ -75,7 +68,7 @@ public class ClusterableAdvice
 
 		Clusterable clusterable = findAnnotation(methodInvocation);
 
-		if (clusterable == _nullClusterable) {
+		if (clusterable == NullClusterable.NULL_CLUSTERABLE) {
 			return null;
 		}
 
@@ -97,8 +90,9 @@ public class ClusterableAdvice
 			return result;
 		}
 
-		MethodHandler methodHandler = createMethodHandler(
-			clusterable.acceptor(), methodInvocation);
+		MethodHandler methodHandler =
+			ClusterableInvokerUtil.createMethodHandler(
+				clusterable.acceptor(), methodInvocation);
 
 		Future<Object> futureResult = ClusterMasterExecutorUtil.executeOnMaster(
 			methodHandler);
@@ -116,75 +110,7 @@ public class ClusterableAdvice
 
 	@Override
 	public Clusterable getNullAnnotation() {
-		return _nullClusterable;
+		return NullClusterable.NULL_CLUSTERABLE;
 	}
-
-	protected MethodHandler createMethodHandler(
-		Class<? extends ClusterInvokeAcceptor> clusterInvokeAcceptorClass,
-		MethodInvocation methodInvocation) {
-
-		MethodHandler methodHandler =
-			IdentifiableBeanInvokerUtil.createMethodHandler(methodInvocation);
-
-		if (clusterInvokeAcceptorClass == ClusterInvokeAcceptor.class) {
-			clusterInvokeAcceptorClass = null;
-		}
-
-		Map<String, Serializable> context =
-			ClusterableContextThreadLocal.collectThreadLocalContext();
-
-		return new MethodHandler(
-			_invokeMethodKey, methodHandler, clusterInvokeAcceptorClass,
-			context);
-	}
-
-	@SuppressWarnings("unused")
-	private static Object _invoke(
-			MethodHandler methodHandler,
-			Class<? extends ClusterInvokeAcceptor> clusterInvokeAcceptorClass,
-			Map<String, Serializable> context)
-		throws Exception {
-
-		if (clusterInvokeAcceptorClass != null) {
-			Constructor<? extends ClusterInvokeAcceptor> constructor =
-				clusterInvokeAcceptorClass.getDeclaredConstructor();
-
-			if (!constructor.isAccessible()) {
-				constructor.setAccessible(true);
-			}
-
-			ClusterInvokeAcceptor clusterInvokeAcceptor =
-				constructor.newInstance();
-
-			if (!clusterInvokeAcceptor.accept(context)) {
-				return null;
-			}
-		}
-
-		return methodHandler.invoke(false);
-	}
-
-	private static MethodKey _invokeMethodKey = new MethodKey(
-		ClusterableAdvice.class, "_invoke", MethodHandler.class, Class.class,
-		Map.class);
-
-	private static Clusterable _nullClusterable = new Clusterable() {
-
-			@Override
-			public Class<? extends ClusterInvokeAcceptor> acceptor() {
-				return null;
-			}
-
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return Clusterable.class;
-			}
-
-			@Override
-			public boolean onMaster() {
-				return false;
-			}
-
-		};
 
 }

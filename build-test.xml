@@ -1700,6 +1700,15 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 			</then>
 		</if>
 
+		<if>
+			<equals arg1="${tck.url}" arg2="true" />
+			<then>
+				<echo file="portal-impl/src/portal-ext.properties" append="true">
+
+tck.url=true</echo>
+			</then>
+		</if>
+
 		<copy
 			file="portal-impl/src/portal-ext.properties"
 			tofile="${app.server.classes.portal.dir}/portal-ext.properties"
@@ -2409,6 +2418,7 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 
 	<target name="record-test-packages">
 		<script classpathref="project.classpath" language="beanshell">
+			import com.liferay.portal.kernel.util.OSDetector;
 			import com.liferay.portal.kernel.util.StringUtil;
 
 			import org.apache.tools.ant.DirectoryScanner;
@@ -2430,6 +2440,11 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 				int x = fileName.indexOf("com/");
 				int y = fileName.lastIndexOf("/");
 
+				if (OSDetector.isWindows()) {
+					x = fileName.indexOf("com\\");
+					y = fileName.lastIndexOf("\\");
+				}
+
 				if (fileName.endsWith("ServiceHttpTest.java") || fileName.endsWith("ServiceJsonTest.java") || fileName.endsWith("ServiceSoapTest.java")) {
 					continue;
 				}
@@ -2437,6 +2452,7 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 				String packageName = fileName.substring(x, y);
 
 				packageName = StringUtil.replace(packageName, "/", ".");
+				packageName = StringUtil.replace(packageName, "\\", ".");
 
 				packageNames.add(packageName);
 			}
@@ -3045,10 +3061,16 @@ Please set "ie.driver.zip" in test.properties to point to "IEDriverServer_x64_2.
 	</target>
 
 	<target name="test-package">
-		<propertyregex property="test.class" input="${test.package}." regexp="\." replace="/" global="true" />
+		<propertyregex
+			global="true"
+			input="${test.package}"
+			property="test.class"
+			regexp="\."
+			replace="/"
+		/>
 
 		<resourcecount property="test.portal-impl.count">
-			<fileset dir="portal-impl/test" includes="**/${test.class}**/*Test.java" />
+			<fileset dir="portal-impl/test" includes="**/${test.class}/*Test.java" />
 		</resourcecount>
 
 		<if>
@@ -3057,13 +3079,13 @@ Please set "ie.driver.zip" in test.properties to point to "IEDriverServer_x64_2.
 			</not>
 			<then>
 				<ant dir="portal-impl" target="test-class" inheritAll="false">
-					<property name="test.class" value="${test.class}**/*Test" />
+					<property name="test.class" value="${test.class}/*Test" />
 				</ant>
 			</then>
 		</if>
 
 		<resourcecount property="test.portal-service.count">
-			<fileset dir="portal-service/test" includes="**/${test.class}**/*Test.java" />
+			<fileset dir="portal-service/test" includes="**/${test.class}/*Test.java" />
 		</resourcecount>
 
 		<if>
@@ -3072,13 +3094,13 @@ Please set "ie.driver.zip" in test.properties to point to "IEDriverServer_x64_2.
 			</not>
 			<then>
 				<ant dir="portal-service" target="test-class" inheritAll="false">
-					<property name="test.class" value="${test.class}**/*Test" />
+					<property name="test.class" value="${test.class}/*Test" />
 				</ant>
 			</then>
 		</if>
 
 		<resourcecount property="test.util-java.count">
-			<fileset dir="util-java/test" includes="**/${test.class}**/*Test.java" />
+			<fileset dir="util-java/test" includes="**/${test.class}/*Test.java" />
 		</resourcecount>
 
 		<if>
@@ -3087,7 +3109,7 @@ Please set "ie.driver.zip" in test.properties to point to "IEDriverServer_x64_2.
 			</not>
 			<then>
 				<ant dir="util-java" target="test-class" inheritAll="false">
-					<property name="test.class" value="${test.class}**/*Test" />
+					<property name="test.class" value="${test.class}/*Test" />
 				</ant>
 			</then>
 		</if>
