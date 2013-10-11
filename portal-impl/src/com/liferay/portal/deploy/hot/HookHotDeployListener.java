@@ -2025,7 +2025,7 @@ public class HookHotDeployListener
 				PropsKeys.PASSWORDS_TOOLKIT);
 
 			Toolkit toolkit = (Toolkit)newInstance(
-				portletClassLoader, Sanitizer.class, toolkitClassName);
+				portletClassLoader, Toolkit.class, toolkitClassName);
 
 			ToolkitWrapper toolkitWrapper =
 				(ToolkitWrapper)PwdToolkitUtil.getToolkit();
