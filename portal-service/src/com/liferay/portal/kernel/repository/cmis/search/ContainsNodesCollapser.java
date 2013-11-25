@@ -3,8 +3,35 @@ package com.liferay.portal.kernel.repository.cmis.search;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.StringBundler;
 
+/**
+ * Helper class to post-process a CMIS query tree and collapse all CONTAINS
+ * nodes into one (to comply with CMIS specification).
+ *
+ * WARNING: This class can only collapse subtrees composed of only AND, OR, and
+ * CONTAINS nodes into just one single CONTAINS node. If you have more than one
+ * subtree of collapsible CONTAINS nodes the processed query will end up having
+ * more than one CONTAINS clause and will make CMIS fail.
+ *
+ * This is because if you consider a query like:
+ *
+ *  ( CONTAINS(X) OR field=='J' ) AND CONTAINS(Y)
+ *
+ * There's no way to collapse both CONTAINS criteria into one single CONTAINS
+ * which, when combined with "field=='J'", makes up a query equivalent to the
+ * one given.
+ *
+ * @author Ivan Zaera
+ */
 class ContainsNodesCollapser {
 
+	/**
+	 * Collapse all subtrees made of AND, OR, and CONTAINS nodes into single
+	 * CONTAINS nodes. See the explanation of the class for more info on the
+	 * algorithm.
+	 * @param node the tree to post-process
+	 * @return a copy of the tree with collapsed CONTAINS nodes
+	 * @throws SearchException if query tree is not supported
+	 */
 	public CMISCriterion collapse(CMISCriterion node) throws SearchException {
 
 		if (node instanceof CMISJunction) {
@@ -28,6 +55,9 @@ class ContainsNodesCollapser {
 		}
 	}
 
+	/**
+	 * Tests whether all children of a node are of type CONTAINS.
+	 */
 	private boolean _areAllChildrenContainsNodes(CMISJunction collapsed)
 		throws SearchException {
 
@@ -40,6 +70,9 @@ class ContainsNodesCollapser {
 		return collapsed.list().size()>0;
 	}
 
+	/**
+	 * Collapses all CONTAINS children of the given node if possible.
+	 */
 	private CMISJunction _collapseChildren(CMISJunction junction)
 		throws SearchException {
 
@@ -57,6 +90,10 @@ class ContainsNodesCollapser {
 		return collapsed;
 	}
 
+	/**
+	 * Merges all contents of the children CONTAINS nodes into one single
+	 * content string.
+	 */
 	private String _collapseContainsChildrenContent(
 		String connector, CMISJunction node) throws SearchException {
 
@@ -75,6 +112,9 @@ class ContainsNodesCollapser {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns the CONTAINS logical connector for a given {@link CMISJunction}.
+	 */
 	private String _connectorFor(CMISJunction junction) throws SearchException {
 
 		if (junction instanceof CMISConjunction) {
@@ -89,6 +129,9 @@ class ContainsNodesCollapser {
 		}
 	}
 
+	/**
+	 * Creates a junction of the same type as the given one.
+	 */
 	private CMISJunction _createJunctionOfSameType(CMISJunction junction) {
 
 		if (junction instanceof CMISConjunction) {
