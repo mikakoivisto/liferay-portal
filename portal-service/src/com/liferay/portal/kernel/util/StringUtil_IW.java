@@ -579,6 +579,10 @@ public class StringUtil_IW {
 		return StringUtil.stripBetween(s, begin, end);
 	}
 
+	public java.lang.String stripCDATA(java.lang.String s) {
+		return StringUtil.stripCDATA(s);
+	}
+
 	public java.lang.String toCharCode(java.lang.String s) {
 		return StringUtil.toCharCode(s);
 	}

@@ -68,6 +68,9 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
 		traverseQuery(cmisConjunction, query, queryConfig);
 
+		cmisConjunction = (CMISConjunction) _containsNodesCollapser.collapse(
+			cmisConjunction);
+
 		if (!cmisConjunction.isEmpty()) {
 			sb.append(" WHERE ");
 			sb.append(cmisConjunction.toQueryFragment());
@@ -391,5 +394,7 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 		_supportedFields.add(Field.USER_ID);
 		_supportedFields.add(Field.USER_NAME);
 	}
+
+	private final ContainsNodesCollapser _containsNodesCollapser = new ContainsNodesCollapser();
 
 }
