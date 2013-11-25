@@ -31,6 +31,18 @@ public class CMISSimpleExpression implements CMISCriterion {
 		_cmisSimpleExpressionOperator = cmisSimpleExpressionOperator;
 	}
 
+	public String getField() {
+		return _field;
+	}
+
+	public CMISSimpleExpressionOperator getOperator() {
+		return _cmisSimpleExpressionOperator;
+	}
+
+	public String getValue() {
+		return _value;
+	}
+
 	@Override
 	public String toQueryFragment() {
 		StringBundler sb = new StringBundler(7);
