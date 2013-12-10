@@ -66,7 +66,20 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
 		CMISConjunction cmisConjunction = new CMISConjunction();
 
-		traverseQuery(cmisConjunction, query, queryConfig);
+		if (!isSupportsOnlyFullText(queryConfig)) {
+			traversePropertiesQuery(cmisConjunction, query, queryConfig);
+		}
+
+		if (isSupportsFullText(queryConfig)) {
+			CMISContainsExpression containsExpression =
+				new CMISContainsExpression();
+
+			traverseFullTextQuery(containsExpression, query, queryConfig);
+
+			if (!containsExpression.isEmpty()) {
+				cmisConjunction.add(containsExpression);
+			}
+		}
 
 		if (!cmisConjunction.isEmpty()) {
 			sb.append(" WHERE ");
@@ -231,7 +244,7 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 		return false;
 	}
 
-	protected void traverseQuery(
+	protected void traversePropertiesQuery(
 			CMISJunction criterion, Query query, QueryConfig queryConfig)
 		throws SearchException {
 
@@ -261,7 +274,8 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
 				Query booleanClauseQuery = booleanClause.getQuery();
 
-				traverseQuery(cmisJunction, booleanClauseQuery, queryConfig);
+				traversePropertiesQuery(
+					cmisJunction, booleanClauseQuery, queryConfig);
 			}
 
 			if (!anyCMISConjunction.isEmpty()) {
