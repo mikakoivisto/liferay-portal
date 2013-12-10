@@ -183,6 +183,95 @@ public class CMISQueryBuilderTest extends PowerMockito {
 	}
 
 	@Test
+	public void testContainsOnlySupportedQueryMultipleKeywords()
+		throws Exception {
+
+		SearchContext searchContext = getSearchContext();
+
+		searchContext.setKeywords("test multiple");
+
+		BooleanQuery searchQuery =
+			RepositorySearchQueryBuilderUtil.getFullQuery(searchContext);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setAttribute(
+			"capabilityQuery", CapabilityQuery.FULLTEXTONLY.value());
+
+		String cmisQuery = CMISSearchQueryBuilderUtil.buildQuery(
+			searchContext, searchQuery);
+
+		assertQueryEquals("(CONTAINS('test multiple'))", cmisQuery);
+	}
+
+	@Test
+	public void testContainsOnlySupportedQueryWithConjuction()
+		throws Exception {
+
+		SearchContext searchContext = getSearchContext();
+
+		searchContext.setKeywords("+test +multiple");
+
+		BooleanQuery searchQuery =
+			RepositorySearchQueryBuilderUtil.getFullQuery(searchContext);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setAttribute(
+			"capabilityQuery", CapabilityQuery.FULLTEXTONLY.value());
+
+		String cmisQuery = CMISSearchQueryBuilderUtil.buildQuery(
+			searchContext, searchQuery);
+
+		assertQueryEquals("(CONTAINS('test AND multiple'))", cmisQuery);
+	}
+
+	@Test
+	public void testContainsOnlySupportedQueryWithNegation()
+		throws Exception {
+
+		SearchContext searchContext = getSearchContext();
+
+		searchContext.setKeywords("test -multiple");
+
+		BooleanQuery searchQuery =
+			RepositorySearchQueryBuilderUtil.getFullQuery(searchContext);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setAttribute(
+			"capabilityQuery", CapabilityQuery.FULLTEXTONLY.value());
+
+		String cmisQuery = CMISSearchQueryBuilderUtil.buildQuery(
+			searchContext, searchQuery);
+
+		assertQueryEquals("(CONTAINS('-multiple OR test'))", cmisQuery);
+	}
+
+	@Test
+	public void testContainsOnlySupportedQueryWithNegationPhrase()
+		throws Exception {
+
+		SearchContext searchContext = getSearchContext();
+
+		searchContext.setKeywords("test -\"multiple words\"");
+
+		BooleanQuery searchQuery =
+			RepositorySearchQueryBuilderUtil.getFullQuery(searchContext);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setAttribute(
+			"capabilityQuery", CapabilityQuery.FULLTEXTONLY.value());
+
+		String cmisQuery = CMISSearchQueryBuilderUtil.buildQuery(
+			searchContext, searchQuery);
+
+		assertQueryEquals(
+			"(CONTAINS('-\\'multiple words\\' OR test'))", cmisQuery);
+	}
+
+	@Test
 	public void testExactFilenameQuery() throws Exception {
 		SearchContext searchContext = getSearchContext();
 
