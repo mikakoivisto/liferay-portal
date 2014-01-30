@@ -25,7 +25,7 @@ public class CMISContainsNotExpression implements CMISCriterion {
 
 	@Override
 	public String toQueryFragment() {
-        return "-".concat(_cmisCriterion.toQueryFragment());
+		return "-".concat(_cmisCriterion.toQueryFragment());
 	}
 
 	private CMISCriterion _cmisCriterion;
