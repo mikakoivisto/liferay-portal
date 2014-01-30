@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.search.WildcardQuery;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.RepositoryEntry;
 import com.liferay.portal.model.User;
@@ -42,6 +43,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * @author Mika Koivisto
@@ -66,14 +68,15 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
 		CMISConjunction cmisConjunction = new CMISConjunction();
 
-        if (!isSupportsOnlyFullText(queryConfig)) {
+		if (!isSupportsOnlyFullText(queryConfig)) {
 			traversePropertiesQuery(cmisConjunction, query, queryConfig);
 		}
-        else {
+
+		if (isSupportsFullText(queryConfig)) {
 			CMISContainsExpression containsExpression =
 				new CMISContainsExpression();
 
-			traverseFullTextQuery(containsExpression, query, queryConfig);
+			traverseContentQuery(containsExpression, query, queryConfig);
 
 			if (!containsExpression.isEmpty()) {
 				cmisConjunction.add(containsExpression);
@@ -139,10 +142,10 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 			value = CMISParameterValueUtil.formatParameterValue(
 				field, value, false, queryConfig);
 
-            CMISContainsExpression contains = new CMISContainsExpression();
-            contains.add(new CMISContainsValueExpression(value));
+			CMISContainsExpression contains = new CMISContainsExpression();
+			contains.add(new CMISContainsValueExpression(value));
 
-            cmisCriterion = contains;
+			cmisCriterion = contains;
 		}
 		else if (field.equals(Field.FOLDER_ID)) {
 			long folderId = GetterUtil.getLong(value);
@@ -199,7 +202,7 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 			value = CMISParameterValueUtil.formatParameterValue(
 				field, value, wildcard, queryConfig);
 
-            cmisCriterion = new CMISSimpleExpression(
+			cmisCriterion = new CMISSimpleExpression(
 				getCmisField(field), value, cmisSimpleExpressionOperator);
 		}
 
@@ -246,122 +249,98 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 		return false;
 	}
 
-    protected void traverseFullTextQuery(
-            CMISJunction criterion, Query query, QueryConfig queryConfig)
-        throws SearchException {
+	protected void traverseContentQuery(
+			CMISJunction criterion, Query query, QueryConfig queryConfig)
+		throws SearchException {
 
-        if (query instanceof BooleanQuery) {
-            BooleanQuery booleanQuery = (BooleanQuery)query;
+		if (query instanceof BooleanQuery) {
+			BooleanQuery booleanQuery = (BooleanQuery)query;
 
-            List<BooleanClause> booleanClauses = booleanQuery.clauses();
+			List<BooleanClause> booleanClauses = booleanQuery.clauses();
 
-            CMISFullTextConjunction anyCMISConjunction = new CMISFullTextConjunction();
-            CMISFullTextConjunction notCMISConjunction = new CMISFullTextConjunction();
-            CMISDisjunction cmisDisjunction = new CMISDisjunction();
+			CMISFullTextConjunction anyCMISConjunction =
+				new CMISFullTextConjunction();
+			CMISFullTextConjunction notCMISConjunction =
+				new CMISFullTextConjunction();
+			CMISDisjunction cmisDisjunction = new CMISDisjunction();
 
-            for (BooleanClause booleanClause : booleanClauses) {
-                CMISJunction cmisJunction = cmisDisjunction;
+			for (BooleanClause booleanClause : booleanClauses) {
+				CMISJunction cmisJunction = cmisDisjunction;
 
-                BooleanClauseOccur booleanClauseOccur =
-                        booleanClause.getBooleanClauseOccur();
+				BooleanClauseOccur booleanClauseOccur =
+						booleanClause.getBooleanClauseOccur();
 
-                if (booleanClauseOccur.equals(BooleanClauseOccur.MUST)) {
-                    cmisJunction = anyCMISConjunction;
-                }
-                else if (booleanClauseOccur.equals(
-                        BooleanClauseOccur.MUST_NOT)) {
+				if (booleanClauseOccur.equals(BooleanClauseOccur.MUST)) {
+					cmisJunction = anyCMISConjunction;
+				}
+				else if (booleanClauseOccur.equals(
+							BooleanClauseOccur.MUST_NOT)) {
 
-                    cmisJunction = notCMISConjunction;
-                }
+					cmisJunction = notCMISConjunction;
+				}
 
-                Query booleanClauseQuery = booleanClause.getQuery();
+				Query booleanClauseQuery = booleanClause.getQuery();
 
-                traverseFullTextQuery(
-                        cmisJunction, booleanClauseQuery, queryConfig);
-            }
+				traverseContentQuery(
+						cmisJunction, booleanClauseQuery, queryConfig);
+			}
 
-            if (!anyCMISConjunction.isEmpty()) {
-                criterion.add(anyCMISConjunction);
-            }
+			if (!anyCMISConjunction.isEmpty()) {
+				criterion.add(anyCMISConjunction);
+			}
 
-            if (!cmisDisjunction.isEmpty()) {
-                criterion.add(cmisDisjunction);
-            }
+			if (!cmisDisjunction.isEmpty()) {
+				criterion.add(cmisDisjunction);
+			}
 
-            if (!notCMISConjunction.isEmpty()) {
-                criterion.add(new CMISContainsNotExpression(notCMISConjunction));
-            }
-        }
-        else if (query instanceof TermQuery) {
-            TermQuery termQuery = (TermQuery)query;
+			if (!notCMISConjunction.isEmpty()) {
+				CMISContainsNotExpression cmisContainsNotExpression =
+					new CMISContainsNotExpression(notCMISConjunction);
 
-            QueryTerm queryTerm = termQuery.getQueryTerm();
+				criterion.add(cmisContainsNotExpression);
+			}
+		}
+		else if (query instanceof TermQuery) {
+			TermQuery termQuery = (TermQuery)query;
 
-            if (!queryTerm.getField().equals(Field.CONTENT)) {
-                return;
-            }
+			QueryTerm queryTerm = termQuery.getQueryTerm();
 
-            criterion.add(new CMISContainsValueExpression(queryTerm.getValue()));
-        }
-        /*
-        else if (query instanceof TermRangeQuery) {
-            TermRangeQuery termRangeQuery = (TermRangeQuery)query;
+			if (!_isContentFieldQueryTerm(queryTerm)) {
+				return;
+			}
 
-            if (!isSupportedField(termRangeQuery.getField())) {
-                return;
-            }
+			CMISContainsValueExpression cmisContainsValueExpression =
+				new CMISContainsValueExpression(queryTerm.getValue());
 
-            String fieldName = termRangeQuery.getField();
+			criterion.add(cmisContainsValueExpression);
+		}
+		else if (query instanceof WildcardQuery) {
+			WildcardQuery wildcardQuery = (WildcardQuery)query;
 
-            String cmisField = getCmisField(fieldName);
-            String cmisLowerTerm = CMISParameterValueUtil.formatParameterValue(
-                    fieldName, termRangeQuery.getLowerTerm(), false, queryConfig);
-            String cmisUpperTerm = CMISParameterValueUtil.formatParameterValue(
-                    fieldName, termRangeQuery.getUpperTerm(), false, queryConfig);
+			QueryTerm queryTerm = wildcardQuery.getQueryTerm();
 
-            CMISCriterion cmisCriterion = new CMISBetweenExpression(
-                    cmisField, cmisLowerTerm, cmisUpperTerm,
-                    termRangeQuery.includesLower(), termRangeQuery.includesUpper());
+			if (!_isContentFieldQueryTerm(queryTerm)) {
+				return;
+			}
 
-            criterion.add(cmisCriterion);
-        }
-        else if (query instanceof WildcardQuery) {
-            WildcardQuery wildcardQuery = (WildcardQuery)query;
+			String value = queryTerm.getValue();
+			String[] terms = value.split(_STAR_PATTERN);
 
-            QueryTerm queryTerm = wildcardQuery.getQueryTerm();
+			CMISConjunction cmisConjunction = new CMISConjunction();
 
-            if (!isSupportedField(queryTerm.getField())) {
-                return;
-            }
+			for (String term : terms) {
+				CMISContainsValueExpression containsValueExpression =
+					new CMISContainsValueExpression(term);
 
-            CMISCriterion cmisCriterion = buildFieldExpression(
-                    queryTerm.getField(), queryTerm.getValue(),
-                    CMISSimpleExpressionOperator.LIKE, queryConfig);
+				cmisConjunction.add(containsValueExpression);
+			}
 
-            if (cmisCriterion != null) {
-                boolean add = true;
-
-                if ((cmisCriterion instanceof CMISContainsExpression) &&
-                        !isSupportsFullText(queryConfig)) {
-
-                    add = false;
-                }
-                else if (!((cmisCriterion instanceof CMISContainsExpression) ||
-                        (cmisCriterion instanceof CMISInFolderExpression) ||
-                        (cmisCriterion instanceof CMISInTreeExpression)) &&
-                        isSupportsOnlyFullText(queryConfig)) {
-
-                    add = false;
-                }
-
-                if (add) {
-                    criterion.add(cmisCriterion);
-                }
-            }
-        }
-        */
-
-    }
+			criterion.add(cmisConjunction);
+		}
+		else if (query instanceof TermRangeQuery) {
+			return;
+		}
+	}
 
 	protected void traversePropertiesQuery(
 			CMISJunction criterion, Query query, QueryConfig queryConfig)
@@ -410,38 +389,27 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 			}
 		}
 		else if (query instanceof TermQuery) {
-            TermQuery termQuery = (TermQuery)query;
+			TermQuery termQuery = (TermQuery)query;
 
-            QueryTerm queryTerm = termQuery.getQueryTerm();
+			QueryTerm queryTerm = termQuery.getQueryTerm();
 
-            if (!isSupportedField(queryTerm.getField())) {
-                return;
-            }
+			if (!isSupportedField(queryTerm.getField())) {
+				return;
+			}
 
-            CMISCriterion cmisExpression = buildFieldExpression(
-                    queryTerm.getField(), queryTerm.getValue(),
-                    CMISSimpleExpressionOperator.EQ, queryConfig);
+			CMISCriterion cmisExpression = buildFieldExpression(
+					queryTerm.getField(), queryTerm.getValue(),
+					CMISSimpleExpressionOperator.EQ, queryConfig);
 
-            if (cmisExpression != null) {
-                boolean add = true;
+			if (cmisExpression != null) {
+				if ((cmisExpression instanceof CMISContainsExpression) &&
+					!isSupportsFullText(queryConfig)) {
 
-                if ((cmisExpression instanceof CMISContainsExpression) &&
-                        !isSupportsFullText(queryConfig)) {
+					return;
+				}
 
-                    add = false;
-                }
-                /*else if (!((cmisExpression instanceof CMISContainsExpression) ||
-                        (cmisExpression instanceof CMISInFolderExpression) ||
-                        (cmisExpression instanceof CMISInTreeExpression)) &&
-                        isSupportsOnlyFullText(queryConfig)) {
-
-                    add = false;
-                }*/
-
-                if (add) {
-                    criterion.add(cmisExpression);
-                }
-            }
+				criterion.add(cmisExpression);
+			}
 		}
 		else if (query instanceof TermRangeQuery) {
 			TermRangeQuery termRangeQuery = (TermRangeQuery)query;
@@ -478,27 +446,22 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 				CMISSimpleExpressionOperator.LIKE, queryConfig);
 
 			if (cmisCriterion != null) {
-				boolean add = true;
-
 				if ((cmisCriterion instanceof CMISContainsExpression) &&
 					!isSupportsFullText(queryConfig)) {
 
-					add = false;
+					return;
 				}
-				/*else if (!((cmisCriterion instanceof CMISContainsExpression) ||
-						   (cmisCriterion instanceof CMISInFolderExpression) ||
-						   (cmisCriterion instanceof CMISInTreeExpression)) &&
-						 isSupportsOnlyFullText(queryConfig)) {
 
-					add = false;
-				}*/
-
-				if (add) {
-					criterion.add(cmisCriterion);
-				}
+				criterion.add(cmisCriterion);
 			}
 		}
 	}
+
+	private boolean _isContentFieldQueryTerm(QueryTerm queryTerm) {
+		return queryTerm.getField().equals(Field.CONTENT);
+	}
+
+	private static final String _STAR_PATTERN = Pattern.quote(StringPool.STAR);
 
 	private static Map<String, String> _cmisFields;
 	private static Set<String> _supportedFields;
@@ -515,7 +478,6 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
 		_supportedFields = new HashSet<String>();
 
-		_supportedFields.add(Field.CONTENT);
 		_supportedFields.add(Field.CREATE_DATE);
 		_supportedFields.add(Field.FOLDER_ID);
 		_supportedFields.add(Field.MODIFIED_DATE);

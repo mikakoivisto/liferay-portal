@@ -157,8 +157,32 @@ public class CMISQueryBuilderTest extends PowerMockito {
 			searchContext, searchQuery);
 
 		assertQueryEquals(
-			"(cmis:name = 'test' OR cmis:createdBy = 'test' OR " +
-				"CONTAINS('test'))",
+			"((cmis:name = 'test' OR cmis:createdBy = 'test') " +
+				"AND CONTAINS('test'))",
+			cmisQuery);
+	}
+
+	@Test
+	public void testContainsCombinedSupportedWildcardQuery() throws Exception {
+		SearchContext searchContext = getSearchContext();
+
+		searchContext.setKeywords("test*.jpg");
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setAttribute(
+			"capabilityQuery", CapabilityQuery.BOTHCOMBINED.value());
+
+		BooleanQuery searchQuery =
+			RepositorySearchQueryBuilderUtil.getFullQuery(searchContext);
+
+		String cmisQuery = CMISSearchQueryBuilderUtil.buildQuery(
+			searchContext, searchQuery);
+
+		assertQueryEquals(
+			"((cmis:name LIKE 'test%.jpg' " +
+				"OR cmis:createdBy LIKE 'test%.jpg') " +
+				"AND CONTAINS('(test AND .jpg)'))",
 			cmisQuery);
 	}
 
@@ -201,7 +225,7 @@ public class CMISQueryBuilderTest extends PowerMockito {
 		String cmisQuery = CMISSearchQueryBuilderUtil.buildQuery(
 			searchContext, searchQuery);
 
-        assertQueryEquals("CONTAINS('(test OR multiple)')", cmisQuery);
+		assertQueryEquals("CONTAINS('(test OR multiple)')", cmisQuery);
 	}
 
 	@Test
@@ -227,9 +251,7 @@ public class CMISQueryBuilderTest extends PowerMockito {
 	}
 
 	@Test
-	public void testContainsOnlySupportedQueryWithNegation()
-		throws Exception {
-
+	public void testContainsOnlySupportedQueryWithNegation() throws Exception {
 		SearchContext searchContext = getSearchContext();
 
 		searchContext.setKeywords("test -multiple");
@@ -328,8 +350,8 @@ public class CMISQueryBuilderTest extends PowerMockito {
 			searchContext, searchQuery);
 
 		assertQueryEquals(
-			"(IN_FOLDER('1000') AND (cmis:name = 'test' OR " +
-				"cmis:createdBy = 'test' OR CONTAINS('test')))",
+			"((IN_FOLDER('1000') AND (cmis:name = 'test' OR " +
+				"cmis:createdBy = 'test')) AND CONTAINS('test'))",
 			cmisQuery);
 	}
 
@@ -462,8 +484,8 @@ public class CMISQueryBuilderTest extends PowerMockito {
 			searchContext, searchQuery);
 
 		assertQueryEquals(
-			"(IN_TREE('1000') AND (cmis:name = 'test' OR " +
-				"cmis:createdBy = 'test' OR CONTAINS('test')))",
+			"((IN_TREE('1000') AND (cmis:name = 'test' OR " +
+				"cmis:createdBy = 'test')) AND CONTAINS('test'))",
 			cmisQuery);
 	}
 
@@ -554,4 +576,3 @@ public class CMISQueryBuilderTest extends PowerMockito {
 	private List<Class<?>> _serviceUtilClasses = new ArrayList<Class<?>>();
 
 }
-
