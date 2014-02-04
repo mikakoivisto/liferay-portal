@@ -15,6 +15,8 @@
 package com.liferay.portal.kernel.repository.cmis.search;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BooleanClause;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
@@ -66,10 +68,16 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 
 		sb.append(" FROM cmis:document");
 
-		CMISConjunction cmisConjunction = new CMISConjunction();
+		CMISDisjunction cmisDisjunction = new CMISDisjunction();
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				"Repository query support: " +
+					queryConfig.getAttribute("capabilityQuery"));
+		}
 
 		if (!isSupportsOnlyFullText(queryConfig)) {
-			traversePropertiesQuery(cmisConjunction, query, queryConfig);
+			traversePropertiesQuery(cmisDisjunction, query, queryConfig);
 		}
 
 		if (isSupportsFullText(queryConfig)) {
@@ -79,13 +87,13 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 			traverseContentQuery(containsExpression, query, queryConfig);
 
 			if (!containsExpression.isEmpty()) {
-				cmisConjunction.add(containsExpression);
+				cmisDisjunction.add(containsExpression);
 			}
 		}
 
-		if (!cmisConjunction.isEmpty()) {
+		if (!cmisDisjunction.isEmpty()) {
 			sb.append(" WHERE ");
-			sb.append(cmisConjunction.toQueryFragment());
+			sb.append(cmisDisjunction.toQueryFragment());
 		}
 
 		Sort[] sorts = searchContext.getSorts();
@@ -122,6 +130,10 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 		}
 		else if (queryConfig.isScoreEnabled()) {
 			sb.append("HITS DESC");
+		}
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Returning CMIS query: " + sb);
 		}
 
 		return sb.toString();
@@ -462,6 +474,9 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 	}
 
 	private static final String _STAR_PATTERN = Pattern.quote(StringPool.STAR);
+
+	private static Log _log = LogFactoryUtil.getLog(
+		BaseCmisSearchQueryBuilder.class);
 
 	private static Map<String, String> _cmisFields;
 	private static Set<String> _supportedFields;
