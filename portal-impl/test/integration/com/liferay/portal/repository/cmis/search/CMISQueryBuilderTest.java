@@ -158,7 +158,7 @@ public class CMISQueryBuilderTest extends PowerMockito {
 
 		assertQueryEquals(
 			"((cmis:name = 'test' OR cmis:createdBy = 'test') " +
-				"AND CONTAINS('test'))",
+				"OR CONTAINS('test'))",
 			cmisQuery);
 	}
 
@@ -182,7 +182,7 @@ public class CMISQueryBuilderTest extends PowerMockito {
 		assertQueryEquals(
 			"((cmis:name LIKE 'test%.jpg' " +
 				"OR cmis:createdBy LIKE 'test%.jpg') " +
-				"AND CONTAINS('(test AND .jpg)'))",
+				"OR CONTAINS('(test AND .jpg)'))",
 			cmisQuery);
 	}
 
@@ -351,7 +351,7 @@ public class CMISQueryBuilderTest extends PowerMockito {
 
 		assertQueryEquals(
 			"((IN_FOLDER('1000') AND (cmis:name = 'test' OR " +
-				"cmis:createdBy = 'test')) AND CONTAINS('test'))",
+				"cmis:createdBy = 'test')) OR CONTAINS('test'))",
 			cmisQuery);
 	}
 
@@ -485,7 +485,7 @@ public class CMISQueryBuilderTest extends PowerMockito {
 
 		assertQueryEquals(
 			"((IN_TREE('1000') AND (cmis:name = 'test' OR " +
-				"cmis:createdBy = 'test')) AND CONTAINS('test'))",
+				"cmis:createdBy = 'test')) OR CONTAINS('test'))",
 			cmisQuery);
 	}
 
