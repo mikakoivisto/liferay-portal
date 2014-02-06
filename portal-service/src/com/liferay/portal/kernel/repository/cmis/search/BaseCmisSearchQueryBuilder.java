@@ -150,16 +150,7 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 		boolean wildcard =
 			CMISSimpleExpressionOperator.LIKE == cmisSimpleExpressionOperator;
 
-		if (field.equals(Field.CONTENT)) {
-			value = CMISParameterValueUtil.formatParameterValue(
-				field, value, false, queryConfig);
-
-			CMISContainsExpression contains = new CMISContainsExpression();
-			contains.add(new CMISContainsValueExpression(value));
-
-			cmisCriterion = contains;
-		}
-		else if (field.equals(Field.FOLDER_ID)) {
+		if (field.equals(Field.FOLDER_ID)) {
 			long folderId = GetterUtil.getLong(value);
 
 			try {
@@ -414,12 +405,6 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 					CMISSimpleExpressionOperator.EQ, queryConfig);
 
 			if (cmisExpression != null) {
-				if ((cmisExpression instanceof CMISContainsExpression) &&
-					!isSupportsFullText(queryConfig)) {
-
-					return;
-				}
-
 				criterion.add(cmisExpression);
 			}
 		}
@@ -458,12 +443,6 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 				CMISSimpleExpressionOperator.LIKE, queryConfig);
 
 			if (cmisCriterion != null) {
-				if ((cmisCriterion instanceof CMISContainsExpression) &&
-					!isSupportsFullText(queryConfig)) {
-
-					return;
-				}
-
 				criterion.add(cmisCriterion);
 			}
 		}
