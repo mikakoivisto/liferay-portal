@@ -294,6 +294,26 @@ public class CMISQueryBuilderTest extends PowerMockito {
 	}
 
 	@Test
+	public void testContainsOnlySupportedWithApostrophe() throws Exception {
+		SearchContext searchContext = getSearchContext();
+
+		searchContext.setKeywords("test's");
+
+		BooleanQuery searchQuery =
+			RepositorySearchQueryBuilderUtil.getFullQuery(searchContext);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setAttribute(
+			"capabilityQuery", CapabilityQuery.FULLTEXTONLY.value());
+
+		String cmisQuery = CMISSearchQueryBuilderUtil.buildQuery(
+			searchContext, searchQuery);
+
+		assertQueryEquals("CONTAINS('test\\'s')", cmisQuery);
+	}
+
+	@Test
 	public void testExactFilenameQuery() throws Exception {
 		SearchContext searchContext = getSearchContext();
 

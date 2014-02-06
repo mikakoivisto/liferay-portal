@@ -312,8 +312,14 @@ public class BaseCmisSearchQueryBuilder implements CMISSearchQueryBuilder {
 				return;
 			}
 
+			String field = queryTerm.getField();
+			String value = queryTerm.getValue();
+
+			value = CMISParameterValueUtil.formatParameterValue(
+					field, value, false, queryConfig);
+
 			CMISContainsValueExpression cmisContainsValueExpression =
-				new CMISContainsValueExpression(queryTerm.getValue());
+				new CMISContainsValueExpression(value);
 
 			criterion.add(cmisContainsValueExpression);
 		}
