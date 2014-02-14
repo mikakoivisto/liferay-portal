@@ -14,8 +14,6 @@
 
 package com.liferay.portal.repository.cmis.search;
 
-import static org.mockito.Matchers.eq;
-
 import java.lang.reflect.Field;
 
 import org.apache.chemistry.opencmis.commons.enums.CapabilityQuery;
@@ -24,6 +22,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -345,7 +344,8 @@ public class CMISQueryBuilderTest extends PowerMockito {
 		);
 
 		when(
-			_repositoryEntryLocalService.fetchRepositoryEntry(eq(1000l))
+			_repositoryEntryLocalService.fetchRepositoryEntry(
+				Matchers.eq(1000l))
 		).thenReturn(
 			_repositoryEntry
 		);
