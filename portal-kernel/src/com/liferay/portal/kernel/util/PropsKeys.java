@@ -2307,6 +2307,18 @@ public interface PropsKeys {
 
 	public static final String WEB_SERVER_DISPLAY_NODE = "web.server.display.node";
 
+	public static final String WEB_SERVER_FORWARD_HOST_ENABLED = "web.server.forward.host.enabled";
+
+	public static final String WEB_SERVER_FORWARD_HOST_HEADER = "web.server.forward.host.header";
+
+	public static final String WEB_SERVER_FORWARD_PORT_ENABLED = "web.server.forward.port.enabled";
+
+	public static final String WEB_SERVER_FORWARD_PORT_HEADER = "web.server.forward.port.header";
+
+	public static final String WEB_SERVER_FORWARD_PROTO_ENABLED = "web.server.forward.proto.enabled";
+
+	public static final String WEB_SERVER_FORWARD_PROTO_HEADER = "web.server.forward.proto.header";
+
 	public static final String WEB_SERVER_HOST = "web.server.host";
 
 	public static final String WEB_SERVER_HTTP_PORT = "web.server.http.port";

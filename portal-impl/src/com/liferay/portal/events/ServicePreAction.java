@@ -78,6 +78,7 @@ import com.liferay.portal.kernel.util.ColorSchemeFactoryUtil;
 import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -742,14 +743,41 @@ public class ServicePreAction extends Action {
 		// Set attributes first that other methods (getCDNBaseURL and
 		// setLookAndFeel) depend on
 
+		boolean secure = request.isSecure();
+
+		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
+			secure = false;
+
+			String forwardedProto = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_PROTO_HEADER);
+
+			if (Validator.equals(Http.HTTPS, forwardedProto)) {
+				secure = true;
+			}
+		}
+
+		String serverName = request.getServerName();
+
+		if (PropsValues.WEB_SERVER_FORWARD_HOST_ENABLED) {
+			serverName = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_HOST_HEADER);
+		}
+
+		int serverPort = request.getServerPort();
+
+		if (PropsValues.WEB_SERVER_FORWARD_PORT_ENABLED) {
+			serverPort = GetterUtil.getInteger(
+				request.getHeader(PropsValues.WEB_SERVER_FORWARD_PORT_HEADER));
+		}
+
 		themeDisplay.setCDNHost(cdnHost);
 		themeDisplay.setCDNDynamicResourcesHost(dynamicResourcesCDNHost);
 		themeDisplay.setFacebookCanvasPageURL(facebookCanvasPageURL);
 		themeDisplay.setPortalURL(portalURL);
 		themeDisplay.setRefererPlid(refererPlid);
-		themeDisplay.setSecure(request.isSecure());
-		themeDisplay.setServerName(request.getServerName());
-		themeDisplay.setServerPort(request.getServerPort());
+		themeDisplay.setSecure(secure);
+		themeDisplay.setServerName(serverName);
+		themeDisplay.setServerPort(serverPort);
 		themeDisplay.setWidget(widget);
 
 		themeDisplay.setCompany(company);
@@ -1026,11 +1054,7 @@ public class ServicePreAction extends Action {
 
 		themeDisplay.setURLPortal(portalURL.concat(contextPath));
 
-		boolean secure = false;
-
-		if (PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS ||
-			request.isSecure()) {
-
+		if (!secure && PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS) {
 			secure = true;
 		}
 

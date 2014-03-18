@@ -3939,8 +3939,22 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public String getPortalURL(HttpServletRequest request, boolean secure) {
-		return getPortalURL(
-			request.getServerName(), request.getServerPort(), secure);
+
+		String serverName = request.getServerName();
+
+		if (PropsValues.WEB_SERVER_FORWARD_HOST_ENABLED) {
+			serverName = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_HOST_HEADER);
+		}
+
+		int serverPort = request.getServerPort();
+
+		if (PropsValues.WEB_SERVER_FORWARD_PORT_ENABLED) {
+			serverPort = GetterUtil.getInteger(
+				request.getHeader(PropsValues.WEB_SERVER_FORWARD_PORT_HEADER));
+		}
+
+		return getPortalURL(serverName, serverPort, secure);
 	}
 
 	@Override
@@ -6257,6 +6271,20 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public boolean isSecure(HttpServletRequest request) {
+
+		boolean secure = false;
+
+		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
+			String forwardedProto = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_PROTO_HEADER);
+
+			if (Validator.equals(Http.HTTPS, forwardedProto)) {
+				secure = true;
+			}
+
+			return secure;
+		}
+
 		HttpSession session = request.getSession();
 
 		if (session == null) {
@@ -6265,8 +6293,6 @@ public class PortalImpl implements Portal {
 
 		Boolean httpsInitial = (Boolean)session.getAttribute(
 			WebKeys.HTTPS_INITIAL);
-
-		boolean secure = false;
 
 		if (PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS &&
 			!PropsValues.SESSION_ENABLE_PHISHING_PROTECTION &&
