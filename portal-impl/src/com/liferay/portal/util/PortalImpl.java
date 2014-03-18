@@ -2334,6 +2334,49 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
+	public String getForwardedHost(HttpServletRequest request) {
+
+		String serverName = request.getServerName();
+
+		if (PropsValues.WEB_SERVER_FORWARD_HOST_ENABLED) {
+			serverName = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_HOST_HEADER);
+		}
+
+		return serverName;
+	}
+
+	@Override
+	public int getForwardedPort(HttpServletRequest request) {
+		int serverPort = request.getServerPort();
+
+		if (PropsValues.WEB_SERVER_FORWARD_PORT_ENABLED) {
+			serverPort = GetterUtil.getInteger(
+				request.getHeader(PropsValues.WEB_SERVER_FORWARD_PORT_HEADER));
+		}
+
+		return serverPort;
+	}
+
+	@Override
+	public boolean getForwardedSecure(HttpServletRequest request) {
+		boolean secure = request.isSecure();
+
+		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
+			secure = false;
+
+			String forwardedProto = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_PROTO_HEADER);
+
+			if (Validator.equals(Http.HTTPS, forwardedProto)) {
+				secure = true;
+			}
+		}
+
+		return secure;
+	}
+
+	@Override
 	public String getFullName(
 		String firstName, String middleName, String lastName) {
 
@@ -3940,19 +3983,9 @@ public class PortalImpl implements Portal {
 	@Override
 	public String getPortalURL(HttpServletRequest request, boolean secure) {
 
-		String serverName = request.getServerName();
+		String serverName = getForwardedHost(request);
 
-		if (PropsValues.WEB_SERVER_FORWARD_HOST_ENABLED) {
-			serverName = request.getHeader(
-				PropsValues.WEB_SERVER_FORWARD_HOST_HEADER);
-		}
-
-		int serverPort = request.getServerPort();
-
-		if (PropsValues.WEB_SERVER_FORWARD_PORT_ENABLED) {
-			serverPort = GetterUtil.getInteger(
-				request.getHeader(PropsValues.WEB_SERVER_FORWARD_PORT_HEADER));
-		}
+		int serverPort = getForwardedPort(request);
 
 		return getPortalURL(serverName, serverPort, secure);
 	}
@@ -6275,14 +6308,7 @@ public class PortalImpl implements Portal {
 		boolean secure = false;
 
 		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
-			String forwardedProto = request.getHeader(
-				PropsValues.WEB_SERVER_FORWARD_PROTO_HEADER);
-
-			if (Validator.equals(Http.HTTPS, forwardedProto)) {
-				secure = true;
-			}
-
-			return secure;
+			return PortalUtil.getForwardedSecure(request);
 		}
 
 		HttpSession session = request.getSession();

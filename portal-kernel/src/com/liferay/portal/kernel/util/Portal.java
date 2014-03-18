@@ -647,6 +647,12 @@ public interface Portal {
 
 	public String getFirstPageLayoutTypes(HttpServletRequest request);
 
+	public String getForwardedHost(HttpServletRequest request);
+
+	public int getForwardedPort(HttpServletRequest request);
+
+	public boolean getForwardedSecure(HttpServletRequest request);
+
 	public String getFullName(
 		String firstName, String middleName, String lastName);
 

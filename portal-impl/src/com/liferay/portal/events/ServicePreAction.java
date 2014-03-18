@@ -78,7 +78,6 @@ import com.liferay.portal.kernel.util.ColorSchemeFactoryUtil;
 import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -743,32 +742,11 @@ public class ServicePreAction extends Action {
 		// Set attributes first that other methods (getCDNBaseURL and
 		// setLookAndFeel) depend on
 
-		boolean secure = request.isSecure();
+		boolean secure = PortalUtil.getForwardedSecure(request);
 
-		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
-			secure = false;
+		String serverName = PortalUtil.getForwardedHost(request);
 
-			String forwardedProto = request.getHeader(
-				PropsValues.WEB_SERVER_FORWARD_PROTO_HEADER);
-
-			if (Validator.equals(Http.HTTPS, forwardedProto)) {
-				secure = true;
-			}
-		}
-
-		String serverName = request.getServerName();
-
-		if (PropsValues.WEB_SERVER_FORWARD_HOST_ENABLED) {
-			serverName = request.getHeader(
-				PropsValues.WEB_SERVER_FORWARD_HOST_HEADER);
-		}
-
-		int serverPort = request.getServerPort();
-
-		if (PropsValues.WEB_SERVER_FORWARD_PORT_ENABLED) {
-			serverPort = GetterUtil.getInteger(
-				request.getHeader(PropsValues.WEB_SERVER_FORWARD_PORT_HEADER));
-		}
+		int serverPort = PortalUtil.getForwardedPort(request);
 
 		themeDisplay.setCDNHost(cdnHost);
 		themeDisplay.setCDNDynamicResourcesHost(dynamicResourcesCDNHost);
