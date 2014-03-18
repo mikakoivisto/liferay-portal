@@ -957,6 +957,18 @@ public class PortalUtil {
 		return getPortal().getFirstSiteAdministrationPortlet(themeDisplay);
 	}
 
+	public static String getForwardedHost(HttpServletRequest request) {
+		return getPortal().getForwardedHost(request);
+	}
+
+	public static int getForwardedPort(HttpServletRequest request) {
+		return getPortal().getForwardedPort(request);
+	}
+
+	public static boolean getForwardedSecure(HttpServletRequest request) {
+		return getPortal().getForwardedSecure(request);
+	}
+
 	public static String getFullName(
 		String firstName, String middleName, String lastName) {
 

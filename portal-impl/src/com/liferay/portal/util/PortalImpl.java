@@ -2548,6 +2548,49 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
+	public String getForwardedHost(HttpServletRequest request) {
+
+		String serverName = request.getServerName();
+
+		if (PropsValues.WEB_SERVER_FORWARD_HOST_ENABLED) {
+			serverName = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_HOST_HEADER);
+		}
+
+		return serverName;
+	}
+
+	@Override
+	public int getForwardedPort(HttpServletRequest request) {
+		int serverPort = request.getServerPort();
+
+		if (PropsValues.WEB_SERVER_FORWARD_PORT_ENABLED) {
+			serverPort = GetterUtil.getInteger(
+				request.getHeader(PropsValues.WEB_SERVER_FORWARD_PORT_HEADER));
+		}
+
+		return serverPort;
+	}
+
+	@Override
+	public boolean getForwardedSecure(HttpServletRequest request) {
+		boolean secure = request.isSecure();
+
+		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
+			secure = false;
+
+			String forwardedProto = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARD_PROTO_HEADER);
+
+			if (Validator.equals(Http.HTTPS, forwardedProto)) {
+				secure = true;
+			}
+		}
+
+		return secure;
+	}
+
+	@Override
 	public String getFullName(
 		String firstName, String middleName, String lastName) {
 
@@ -4092,8 +4135,12 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public String getPortalURL(HttpServletRequest request, boolean secure) {
-		return getPortalURL(
-			request.getServerName(), request.getServerPort(), secure);
+
+		String serverName = getForwardedHost(request);
+
+		int serverPort = getForwardedPort(request);
+
+		return getPortalURL(serverName, serverPort, secure);
 	}
 
 	@Override
@@ -6598,6 +6645,13 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public boolean isSecure(HttpServletRequest request) {
+
+		boolean secure = false;
+
+		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
+			return PortalUtil.getForwardedSecure(request);
+		}
+
 		HttpSession session = request.getSession();
 
 		if (session == null) {
@@ -6606,8 +6660,6 @@ public class PortalImpl implements Portal {
 
 		Boolean httpsInitial = (Boolean)session.getAttribute(
 			WebKeys.HTTPS_INITIAL);
-
-		boolean secure = false;
 
 		if (PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS &&
 			!PropsValues.SESSION_ENABLE_PHISHING_PROTECTION &&
