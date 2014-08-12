@@ -207,8 +207,10 @@ public class LoginAction extends PortletAction {
 		if (Validator.isNotNull(redirect)) {
 			redirect = PortalUtil.escapeRedirect(redirect);
 
-			if (!redirect.startsWith(Http.HTTP)) {
-				redirect = getCompleteRedirectURL(request, redirect);
+			if (Validator.isNotNull(redirect)) {
+				if (!redirect.startsWith(Http.HTTP)) {
+					redirect = getCompleteRedirectURL(request, redirect);
+				}
 			}
 		}
 
