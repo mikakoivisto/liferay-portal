@@ -37,7 +37,10 @@
 	<xsl:template match="library">
 		<tr>
 			<td nowrap="nowrap">
-				<xsl:value-of select="file-name" />
+				<xsl:for-each select="file-name">
++					<xsl:value-of select="."/>
++					<xsl:if test="position() != last()"><br/></xsl:if>
++				</xsl:for-each>
 			</td>
 			<td nowrap="nowrap">
 				<xsl:value-of select="version" />
