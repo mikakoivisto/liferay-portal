@@ -142,9 +142,9 @@ public class PasswordPolicyToolkit extends BasicToolkit {
 
 			long minAge = passwordPolicy.getMinAge() * 1000;
 
-			boolean passwordReset = user.getPasswordReset();
+			if ((passwordModificationElapsedTime < minAge) &&
+				!user.getPasswordReset()) {
 
-			if ((passwordModificationElapsedTime < minAge) && !passwordReset) {
 				throw new UserPasswordException(
 					UserPasswordException.PASSWORD_TOO_YOUNG);
 			}
