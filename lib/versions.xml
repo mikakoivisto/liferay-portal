@@ -2422,6 +2422,18 @@
 		</comments>
 	</library>
 	<library>
+		<file-name>lib/portal/json-vaadin.jar</file-name>
+		<version>0.0.20131108.vaadin1</version>
+		<project-name>Android JSON for Vaadin</project-name>
+		<project-url>https://github.com/vaadin/vaadin-deps/tree/master/shared/json</project-url>
+		<licenses>
+			<license>
+				<license-name>JSON License</license-name>
+				<license-url>https://github.com/vaadin/vaadin-deps/blob/master/licenses/licenses/the-json-license.txt</license-url>
+			</license>
+		</licenses>
+	</library>
+	<library>
 		<file-name>lib/portal/json-schema-validator.jar</file-name>
 		<version>2.2.3</version>
 		<project-name>json-schema-validator</project-name>
@@ -2456,6 +2468,18 @@
 			Removed org.json.* because it conflicts with jabsorb.jar. This JAR
 			is still necessary until JSPWiki upgrades to jabsorb.jar.
 		</comments>
+	</library>
+	<library>
+		<file-name>lib/portal/jsoup.jar</file-name>
+		<version>1.6.3</version>
+		<project-name>jsoup</project-name>
+		<project-url>http://http://jsoup.org</project-url>
+		<licenses>
+			<license>
+				<license-name>MIT License</license-name>
+				<license-url>http://opensource.org/licenses/MIT</license-url>
+			</license>
+		</licenses>
 	</library>
 	<library>
 		<file-name>lib/portal/jspwiki.jar</file-name>
@@ -3589,15 +3613,16 @@
 		</licenses>
 	</library>
 	<library>
-		<file-name>lib/portal/vaadin.jar</file-name>
-		<version>6.8.12</version>
+		<file-name>lib/portal/vaadin-server.jar</file-name>
+		<file-name>lib/portal/vaadin-shared.jar</file-name>
+		<version>7.2.6</version>
 		<project-name>Vaadin</project-name>
 		<project-url>http://vaadin.com</project-url>
 		<licenses>
 			<license>
 				<license-name>Apache License 2.0</license-name>
 				<license-url>http://www.apache.org/licenses/LICENSE-2.0</license-url>
-				<copyright-notice>Copyright (c) 2012 Vaadin Ltd</copyright-notice>
+				<copyright-notice>Copyright (c) 2014 Vaadin Ltd</copyright-notice>
 			</license>
 		</licenses>
 	</library>

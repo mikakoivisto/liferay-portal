@@ -11,7 +11,7 @@
 	<property name="ckeditor.file" value="ckeditor_4.3.5_liferay.zip" />
 	<property name="scayt.file" value="scayt_4.3.5.zip" />
 	<property name="tinymce.file" value="tinymce_3.5.6.zip" />
-	<property name="vaadin.file" value="vaadin-6.8.12-liferay.zip" />
+	<property name="vaadin.file" value="vaadin-liferay-7.2.6.zip" />
 	<property name="wsc.file" value="wsc_4.3.5.zip" />
 
 	<path id="jspc.common.classpath">
@@ -787,6 +787,14 @@
 
 				<delete dir="docroot/html/VAADIN" />
 
+				<copy todir="docroot/html/VAADIN">
+					<fileset dir="docroot/html/VAADIN_ZIP/VAADIN">
+						<include name="vaadinPush.js" />
+						<include name="vaadinPush.debug.js" />
+						<include name="vaadinBootstrap.js" />
+					</fileset>
+				</copy>
+
 				<copy todir="docroot/html/VAADIN/themes" preservelastmodified="true">
 					<fileset dir="docroot/html/VAADIN_ZIP/VAADIN/themes">
 						<include name="default/**" />
@@ -799,7 +807,7 @@
 
 				<copy todir="docroot/html/VAADIN/widgetsets" preservelastmodified="true">
 					<fileset dir="docroot/html/VAADIN_ZIP/VAADIN/widgetsets">
-						<include name="com.vaadin.portal.gwt.PortalDefaultWidgetSet/**" />
+						<include name="com.vaadin.DefaultWidgetSet/**" />
 					</fileset>
 				</copy>
 
