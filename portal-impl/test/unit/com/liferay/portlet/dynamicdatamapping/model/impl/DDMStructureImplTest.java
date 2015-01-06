@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -104,6 +105,27 @@ public class DDMStructureImplTest extends BaseDDMTestCase {
 	}
 
 	@Test
+	public void testGetDDMForm() throws Exception {
+		DDMForm ddmForm = createDDMForm(
+			createAvailableLocales(LocaleUtil.US), LocaleUtil.US);
+
+		ddmForm.addDDMFormField(createTextDDMFormField("field1"));
+
+		DDMStructure structure = createStructure("Test Structure", ddmForm);
+
+		DDMForm ddmForm1 = structure.getDDMForm();
+
+		ddmForm1.addDDMFormField(createTextDDMFormField("field2"));
+
+		DDMForm ddmForm2 = structure.getDDMForm();
+
+		Map<String, DDMFormField> ddmForm2FieldsMap =
+			ddmForm2.getDDMFormFieldsMap(false);
+
+		Assert.assertFalse(ddmForm2FieldsMap.containsKey("field2"));
+	}
+
+	@Test
 	public void testGetDefaultLanguageId() throws Exception {
 		DDMForm ddmForm = createDDMForm(
 			createAvailableLocales(LocaleUtil.BRAZIL, LocaleUtil.US),
@@ -165,7 +187,6 @@ public class DDMStructureImplTest extends BaseDDMTestCase {
 		expectedFieldNames.add("child2Field1");
 		expectedFieldNames.add("field2");
 		expectedFieldNames.add("field3");
-		expectedFieldNames.add("_fieldsDisplay");
 
 		Assert.assertEquals(expectedFieldNames, structure.getFieldNames());
 	}
@@ -200,7 +221,6 @@ public class DDMStructureImplTest extends BaseDDMTestCase {
 		expectedFieldNames.add("field3");
 		expectedFieldNames.add("field4");
 		expectedFieldNames.add("field5");
-		expectedFieldNames.add("_fieldsDisplay");
 
 		Assert.assertEquals(expectedFieldNames, childStructure.getFieldNames());
 	}
@@ -272,7 +292,6 @@ public class DDMStructureImplTest extends BaseDDMTestCase {
 		expectedFieldNames.add("field1");
 		expectedFieldNames.add("field2");
 		expectedFieldNames.add("field3");
-		expectedFieldNames.add("_fieldsDisplay");
 
 		Assert.assertEquals(expectedFieldNames, structure.getRootFieldNames());
 	}

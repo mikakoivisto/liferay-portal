@@ -159,9 +159,10 @@ create unique index IX_8854A128 on DDMTemplateVersion (templateId, version);
 
 create unique index IX_FDD1AAA8 on DLContent (companyId, repositoryId, path_, version);
 
-create index IX_4CB1B2B4 on DLFileEntry (companyId);
+create index IX_5444C427 on DLFileEntry (companyId, fileEntryTypeId);
 create index IX_772ECDE7 on DLFileEntry (fileEntryTypeId);
 create index IX_8F6C75D0 on DLFileEntry (folderId, name);
+create index IX_BAF654E5 on DLFileEntry (groupId, fileEntryTypeId);
 create index IX_29D0AF28 on DLFileEntry (groupId, folderId, fileEntryTypeId);
 create unique index IX_DF37D92E on DLFileEntry (groupId, folderId, fileName);
 create unique index IX_5391712 on DLFileEntry (groupId, folderId, name);
@@ -244,11 +245,11 @@ create index IX_38FA468D on ExportImportConfiguration (groupId, status);
 create index IX_47CC6234 on ExportImportConfiguration (groupId, type_, status);
 
 create unique index IX_D0D5E397 on Group_ (companyId, classNameId, classPK);
-create unique index IX_5DE0BE11 on Group_ (companyId, classNameId, liveGroupId, name);
+create unique index IX_A729E3A6 on Group_ (companyId, classNameId, liveGroupId, groupKey);
 create index IX_ABE2D54 on Group_ (companyId, classNameId, parentGroupId);
 create unique index IX_5BDDB872 on Group_ (companyId, friendlyURL);
-create unique index IX_BBCA55B on Group_ (companyId, liveGroupId, name);
-create unique index IX_5AA68501 on Group_ (companyId, name);
+create unique index IX_ACD2B296 on Group_ (companyId, groupKey);
+create unique index IX_AACD15F0 on Group_ (companyId, liveGroupId, groupKey);
 create index IX_D4BFF38B on Group_ (companyId, parentGroupId, site, inheritContent);
 create index IX_63A2AABD on Group_ (companyId, site);
 create index IX_16218A38 on Group_ (liveGroupId);

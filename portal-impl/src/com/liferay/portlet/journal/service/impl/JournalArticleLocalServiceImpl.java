@@ -5266,7 +5266,12 @@ public class JournalArticleLocalServiceImpl
 
 		JournalArticle article = null;
 
-		User user = userPersistence.findByPrimaryKey(oldArticle.getUserId());
+		User user = userPersistence.fetchByC_U(
+			oldArticle.getCompanyId(), oldArticle.getUserId());
+
+		if (user == null) {
+			user = userPersistence.fetchByC_DU(oldArticle.getCompanyId(), true);
+		}
 
 		Locale defaultLocale = getArticleDefaultLocale(content);
 
@@ -6008,10 +6013,6 @@ public class JournalArticleLocalServiceImpl
 		throws PortalException {
 
 		for (DDMFormField ddmFormField : ddmForm.getDDMFormFields()) {
-			if (isPrivateDDMFormField(ddmFormField)) {
-				continue;
-			}
-
 			checkStructureField(ddmFormField, contentDocument.getRootElement());
 		}
 	}
@@ -6803,16 +6804,6 @@ public class JournalArticleLocalServiceImpl
 		catch (NoSuchArticleException nsae) {
 			return true;
 		}
-	}
-
-	protected boolean isPrivateDDMFormField(DDMFormField ddmFormField) {
-		String name = ddmFormField.getName();
-
-		if (name.startsWith(StringPool.UNDERLINE)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	protected void notifySubscribers(

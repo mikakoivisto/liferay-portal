@@ -15,167 +15,159 @@
 package com.liferay.portal.model.impl;
 
 import com.liferay.portal.kernel.test.AggregateTestRule;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTemplate;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.PortletLocalService;
 import com.liferay.portal.service.PortletLocalServiceUtil;
+import com.liferay.portal.service.impl.PortletLocalServiceImpl;
+import com.liferay.portal.test.DeleteAfterTestRun;
 import com.liferay.portal.test.LiferayIntegrationTestRule;
 import com.liferay.portal.test.MainServletTestRule;
-import com.liferay.portal.test.ResetDatabaseTestRule;
 import com.liferay.portal.util.test.GroupTestUtil;
 import com.liferay.portal.util.test.LayoutTestUtil;
 import com.liferay.portal.util.test.RandomTestUtil;
 import com.liferay.portal.util.test.TestPropsValues;
 import com.liferay.portal.util.test.UserTestUtil;
-import com.liferay.portlet.PortletInstanceFactoryUtil;
 import com.liferay.portlet.util.PortletKeys;
 
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 /**
  * @author Raymond Augé
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LayoutTypePortletTest {
 
 	@ClassRule
 	@Rule
 	public static final AggregateTestRule aggregateTestRule =
 		new AggregateTestRule(
-			new LiferayIntegrationTestRule(), MainServletTestRule.INSTANCE,
-			ResetDatabaseTestRule.INSTANCE);
+			new LiferayIntegrationTestRule(), MainServletTestRule.INSTANCE);
+
+	@Before
+	public void setUp() throws Exception {
+		_group = GroupTestUtil.addGroup();
+
+		Layout layout = LayoutTestUtil.addLayout(_group, false);
+
+		_layoutTypePortlet = (LayoutTypePortlet)layout.getLayoutType();
+	}
 
 	@Test
 	public void testAddModeAboutPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
-		Assert.assertFalse(layoutTypePortlet.hasModeAboutPortletId(portletId));
+		Assert.assertFalse(_layoutTypePortlet.hasModeAboutPortletId(portletId));
 
-		layoutTypePortlet.addModeAboutPortletId(portletId);
+		_layoutTypePortlet.addModeAboutPortletId(portletId);
 
-		Assert.assertTrue(layoutTypePortlet.hasModeAboutPortletId(portletId));
+		Assert.assertTrue(_layoutTypePortlet.hasModeAboutPortletId(portletId));
 	}
 
 	@Test
 	public void testAddModeConfigPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
-		Assert.assertFalse(layoutTypePortlet.hasModeConfigPortletId(portletId));
+		Assert.assertFalse(
+			_layoutTypePortlet.hasModeConfigPortletId(portletId));
 
-		layoutTypePortlet.addModeConfigPortletId(portletId);
+		_layoutTypePortlet.addModeConfigPortletId(portletId);
 
-		Assert.assertTrue(layoutTypePortlet.hasModeConfigPortletId(portletId));
+		Assert.assertTrue(_layoutTypePortlet.hasModeConfigPortletId(portletId));
 	}
 
 	@Test
 	public void testAddModeEditDefaultsPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
 		Assert.assertFalse(
-			layoutTypePortlet.hasModeEditDefaultsPortletId(portletId));
+			_layoutTypePortlet.hasModeEditDefaultsPortletId(portletId));
 
-		layoutTypePortlet.addModeEditDefaultsPortletId(portletId);
+		_layoutTypePortlet.addModeEditDefaultsPortletId(portletId);
 
 		Assert.assertTrue(
-			layoutTypePortlet.hasModeEditDefaultsPortletId(portletId));
+			_layoutTypePortlet.hasModeEditDefaultsPortletId(portletId));
 	}
 
 	@Test
 	public void testAddModeEditGuestPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
 		Assert.assertFalse(
-			layoutTypePortlet.hasModeEditGuestPortletId(portletId));
+			_layoutTypePortlet.hasModeEditGuestPortletId(portletId));
 
-		layoutTypePortlet.addModeEditGuestPortletId(portletId);
+		_layoutTypePortlet.addModeEditGuestPortletId(portletId);
 
 		Assert.assertTrue(
-			layoutTypePortlet.hasModeEditGuestPortletId(portletId));
+			_layoutTypePortlet.hasModeEditGuestPortletId(portletId));
 	}
 
 	@Test
 	public void testAddModeEditPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
-		Assert.assertFalse(layoutTypePortlet.hasModeEditPortletId(portletId));
+		Assert.assertFalse(_layoutTypePortlet.hasModeEditPortletId(portletId));
 
-		layoutTypePortlet.addModeEditPortletId(portletId);
+		_layoutTypePortlet.addModeEditPortletId(portletId);
 
-		Assert.assertTrue(layoutTypePortlet.hasModeEditPortletId(portletId));
+		Assert.assertTrue(_layoutTypePortlet.hasModeEditPortletId(portletId));
 	}
 
 	@Test
 	public void testAddModeHelpPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
-		Assert.assertFalse(layoutTypePortlet.hasModeHelpPortletId(portletId));
+		Assert.assertFalse(_layoutTypePortlet.hasModeHelpPortletId(portletId));
 
-		layoutTypePortlet.addModeHelpPortletId(portletId);
+		_layoutTypePortlet.addModeHelpPortletId(portletId);
 
-		Assert.assertTrue(layoutTypePortlet.hasModeHelpPortletId(portletId));
+		Assert.assertTrue(_layoutTypePortlet.hasModeHelpPortletId(portletId));
 	}
 
 	@Test
 	public void testAddModePreviewPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
 		Assert.assertFalse(
-			layoutTypePortlet.hasModePreviewPortletId(portletId));
+			_layoutTypePortlet.hasModePreviewPortletId(portletId));
 
-		layoutTypePortlet.addModePreviewPortletId(portletId);
+		_layoutTypePortlet.addModePreviewPortletId(portletId);
 
-		Assert.assertTrue(layoutTypePortlet.hasModePreviewPortletId(portletId));
+		Assert.assertTrue(
+			_layoutTypePortlet.hasModePreviewPortletId(portletId));
 	}
 
 	@Test
 	public void testAddModePrintPortletId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
 		String portletId = PortletKeys.TEST;
 
-		Assert.assertFalse(layoutTypePortlet.hasModePrintPortletId(portletId));
+		Assert.assertFalse(_layoutTypePortlet.hasModePrintPortletId(portletId));
 
-		layoutTypePortlet.addModePrintPortletId(portletId);
+		_layoutTypePortlet.addModePrintPortletId(portletId);
 
-		Assert.assertTrue(layoutTypePortlet.hasModePrintPortletId(portletId));
+		Assert.assertTrue(_layoutTypePortlet.hasModePrintPortletId(portletId));
 	}
 
 	@Test
 	public void testAddPortletIdCheckColumn() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
+		Layout layout = _layoutTypePortlet.getLayout();
 
-		Layout layout = layoutTypePortlet.getLayout();
-
-		User user = UserTestUtil.addUser(
+		_user = UserTestUtil.addUser(
 			RandomTestUtil.randomString(), layout.getGroupId());
 
 		String portletId = PortletKeys.TEST;
 
-		LayoutTemplate layoutTemplate = layoutTypePortlet.getLayoutTemplate();
+		LayoutTemplate layoutTemplate = _layoutTypePortlet.getLayoutTemplate();
 
 		List<String> columns = layoutTemplate.getColumns();
 
@@ -183,27 +175,26 @@ public class LayoutTypePortletTest {
 
 		Assert.assertEquals(2, columns.size());
 
-		portletId = layoutTypePortlet.addPortletId(user.getUserId(), portletId);
+		portletId = _layoutTypePortlet.addPortletId(
+			_user.getUserId(), portletId);
 
 		Assert.assertNotNull(portletId);
 
-		List<Portlet> portlets = layoutTypePortlet.getAllPortlets(column1);
+		List<Portlet> portlets = _layoutTypePortlet.getAllPortlets(column1);
 
 		Assert.assertEquals(1, portlets.size());
 	}
 
 	@Test
 	public void testAddPortletIdColumn2() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
+		Layout layout = _layoutTypePortlet.getLayout();
 
-		Layout layout = layoutTypePortlet.getLayout();
-
-		User user = UserTestUtil.addUser(
+		_user = UserTestUtil.addUser(
 			RandomTestUtil.randomString(), layout.getGroupId());
 
 		String portletId = PortletKeys.TEST;
 
-		LayoutTemplate layoutTemplate = layoutTypePortlet.getLayoutTemplate();
+		LayoutTemplate layoutTemplate = _layoutTypePortlet.getLayoutTemplate();
 
 		List<String> columns = layoutTemplate.getColumns();
 
@@ -212,111 +203,117 @@ public class LayoutTypePortletTest {
 		String column1 = columns.get(0);
 		String column2 = columns.get(1);
 
-		portletId = layoutTypePortlet.addPortletId(
-			user.getUserId(), portletId, column2, -1);
+		portletId = _layoutTypePortlet.addPortletId(
+			_user.getUserId(), portletId, column2, -1);
 
 		Assert.assertNotNull(portletId);
 
-		List<Portlet> portlets = layoutTypePortlet.getAllPortlets(column1);
+		List<Portlet> portlets = _layoutTypePortlet.getAllPortlets(column1);
 
 		Assert.assertEquals(0, portlets.size());
 
-		portlets = layoutTypePortlet.getAllPortlets(column2);
+		portlets = _layoutTypePortlet.getAllPortlets(column2);
 
 		Assert.assertEquals(1, portlets.size());
 	}
 
 	@Test
 	public void testAddPortletIdWithInvalidId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
+		Layout layout = _layoutTypePortlet.getLayout();
 
-		Layout layout = layoutTypePortlet.getLayout();
-
-		User user = UserTestUtil.addUser(
+		_user = UserTestUtil.addUser(
 			RandomTestUtil.randomString(), layout.getGroupId());
 
 		String portletId = RandomTestUtil.randomString();
 
-		portletId = layoutTypePortlet.addPortletId(user.getUserId(), portletId);
-
-		Assert.assertNull(portletId);
-	}
-
-	@Test
-	public void testAddPortletIdWithInvalidIdWithoutPermission()
-		throws Exception {
-
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
-		Layout layout = layoutTypePortlet.getLayout();
-
-		User user = UserTestUtil.addUser(
-			RandomTestUtil.randomString(), layout.getGroupId());
-
-		String portletId = RandomTestUtil.randomString();
-
-		portletId = layoutTypePortlet.addPortletId(user.getUserId(), portletId);
+		portletId = _layoutTypePortlet.addPortletId(
+			_user.getUserId(), portletId);
 
 		Assert.assertNull(portletId);
 	}
 
 	@Test
 	public void testAddPortletIdWithValidId() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
+		Layout layout = _layoutTypePortlet.getLayout();
 
-		Layout layout = layoutTypePortlet.getLayout();
-
-		User user = UserTestUtil.addUser(
+		_user = UserTestUtil.addUser(
 			RandomTestUtil.randomString(), layout.getGroupId());
 
 		String portletId = PortletKeys.TEST;
 
-		portletId = layoutTypePortlet.addPortletId(user.getUserId(), portletId);
+		portletId = _layoutTypePortlet.addPortletId(
+			_user.getUserId(), portletId);
 
 		Assert.assertNotNull(portletId);
 	}
 
 	@Test
 	public void testGetAllPortlets() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
+		Layout layout = _layoutTypePortlet.getLayout();
 
-		Layout layout = layoutTypePortlet.getLayout();
-
-		User user = UserTestUtil.addUser(
+		_user = UserTestUtil.addUser(
 			RandomTestUtil.randomString(), layout.getGroupId());
 
-		String portletId = layoutTypePortlet.addPortletId(
-			user.getUserId(), PortletKeys.TEST);
+		final String portletId = _layoutTypePortlet.addPortletId(
+			_user.getUserId(), PortletKeys.TEST);
 
-		List<Portlet> portlets = layoutTypePortlet.getAllPortlets();
+		List<Portlet> portlets = _layoutTypePortlet.getAllPortlets();
 
 		Assert.assertEquals(1, portlets.size());
 
-		Portlet portlet = PortletLocalServiceUtil.getPortletById(
-			TestPropsValues.getCompanyId(), portletId);
+		final long companyId = TestPropsValues.getCompanyId();
 
-		PortletInstanceFactoryUtil.destroy(portlet);
+		PortletLocalService portletLocalService =
+			PortletLocalServiceUtil.getService();
 
-		portlets = layoutTypePortlet.getAllPortlets();
+		ReflectionTestUtil.setFieldValue(
+			PortletLocalServiceUtil.class, "_service",
+			new PortletLocalServiceImpl() {
 
-		Assert.assertEquals(0, portlets.size());
+				@Override
+				public Portlet getPortletById(
+					long localCompanyId, String localPortletId) {
+
+					Portlet portlet = super.getPortletById(
+						localCompanyId, localPortletId);
+
+					if ((companyId == localCompanyId) &&
+						portletId.equals(localPortletId)) {
+
+						portlet = (Portlet)portlet.clone();
+
+						portlet.setUndeployedPortlet(true);
+					}
+
+					return portlet;
+				}
+
+			});
+
+		try {
+			portlets = _layoutTypePortlet.getAllPortlets();
+
+			Assert.assertTrue(portlets.isEmpty());
+		}
+		finally {
+			ReflectionTestUtil.setFieldValue(
+				PortletLocalServiceUtil.class, "_service", portletLocalService);
+		}
 	}
 
 	@Test
 	public void testNoPortlets() throws Exception {
-		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
-
-		List<Portlet> portlets = layoutTypePortlet.getAllPortlets();
+		List<Portlet> portlets = _layoutTypePortlet.getAllPortlets();
 
 		Assert.assertEquals(0, portlets.size());
 	}
 
-	protected LayoutTypePortlet getLayoutTypePortlet() throws Exception {
-		Group group = GroupTestUtil.addGroup();
+	@DeleteAfterTestRun
+	private Group _group;
 
-		Layout layout = LayoutTestUtil.addLayout(group, false);
+	private LayoutTypePortlet _layoutTypePortlet;
 
-		return (LayoutTypePortlet)layout.getLayoutType();
-	}
+	@DeleteAfterTestRun
+	private User _user;
 
 }

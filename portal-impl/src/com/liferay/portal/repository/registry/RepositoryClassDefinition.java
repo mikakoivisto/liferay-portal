@@ -165,7 +165,7 @@ public class RepositoryClassDefinition
 	}
 
 	protected void setUpCapabilityRepositoryCapabilities(
-		Repository repository, CapabilityRegistry capabilityRegistry) {
+		Repository repository, CapabilityRegistry<?> capabilityRegistry) {
 
 		CMISRepositoryHandler cmisRepositoryHandler = getCMISRepositoryHandler(
 			repository);

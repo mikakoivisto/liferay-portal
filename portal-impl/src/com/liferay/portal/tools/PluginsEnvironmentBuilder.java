@@ -89,8 +89,7 @@ public class PluginsEnvironmentBuilder {
 
 			boolean osgiProject = false;
 
-			if (content.contains(
-					"<import file=\"../../build-common-osgi-plugin.xml\" />") ||
+			if (content.contains("../build-common-osgi-plugin.xml\" />") ||
 				content.contains(
 					"../tools/sdk/build-common-osgi-plugin.xml\" />")) {
 
@@ -622,6 +621,7 @@ public class PluginsEnvironmentBuilder {
 				sb, "/portal/lib/development/powermock-api-mockito.jar");
 			addClasspathEntry(
 				sb, "/portal/lib/development/powermock-api-support.jar");
+			addClasspathEntry(sb, "/portal/lib/development/powermock-core.jar");
 			addClasspathEntry(
 				sb, "/portal/lib/development/powermock-module-junit4.jar");
 			addClasspathEntry(

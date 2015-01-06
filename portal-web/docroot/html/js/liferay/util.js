@@ -64,6 +64,7 @@
 
 				if (loc.indexOf('#') > -1) {
 					var locationPieces = loc.split('#');
+
 					loc = locationPieces[0];
 					anchorHash = locationPieces[1];
 				}
@@ -362,7 +363,7 @@
 
 				var winRegion = DOM.viewportRegion(win);
 
-				var viewable = (
+				viewable = (
 					nodeRegion.bottom <= winRegion.bottom &&
 					nodeRegion.left >= winRegion.left &&
 					nodeRegion.right <= winRegion.right &&
@@ -567,7 +568,10 @@
 
 		showCapsLock: function(event, span) {
 			var keyCode = event.keyCode ? event.keyCode : event.which;
-			var shiftKey = event.shiftKey ? event.shiftKey : ((keyCode == 16) ? true : false);
+
+			var shiftKeyCode = ((keyCode == 16) ? true : false);
+
+			var shiftKey = event.shiftKey ? event.shiftKey : shiftKeyCode;
 
 			if (((keyCode >= 65 && keyCode <= 90) && !shiftKey) ||
 				((keyCode >= 97 && keyCode <= 122) && shiftKey)) {
@@ -826,19 +830,6 @@
 
 	Liferay.provide(
 		Util,
-		'check',
-		function(form, name, checked) {
-			var checkbox = A.one(form[name]);
-
-			if (checkbox) {
-				checkbox.attr(STR_CHECKED, checked);
-			}
-		},
-		['aui-base']
-	);
-
-	Liferay.provide(
-		Util,
 		'checkAll',
 		function(form, name, allBox, selectClassName) {
 			var selector;
@@ -860,7 +851,7 @@
 						item.attr(STR_CHECKED, allBoxChecked);
 					}
 				}
-			)
+			);
 
 			if (selectClassName) {
 				form.all(selectClassName).toggleClass('info', allBoxChecked);
@@ -902,80 +893,6 @@
 
 	Liferay.provide(
 		Util,
-		'createFlyouts',
-		function(options) {
-			options = options || {};
-
-			var flyout = A.one(options.container);
-			var containers = [];
-
-			if (flyout) {
-				var lis = flyout.all('li');
-
-				lis.each(
-					function(item, index) {
-						var childUL = item.one('ul');
-
-						if (childUL) {
-							childUL.hide();
-
-							item.addClass('lfr-flyout');
-							item.addClass('has-children lfr-flyout-has-children');
-						}
-					}
-				);
-
-				var hideTask = A.debounce(
-					function(event) {
-						showTask.cancel();
-
-						var li = event.currentTarget;
-
-						if (li.hasClass('has-children')) {
-							var childUL = event.currentTarget.one('> ul');
-
-							if (childUL) {
-								childUL.hide();
-
-								if (options.mouseOut) {
-									options.mouseOut.apply(event.currentTarget, [event]);
-								}
-							}
-						}
-					},
-					300
-				);
-
-				var showTask = A.debounce(
-					function(event) {
-						hideTask.cancel();
-
-						var li = event.currentTarget;
-
-						if (li.hasClass('has-children')) {
-							var childUL = event.currentTarget.one('> ul');
-
-							if (childUL) {
-								childUL.show();
-
-								if (options.mouseOver) {
-									options.mouseOver.apply(event.currentTarget, [event]);
-								}
-							}
-						}
-					},
-					0
-				);
-
-				lis.on('mouseenter', showTask, 'li');
-				lis.on('mouseleave', hideTask, 'li');
-			}
-		},
-		['aui-base']
-	);
-
-	Liferay.provide(
-		Util,
 		'disableElements',
 		function(obj) {
 			var el = A.one(obj);
@@ -1001,9 +918,9 @@
 
 					Event.purgeElement(el, false);
 
-					item.href = 'javascript:;';
-					item.disabled = true;
 					item.action = '';
+					item.disabled = true;
+					item.href = 'javascript:;';
 					item.onsubmit = emptyFnFalse;
 				}
 			}
@@ -1195,7 +1112,7 @@
 
 			ddmURL.setParameter('templateId', config.templateId);
 
-			ddmURL.setPortletId(166);
+			ddmURL.setPortletId(Liferay.PortletKeys.DYNAMIC_DATA_MAPPING);
 			ddmURL.setWindowState('pop_up');
 
 			config.uri = ddmURL.toString();
@@ -1293,33 +1210,17 @@
 
 	Liferay.provide(
 		Util,
-		'removeFolderSelection',
-		function(folderIdString, folderNameString, namespace) {
-			A.byIdNS(namespace, folderIdString).val(0);
+		'removeEntitySelection',
+		function(entityIdString, entityNameString, removeEntityButton, namespace) {
+			A.byIdNS(namespace, entityIdString).val(0);
 
-			A.byIdNS(namespace, folderNameString).val('');
+			A.byIdNS(namespace, entityNameString).val('');
 
-			Liferay.Util.toggleDisabled(A.byIdNS(namespace, 'removeFolderButton'), true);
+			Liferay.Util.toggleDisabled(removeEntityButton, true);
+
+			Liferay.fire('entitySelectionRemoved');
 		},
 		['aui-base', 'liferay-node']
-	);
-
-	Liferay.provide(
-		Util,
-		'removeItem',
-		function(box, value) {
-			box = A.one(box);
-
-			var selectedIndex = box.get('selectedIndex');
-
-			if (!value) {
-				box.all('option').item(selectedIndex).remove(true);
-			}
-			else {
-				box.all('option[value=' + value + STR_RIGHT_SQUARE_BRACKET).item(selectedIndex).remove(true);
-			}
-		},
-		['aui-base']
 	);
 
 	Liferay.provide(
@@ -1444,7 +1345,7 @@
 
 						Liferay.detach('destroyPortlet', destroyDialog);
 					}
-				}
+				};
 
 				Util.openWindow(
 					config,
@@ -1464,25 +1365,40 @@
 		Util,
 		'selectEntityHandler',
 		function(container, selectEventName, disableButton) {
+			var containerNode = A.one(container);
+
 			var openingLiferay = Util.getOpener().Liferay;
 
-			A.one(container).delegate(
-				'click',
-				function(event) {
-					var currentTarget = event.currentTarget;
+			if (containerNode) {
+				var selectorButtons = containerNode.all('.selector-button');
 
-					if (disableButton !== false) {
-						currentTarget.attr('disabled', true);
+				containerNode.delegate(
+					'click',
+					function(event) {
+						var currentTarget = event.currentTarget;
+
+						if (disableButton !== false) {
+							selectorButtons.attr('disabled', false);
+
+							currentTarget.attr('disabled', true);
+						}
+
+						var result = Util.getAttributes(currentTarget, 'data-');
+
+						openingLiferay.fire(selectEventName, result);
+
+						Util.getWindow().hide();
+					},
+					'.selector-button'
+				);
+
+				openingLiferay.on(
+					'entitySelectionRemoved',
+					function(event) {
+						selectorButtons.attr('disabled', false);
 					}
-
-					var result = Util.getAttributes(currentTarget, 'data-');
-
-					openingLiferay.fire(selectEventName, result);
-
-					Util.getWindow().hide();
-				},
-				'.selector-button'
-			);
+				);
+			}
 		},
 		['aui-base']
 	);

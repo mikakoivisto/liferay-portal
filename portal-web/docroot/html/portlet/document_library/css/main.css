@@ -2,12 +2,6 @@
 @import "mixins";
 
 .portlet-document-library, .portlet-document-library-display {
-	.select-all-entries {
-		display: inline-block;
-		margin-left: 10px;
-		margin-top: 15px;
-	}
-
 	.file-entry-list-description {
 		font-style: italic;
 		margin-left: 10px;
@@ -72,6 +66,12 @@
 				position: absolute;
 				right: 5px;
 				top: 50%;
+
+				@include respond-to(phone) {
+					.icon-remove {
+						font-size: 22px;
+					}
+				}
 			}
 		}
 	}
@@ -194,6 +194,10 @@
 
 		.edit-toolbar {
 			margin: 0;
+		}
+
+		.nav-item-icon {
+			width: 15px;
 		}
 	}
 

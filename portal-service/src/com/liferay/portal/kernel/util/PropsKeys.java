@@ -91,8 +91,6 @@ public interface PropsKeys {
 
 	public static final String ASSET_BROWSER_SEARCH_WITH_DATABASE = "asset.browser.search.with.database";
 
-	public static final String ASSET_CATEGORIES_NAVIGATION_DISPLAY_TEMPLATES_CONFIG = "asset.categories.navigation.display.templates.config";
-
 	public static final String ASSET_CATEGORIES_PROPERTIES_DEFAULT = "asset.categories.properties.default";
 
 	public static final String ASSET_CATEGORIES_SEARCH_HIERARCHICAL = "asset.categories.search.hierarchical";
@@ -138,8 +136,6 @@ public interface PropsKeys {
 	public static final String ASSET_TAG_PROPERTIES_ENABLED = "asset.tag.properties.enabled";
 
 	public static final String ASSET_TAG_SUGGESTIONS_ENABLED = "asset.tag.suggestions.enabled";
-
-	public static final String ASSET_TAGS_NAVIGATION_DISPLAY_TEMPLATES_CONFIG = "asset.tags.navigation.display.templates.config";
 
 	public static final String ASSET_VOCABULARY_DEFAULT = "asset.vocabulary.default";
 
@@ -280,6 +276,8 @@ public interface PropsKeys {
 	public static final String BLOGS_ENTRY_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED = "blogs.entry.previous.and.next.navigation.enabled";
 
 	public static final String BLOGS_FLAGS_ENABLED = "blogs.flags.enabled";
+
+	public static final String BLOGS_IMAGE_ALLOY_EDITOR_MAX_SIZE = "blogs.image.alloy.editor.max.size";
 
 	public static final String BLOGS_IMAGE_COVER_MAX_SIZE = "blogs.image.cover.max.size";
 
@@ -476,6 +474,8 @@ public interface PropsKeys {
 	public static final String COMPANY_SECURITY_AUTO_LOGIN_MAX_AGE = "company.security.auto.login.max.age";
 
 	public static final String COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE = "company.security.login.form.autocomplete";
+
+	public static final String COMPANY_SECURITY_PASSWORD_REMINDER_QUERY_FORM_AUTOCOMPLETE = "company.security.password.reminder.query.form.autocomplete";
 
 	public static final String COMPANY_SECURITY_SEND_PASSWORD = "company.security.send.password";
 
@@ -727,6 +727,8 @@ public interface PropsKeys {
 
 	public static final String DL_FILE_ENTRY_PROCESSORS = "dl.file.entry.processors";
 
+	public static final String DL_FILE_ENTRY_RAW_METADATA_PROCESSOR_EXCLUDED_MIME_TYPES = "dl.file.entry.raw.metadata.processor.excluded.mime.types";
+
 	public static final String DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT = "dl.file.entry.thumbnail.custom1.max.height";
 
 	public static final String DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH = "dl.file.entry.thumbnail.custom1.max.width";
@@ -846,12 +848,6 @@ public interface PropsKeys {
 	public static final String DYNAMIC_DATA_MAPPING_IMAGE_SMALL_MAX_SIZE = "dynamic.data.mapping.image.small.max.size";
 
 	public static final String DYNAMIC_DATA_MAPPING_STRUCTURE_FORCE_AUTOGENERATE_KEY = "dynamic.data.mapping.structure.force.autogenerate.key";
-
-	public static final String DYNAMIC_DATA_MAPPING_STRUCTURE_PRIVATE_FIELD_DATATYPE = "dynamic.data.mapping.structure.private.field.datatype";
-
-	public static final String DYNAMIC_DATA_MAPPING_STRUCTURE_PRIVATE_FIELD_NAMES = "dynamic.data.mapping.structure.private.field.names";
-
-	public static final String DYNAMIC_DATA_MAPPING_STRUCTURE_PRIVATE_FIELD_REPEATABLE = "dynamic.data.mapping.structure.private.field.repeatable";
 
 	public static final String DYNAMIC_DATA_MAPPING_TEMPLATE_FORCE_AUTOGENERATE_KEY = "dynamic.data.mapping.template.force.autogenerate.key";
 
@@ -2083,7 +2079,7 @@ public interface PropsKeys {
 
 	public static final String PORTAL_FABRIC_SERVER_RPC_RELAY_TIMEOUT = "portal.fabric.server.rpc.relay.timeout";
 
-	public static final String PORTAL_FABRIC_SERVER_WARMUP_AGENT_ON_REGISTER = "portal.fanric.server.warmup.agent.on.register";
+	public static final String PORTAL_FABRIC_SERVER_WARMUP_AGENT_ON_REGISTER = "portal.fabric.server.warmup.agent.on.register";
 
 	public static final String PORTAL_FABRIC_SERVER_WORKER_GROUP_THREAD_COUNT = "portal.fabric.server.worker.group.thread.count";
 
@@ -2091,9 +2087,9 @@ public interface PropsKeys {
 
 	public static final String PORTAL_IMPERSONATION_ENABLE = "portal.impersonation.enable";
 
-	public static final String PORTAL_INSTANCE_HTTP_INET_SOCKET_ADDRESS = "portal.instance.http.inet.socket.address";
+	public static final String PORTAL_INSTANCE_INET_SOCKET_ADDRESS = "portal.instance.inet.socket.address";
 
-	public static final String PORTAL_INSTANCE_HTTPS_INET_SOCKET_ADDRESS = "portal.instance.https.inet.socket.address";
+	public static final String PORTAL_INSTANCE_PROTOCOL = "portal.instance.protocol";
 
 	public static final String PORTAL_JAAS_AUTH_TYPE = "portal.jaas.auth.type";
 
@@ -2870,6 +2866,8 @@ public interface PropsKeys {
 	public static final String WIKI_RSS_ABSTRACT_LENGTH = "wiki.rss.abstract.length";
 
 	public static final String WIKI_RSS_ENABLED = "wiki.rss.enabled";
+
+	public static final String XML_SECURITY_ENABLED = "xml.security.enabled";
 
 	public static final String XML_VALIDATION_ENABLED = "xml.validation.enabled";
 

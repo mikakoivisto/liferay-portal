@@ -29,6 +29,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.UserDefinedFileAttributeView;
 
@@ -39,6 +40,7 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -131,8 +133,61 @@ public class FileUtil {
 		return filePath.toString();
 	}
 
-	public static String getSanitizedFileName(String title, String extension) {
-		String fileName = title.replace("/", "_");
+	public static String getNextFilePathName(String filePathName) {
+		Path filePath = Paths.get(filePathName);
+
+		Path parentFilePath = filePath.getParent();
+
+		for (int i = 0;; i++) {
+			StringBuilder sb = new StringBuilder();
+
+			sb.append(FilenameUtils.getBaseName(filePathName));
+
+			if (i > 0) {
+				sb.append(" (");
+				sb.append(i);
+				sb.append(")");
+			}
+
+			String extension = FilenameUtils.getExtension(filePathName);
+
+			if (extension.length() > 0) {
+				sb.append(".");
+				sb.append(extension);
+			}
+
+			String tempFilePathName = FileUtil.getFilePathName(
+				parentFilePath.toString(), sb.toString());
+
+			if (SyncFileService.fetchSyncFile(tempFilePathName) == null) {
+				Path tempFilePath = Paths.get(tempFilePathName);
+
+				if (!Files.exists(tempFilePath)) {
+					return tempFilePathName;
+				}
+			}
+		}
+	}
+
+	public static String getSanitizedFileName(
+		String fileName, String extension) {
+
+		for (String blacklistChar : PropsValues.SYNC_FILE_BLACKLIST_CHARS) {
+			fileName = fileName.replace(blacklistChar, "_");
+		}
+
+		for (String blacklistCharLast :
+				PropsValues.SYNC_FILE_BLACKLIST_CHARS_LAST) {
+
+			if (blacklistCharLast.startsWith("\\u")) {
+				blacklistCharLast = StringEscapeUtils.unescapeJava(
+					blacklistCharLast);
+			}
+
+			if (fileName.endsWith(blacklistCharLast)) {
+				fileName = fileName.substring(0, fileName.length() - 1);
+			}
+		}
 
 		if ((extension != null) && !extension.equals("")) {
 			int x = fileName.lastIndexOf(".");
@@ -204,6 +259,7 @@ public class FileUtil {
 		String fileName = String.valueOf(filePath.getFileName());
 
 		if (_syncFileIgnoreNames.contains(fileName) ||
+			(!Files.isDirectory(filePath) && fileName.startsWith("~$")) ||
 			(PropsValues.SYNC_FILE_IGNORE_HIDDEN && isHidden(filePath)) ||
 			Files.isSymbolicLink(filePath) || fileName.endsWith(".lnk")) {
 
@@ -271,6 +327,19 @@ public class FileUtil {
 		return true;
 	}
 
+	public static void moveFile(Path sourceFilePath, Path targetFilePath) {
+		checkFilePath(sourceFilePath);
+
+		try {
+			Files.move(
+				sourceFilePath, targetFilePath,
+				StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch (Exception e) {
+			_logger.error(e.getMessage(), e);
+		}
+	}
+
 	public static void writeFileKey(Path filePath, String fileKey) {
 		if (!OSDetector.isWindows()) {
 			return;
@@ -289,6 +358,30 @@ public class FileUtil {
 		try {
 			userDefinedFileAttributeView.write(
 				"fileKey", _CHARSET.encode(CharBuffer.wrap(fileKey)));
+		}
+		catch (Exception e) {
+			_logger.error(e.getMessage(), e);
+		}
+	}
+
+	protected static void checkFilePath(Path filePath) {
+
+		// Check to see if the file or folder is still being written to. If
+		// it is, wait until the process is finished before making any future
+		// modifications. This is used to prevent file system interruptions.
+
+		try {
+			while (true) {
+				long size1 = FileUtils.sizeOf(filePath.toFile());
+
+				Thread.sleep(1000);
+
+				long size2 = FileUtils.sizeOf(filePath.toFile());
+
+				if (size1 == size2) {
+					break;
+				}
+			}
 		}
 		catch (Exception e) {
 			_logger.error(e.getMessage(), e);

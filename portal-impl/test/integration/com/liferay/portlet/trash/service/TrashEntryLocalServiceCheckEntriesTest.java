@@ -19,9 +19,9 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.util.RepositoryTrashUtil;
 import com.liferay.portal.kernel.test.AggregateTestRule;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Company;
@@ -52,7 +52,10 @@ import com.liferay.portlet.trash.util.TrashUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -131,7 +134,7 @@ public class TrashEntryLocalServiceCheckEntriesTest {
 
 		createFileEntryTrashEntry(group, false);
 
-		disableTrashForGroup(group);
+		TrashUtil.disableTrash(group);
 
 		TrashEntryLocalServiceUtil.checkEntries();
 
@@ -188,7 +191,7 @@ public class TrashEntryLocalServiceCheckEntriesTest {
 	public void testStagingTrashDisabled() throws Exception {
 		long companyId = TestPropsValues.getCompanyId();
 
-		Group group = disableTrashForGroup(createGroup(companyId));
+		Group group = TrashUtil.disableTrash(createGroup(companyId));
 		User user = UserTestUtil.getAdminUser(companyId);
 
 		ServiceContext serviceContext =
@@ -262,11 +265,15 @@ public class TrashEntryLocalServiceCheckEntriesTest {
 		User user = UserTestUtil.getAdminUser(group.getCompanyId());
 		Layout layout = LayoutTestUtil.addLayout(group);
 
+		Map<Locale, String> nameMap = new HashMap<Locale, String>();
+
+		nameMap.put(LocaleUtil.getDefault(), String.valueOf(layout.getPlid()));
+
 		return GroupLocalServiceUtil.addGroup(
 			user.getUserId(), GroupConstants.DEFAULT_PARENT_GROUP_ID,
 			Layout.class.getName(), layout.getPlid(),
-			GroupConstants.DEFAULT_LIVE_GROUP_ID,
-			String.valueOf(layout.getPlid()), null, 0, true,
+			GroupConstants.DEFAULT_LIVE_GROUP_ID, nameMap,
+			(Map<Locale, String>)null, 0, true,
 			GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, null, false, true,
 			null);
 	}
@@ -299,17 +306,6 @@ public class TrashEntryLocalServiceCheckEntriesTest {
 		Assert.assertEquals(
 			_NOT_EXPIRED_TRASH_ENTRIES_COUNT,
 			TrashEntryLocalServiceUtil.getTrashEntriesCount());
-	}
-
-	protected Group disableTrashForGroup(Group group) throws Exception {
-		UnicodeProperties typeSettingsProperties =
-			group.getParentLiveGroupTypeSettingsProperties();
-
-		typeSettingsProperties.setProperty("trashEnabled", StringPool.FALSE);
-
-		group.setTypeSettingsProperties(typeSettingsProperties);
-
-		return GroupLocalServiceUtil.updateGroup(group);
 	}
 
 	protected Group updateTrashEntriesMaxAge(Group group, int days)

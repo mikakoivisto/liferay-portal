@@ -4,6 +4,7 @@
 <project>
 	<path id="plugins.includes.path">
 		<dirset dir="apps/amazon-rankings" includes="*" />
+		<dirset dir="apps/asset" includes="*" />
 		<dirset dir="apps/bookmarks" includes="*" />
 		<dirset dir="apps/currency-converter" includes="*" />
 		<dirset dir="apps/dictionary" includes="*" />
@@ -25,9 +26,10 @@
 		<dirset dir="apps/xsl-content" includes="*" />
 		<dirset dir="core" includes="*" />
 		<dirset dir="portal" excludes="portal-taglib-aui-form-extension-sample" includes="*" />
+		<dirset dir="util" includes="portal-tools" />
 	</path>
 
 	<pathconvert pathsep="," property="plugins.includes.path" refid="plugins.includes.path" targetos="unix" />
 
-	<import file="../tools/sdk/build-common.xml" />
+	<import file="../tools/sdk/build-common-plugins.xml" />
 </project>

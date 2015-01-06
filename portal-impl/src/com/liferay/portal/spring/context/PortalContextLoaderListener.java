@@ -16,6 +16,7 @@ package com.liferay.portal.spring.context;
 
 import com.liferay.portal.bean.BeanLocatorImpl;
 import com.liferay.portal.cache.ehcache.ClearEhcacheThreadUtil;
+import com.liferay.portal.dao.orm.hibernate.FieldInterceptionHelperUtil;
 import com.liferay.portal.deploy.hot.IndexerPostProcessorRegistry;
 import com.liferay.portal.deploy.hot.SchedulerEntryRegistry;
 import com.liferay.portal.deploy.hot.ServiceWrapperRegistry;
@@ -39,7 +40,6 @@ import com.liferay.portal.kernel.servlet.SerializableSessionAttributeListener;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.settings.SettingsFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
-import com.liferay.portal.kernel.util.CharBufferPool;
 import com.liferay.portal.kernel.util.ClassLoaderPool;
 import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
 import com.liferay.portal.kernel.util.ClearTimerThreadUtil;
@@ -194,6 +194,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		ReferenceRegistry.releaseReferences();
 
+		FieldInterceptionHelperUtil.initialize();
+
 		InitUtil.init();
 
 		final ServletContext servletContext =
@@ -222,7 +224,6 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		ClassPathUtil.initializeClassPaths(servletContext);
 
 		CacheRegistryUtil.clear();
-		CharBufferPool.cleanUp();
 		PortletContextBagPool.clear();
 		WebAppPool.clear();
 

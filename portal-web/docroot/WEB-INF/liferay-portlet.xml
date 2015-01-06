@@ -660,11 +660,10 @@
 	<portlet>
 		<portlet-name>99</portlet-name>
 		<icon>/html/icons/asset_tag_admin.png</icon>
-		<struts-path>asset_tag_admin</struts-path>
 		<control-panel-entry-category>site_administration.content</control-panel-entry-category>
 		<control-panel-entry-weight>20.0</control-panel-entry-weight>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>false</use-default-template>
+		<use-default-template>true</use-default-template>
 		<private-request-attributes>false</private-request-attributes>
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
@@ -827,21 +826,6 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<css-class-wrapper>portlet-activities</css-class-wrapper>
-	</portlet>
-	<portlet>
-		<portlet-name>122</portlet-name>
-		<icon>/html/icons/asset_categories_navigation.png</icon>
-		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
-		<portlet-data-handler-class>com.liferay.portlet.assetcategoriesnavigation.lar.AssetCategoriesNavigationPortletDataHandler</portlet-data-handler-class>
-		<template-handler>com.liferay.portlet.assetcategoriesnavigation.template.AssetCategoriesNavigationPortletDisplayTemplateHandler</template-handler>
-		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>true</use-default-template>
-		<layout-cacheable>true</layout-cacheable>
-		<instanceable>true</instanceable>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<css-class-wrapper>portlet-asset-categories-navigation</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>124</portlet-name>
@@ -1088,22 +1072,6 @@
 		<system>true</system>
 	</portlet>
 	<portlet>
-		<portlet-name>141</portlet-name>
-		<icon>/html/icons/asset_tags_navigation.png</icon>
-		<struts-path>asset_tags_navigation</struts-path>
-		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
-		<template-handler>com.liferay.portlet.assettagsnavigation.template.AssetTagsNavigationPortletDisplayTemplateHandler</template-handler>
-		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>false</use-default-template>
-		<layout-cacheable>true</layout-cacheable>
-		<instanceable>true</instanceable>
-		<scopeable>true</scopeable>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<css-class-wrapper>portlet-asset-tags-navigation</css-class-wrapper>
-	</portlet>
-	<portlet>
 		<portlet-name>142</portlet-name>
 		<icon>/html/icons/flags.png</icon>
 		<struts-path>flags</struts-path>
@@ -1176,20 +1144,6 @@
 		<private-request-attributes>false</private-request-attributes>
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
-	</portlet>
-	<portlet>
-		<portlet-name>148</portlet-name>
-		<icon>/html/icons/asset_tags_cloud.png</icon>
-		<struts-path>asset_tags_cloud</struts-path>
-		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
-		<use-default-template>false</use-default-template>
-		<layout-cacheable>true</layout-cacheable>
-		<instanceable>true</instanceable>
-		<scopeable>true</scopeable>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<css-class-wrapper>portlet-asset-tags-navigation</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>149</portlet-name>

@@ -88,8 +88,6 @@ public class PropsValues {
 
 	public static final String[] APPLICATION_STARTUP_EVENTS = PropsUtil.getArray(PropsKeys.APPLICATION_STARTUP_EVENTS);
 
-	public static final String ASSET_CATEGORIES_NAVIGATION_DISPLAY_TEMPLATES_CONFIG = PropsUtil.get(PropsKeys.ASSET_CATEGORIES_NAVIGATION_DISPLAY_TEMPLATES_CONFIG);
-
 	public static final String[] ASSET_CATEGORIES_PROPERTIES_DEFAULT = PropsUtil.getArray(PropsKeys.ASSET_CATEGORIES_PROPERTIES_DEFAULT);
 
 	public static final boolean ASSET_CATEGORIES_SEARCH_HIERARCHICAL = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ASSET_CATEGORIES_SEARCH_HIERARCHICAL));
@@ -137,8 +135,6 @@ public class PropsValues {
 	public static final boolean ASSET_TAG_PROPERTIES_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ASSET_TAG_PROPERTIES_ENABLED));
 
 	public static final boolean ASSET_TAG_SUGGESTIONS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ASSET_TAG_SUGGESTIONS_ENABLED));
-
-	public static final String ASSET_TAGS_NAVIGATION_DISPLAY_TEMPLATES_CONFIG = PropsUtil.get(PropsKeys.ASSET_TAGS_NAVIGATION_DISPLAY_TEMPLATES_CONFIG);
 
 	public static final String ASSET_VOCABULARY_DEFAULT = PropsUtil.get(PropsKeys.ASSET_VOCABULARY_DEFAULT);
 
@@ -392,6 +388,8 @@ public class PropsValues {
 
 	public static final boolean COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE));
 
+	public static final boolean COMPANY_SECURITY_PASSWORD_REMINDER_QUERY_FORM_AUTOCOMPLETE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.COMPANY_SECURITY_PASSWORD_REMINDER_QUERY_FORM_AUTOCOMPLETE));
+
 	public static final boolean COMPANY_SECURITY_SEND_PASSWORD = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.COMPANY_SECURITY_SEND_PASSWORD));
 
 	public static final boolean COMPANY_SECURITY_SEND_PASSWORD_RESET_LINK = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.COMPANY_SECURITY_SEND_PASSWORD_RESET_LINK));
@@ -578,6 +576,8 @@ public class PropsValues {
 
 	public static final long DL_FILE_ENTRY_PREVIEWABLE_PROCESSOR_MAX_SIZE = GetterUtil.getLong(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_PREVIEWABLE_PROCESSOR_MAX_SIZE));
 
+	public static final String[] DL_FILE_ENTRY_RAW_METADATA_PROCESSOR_EXCLUDED_MIME_TYPES = PropsUtil.getArray(PropsKeys.DL_FILE_ENTRY_RAW_METADATA_PROCESSOR_EXCLUDED_MIME_TYPES);
+
 	public static final int DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT));
 
 	public static final int DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH = GetterUtil.getInteger(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH));
@@ -661,8 +661,6 @@ public class PropsValues {
 	public static final String DYNAMIC_DATA_LISTS_STORAGE_TYPE = PropsUtil.get(PropsKeys.DYNAMIC_DATA_LISTS_STORAGE_TYPE);
 
 	public static final boolean DYNAMIC_DATA_MAPPING_STRUCTURE_FORCE_AUTOGENERATE_KEY = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DYNAMIC_DATA_MAPPING_STRUCTURE_FORCE_AUTOGENERATE_KEY));
-
-	public static final String[] DYNAMIC_DATA_MAPPING_STRUCTURE_PRIVATE_FIELD_NAMES = PropsUtil.getArray(PropsKeys.DYNAMIC_DATA_MAPPING_STRUCTURE_PRIVATE_FIELD_NAMES);
 
 	public static final boolean DYNAMIC_DATA_MAPPING_TEMPLATE_FORCE_AUTOGENERATE_KEY = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DYNAMIC_DATA_MAPPING_TEMPLATE_FORCE_AUTOGENERATE_KEY));
 
@@ -1478,9 +1476,9 @@ public class PropsValues {
 
 	public static final boolean PORTAL_IMPERSONATION_ENABLE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PORTAL_IMPERSONATION_ENABLE));
 
-	public static final String PORTAL_INSTANCE_HTTP_INET_SOCKET_ADDRESS = PropsUtil.get(PropsKeys.PORTAL_INSTANCE_HTTP_INET_SOCKET_ADDRESS);
+	public static final String PORTAL_INSTANCE_INET_SOCKET_ADDRESS = PropsUtil.get(PropsKeys.PORTAL_INSTANCE_INET_SOCKET_ADDRESS);
 
-	public static final String PORTAL_INSTANCE_HTTPS_INET_SOCKET_ADDRESS = PropsUtil.get(PropsKeys.PORTAL_INSTANCE_HTTPS_INET_SOCKET_ADDRESS);
+	public static final String PORTAL_INSTANCE_PROTOCOL = PropsUtil.get(PropsKeys.PORTAL_INSTANCE_PROTOCOL);
 
 	public static final String PORTAL_JAAS_AUTH_TYPE = GetterUtil.getString(PropsUtil.get(PropsKeys.PORTAL_JAAS_AUTH_TYPE));
 
@@ -2011,6 +2009,8 @@ public class PropsValues {
 	public static final String[] WIKI_PARSERS_CREOLE_SUPPORTED_PROTOCOLS = PropsUtil.getArray(PropsKeys.WIKI_PARSERS_CREOLE_SUPPORTED_PROTOCOLS);
 
 	public static final int WIKI_RSS_ABSTRACT_LENGTH = GetterUtil.getInteger(PropsUtil.get(PropsKeys.WIKI_RSS_ABSTRACT_LENGTH));
+
+	public static final boolean XML_SECURITY_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.XML_SECURITY_ENABLED));
 
 	public static final boolean XML_VALIDATION_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.XML_VALIDATION_ENABLED));
 

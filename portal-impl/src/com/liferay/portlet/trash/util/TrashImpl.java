@@ -227,6 +227,18 @@ public class TrashImpl implements Trash {
 	}
 
 	@Override
+	public Group disableTrash(Group group) {
+		UnicodeProperties typeSettingsProperties =
+			group.getParentLiveGroupTypeSettingsProperties();
+
+		typeSettingsProperties.setProperty("trashEnabled", StringPool.FALSE);
+
+		group.setTypeSettingsProperties(typeSettingsProperties);
+
+		return GroupLocalServiceUtil.updateGroup(group);
+	}
+
+	@Override
 	public List<TrashEntry> getEntries(Hits hits) {
 		List<TrashEntry> entries = new ArrayList<TrashEntry>();
 

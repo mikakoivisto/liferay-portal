@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
@@ -42,6 +43,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.module.framework.ModuleFramework;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -76,7 +78,6 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -327,7 +328,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		Map<String, List<URL>> extraPackageMap = getExtraPackageMap();
 
-		Dictionary<String, Object> properties = new Hashtable<>();
+		Dictionary<String, Object> properties =
+			new HashMapDictionary<String, Object>();
 
 		properties.put("jsp.compiler.resource.map", "portal.extra.packages");
 
@@ -727,6 +729,17 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 	}
 
+	/**
+	 * @see com.liferay.portal.kernel.util.HttpUtil#decodePath
+	 */
+	private String _decodePath(String path) {
+		path = StringUtil.replace(path, StringPool.SLASH, _TEMP_SLASH);
+		path = URLCodec.decodeURL(path, StringPool.UTF8);
+		path = StringUtil.replace(path, _TEMP_SLASH, StringPool.SLASH);
+
+		return path;
+	}
+
 	private String _getFelixFileInstallDir() {
 		return PropsValues.MODULE_FRAMEWORK_PORTAL_DIR + StringPool.COMMA +
 			StringUtil.merge(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIRS);
@@ -817,6 +830,16 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 
 		return new File(fileName);
+	}
+
+	private String _getLiferayLibPortalDir() {
+		String liferayLibPortalDir = PropsValues.LIFERAY_LIB_PORTAL_DIR;
+
+		if (liferayLibPortalDir.startsWith(StringPool.SLASH)) {
+			liferayLibPortalDir = liferayLibPortalDir.substring(1);
+		}
+
+		return liferayLibPortalDir;
 	}
 
 	private String _getSystemPackagesExtra() {
@@ -1132,9 +1155,9 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			Constants.BUNDLE_SYMBOLICNAME);
 
 		if (Validator.isNull(bundleSymbolicName)) {
-			String urlString = url.toString();
+			String urlString = _decodePath(url.toString());
 
-			if (urlString.contains(PropsValues.LIFERAY_LIB_PORTAL_DIR)) {
+			if (urlString.contains(_getLiferayLibPortalDir())) {
 				manifest = _calculateManifest(url, manifest);
 
 				attributes = manifest.getMainAttributes();
@@ -1249,7 +1272,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			return;
 		}
 
-		Hashtable<String, Object> properties = new Hashtable<String, Object>();
+		HashMapDictionary<String, Object> properties =
+			new HashMapDictionary<String, Object>();
 
 		Map<String, Object> osgiBeanProperties =
 			OSGiBeanProperties.Convert.fromObject(bean);
@@ -1269,7 +1293,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	private void _registerServletContext(ServletContext servletContext) {
 		BundleContext bundleContext = _framework.getBundleContext();
 
-		Hashtable<String, Object> properties = new Hashtable<String, Object>();
+		Dictionary<String, Object> properties =
+			new HashMapDictionary<String, Object>();
 
 		properties.put(
 			ServicePropsKeys.BEAN_ID, ServletContext.class.getName());
@@ -1302,6 +1327,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		frameworkWiring.refreshBundles(refreshBundles, frameworkListener);
 	}
+
+	private static final String _TEMP_SLASH = "_LIFERAY_TEMP_SLASH_";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ModuleFrameworkImpl.class);

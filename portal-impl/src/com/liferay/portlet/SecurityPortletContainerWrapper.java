@@ -605,7 +605,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 				continue;
 			}
 
-			if (c == CharPool.UNDERLINE) {
+			if ((c == CharPool.POUND) || (c == CharPool.UNDERLINE)) {
 				continue;
 			}
 

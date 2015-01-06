@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.dynamicdatamapping.storage;
 
+import com.liferay.portal.kernel.util.HashUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 
 import java.util.ArrayList;
@@ -37,6 +39,30 @@ public class DDMFormValues {
 		ddmFormFieldValue.setDDMFormValues(this);
 
 		_ddmFormFieldValues.add(ddmFormFieldValue);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof DDMFormValues)) {
+			return false;
+		}
+
+		DDMFormValues ddmFormValues = (DDMFormValues)obj;
+
+		if (Validator.equals(
+				_availableLocales, ddmFormValues._availableLocales) &&
+			Validator.equals(_defaultLocale, ddmFormValues._defaultLocale) &&
+			Validator.equals(
+				_ddmFormFieldValues, ddmFormValues._ddmFormFieldValues)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public Set<Locale> getAvailableLocales() {
@@ -74,6 +100,15 @@ public class DDMFormValues {
 
 	public Locale getDefaultLocale() {
 		return _defaultLocale;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = HashUtil.hash(0, _availableLocales);
+
+		hash = HashUtil.hash(hash, _defaultLocale);
+
+		return HashUtil.hash(hash, _ddmFormFieldValues);
 	}
 
 	public void setAvailableLocales(Set<Locale> availableLocales) {

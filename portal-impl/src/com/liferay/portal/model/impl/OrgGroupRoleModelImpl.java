@@ -314,6 +314,8 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 	public CacheModel<OrgGroupRole> toCacheModel() {
 		OrgGroupRoleCacheModel orgGroupRoleCacheModel = new OrgGroupRoleCacheModel();
 
+		orgGroupRoleCacheModel.orgGroupRolePK = getPrimaryKey();
+
 		orgGroupRoleCacheModel.mvccVersion = getMvccVersion();
 
 		orgGroupRoleCacheModel.organizationId = getOrganizationId();

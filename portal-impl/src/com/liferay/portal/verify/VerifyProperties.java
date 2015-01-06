@@ -283,6 +283,18 @@ public class VerifyProperties extends VerifyProcess {
 
 	private static final String[][] _MODULARIZED_PORTAL_KEYS = {
 
+		// Asset
+
+		new String[] {
+			"asset.categories.navigation.display.templates.config",
+			"display.templates.config",
+			"com.liferay.asset.categories.navigation.web"
+		},
+		new String[] {
+			"asset.tags.navigation.display.templates.config",
+			"display.templates.config", "com.liferay.asset.tags.web"
+		},
+
 		// Bookmarks
 
 		new String[] {
@@ -390,12 +402,18 @@ public class VerifyProperties extends VerifyProcess {
 		"cluster.executor.heartbeat.interval",
 		"com.liferay.filters.doubleclick.DoubleClickFilter",
 		"com.liferay.portal.servlet.filters.doubleclick.DoubleClickFilter",
+		"com.liferay.portal.servlet.filters.charbufferpool." +
+			"CharBufferPoolFilter",
 		"com.liferay.portal.servlet.filters.validhtml.ValidHtmlFilter",
 		"commons.pool.enabled", "convert.processes",
 		"dl.file.entry.read.count.enabled",
 		"dynamic.data.lists.template.language.parser[ftl]",
 		"dynamic.data.lists.template.language.parser[vm]",
 		"dynamic.data.lists.template.language.parser[xsl]",
+		"dynamic.data.mapping.structure.private.field.names",
+		"dynamic.data.mapping.structure.private.field.datatype[_fieldsDisplay]",
+		"dynamic.data.mapping.structure.private.field.repeatable[" +
+			"_fieldsDisplay]",
 		"dynamic.data.mapping.template.language.types",
 		"editor.wysiwyg.portal-web.docroot.html.portlet.asset_publisher." +
 			"configuration.jsp",
@@ -610,12 +628,10 @@ public class VerifyProperties extends VerifyProcess {
 			"velocity.engine.restricted.variables"
 		},
 		new String[] {
-			"portal.instance.http.port",
-			"portal.instance.http.inet.socket.address"
+			"portal.instance.http.port", "portal.instance.http.socket.address"
 		},
 		new String[] {
-			"portal.instance.https.port",
-			"portal.instance.https.inet.socket.address"
+			"portal.instance.https.port", "portal.instance.http.socket.address"
 		},
 		new String[] {
 			"referer.url.domains.allowed", "redirect.url.domains.allowed"

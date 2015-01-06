@@ -270,6 +270,21 @@
 		<execute action="PGDocumentsandmediaAdddocument#type" locator-key1="DESCRIPTION_FIELD" value1="${dmDocumentDescription}" />
 
 		<if>
+			<isset var="categoryName" />
+			<then>
+				<var name="key_categoryName" value="${categoryName}" />
+
+				<execute macro="PGDocumentsandmediaEditdocument#showCategorization" />
+				<execute action="PGDocumentsandmediaEditdocument#assertClick" locator-key1="CATEGORIZATION_TOPIC_SELECT_BUTTON" value1="Select" />
+
+				<execute action="PGDocumentsandmediaCategoriesDialogBox#assertClick" locator-key1="CATEGORY_TOPIC" value1="${categoryName}" />
+				<execute action="PGDocumentsandmediaCategoriesDialogBox#assertClick" locator-key1="CLOSE_BUTTON" value1="×" />
+
+				<execute action="PGDocumentsandmediaEditdocument#assertTextEquals" locator-key1="CATEGORIZATION_VOCABULARY_TAG" value1="${categoryName}" />
+			</then>
+		</if>
+
+		<if>
 			<isset var="dmDocumentRelatedAsset" />
 			<then>
 				<execute macro="DMDocument#addRelatedAssetPG">
@@ -1643,6 +1658,36 @@
 		</if>
 	</command>
 
+	<command name="viewDocumentCheckoutOption">
+		<var name="key_dmDocumentTitle" value="${dmDocumentTitle}" />
+
+		<if>
+			<equals arg1="${dmDocumentShortcut}" arg2="true" />
+			<then>
+				<execute action="PGDocumentsandmedia#click" locator-key1="ENTRY_ICON_DOCUMENT_SHORTCUT_ACTIONS" />
+			</then>
+			<elseif>
+				<equals arg1="${dmDocumentShortcut}" arg2="false" />
+				<then>
+					<execute action="PGDocumentsandmedia#click" locator-key1="ENTRY_ICON_DOCUMENT_ACTIONS" />
+				</then>
+			</elseif>
+		</if>
+
+		<if>
+			<equals arg1="${viewCheckoutOption}" arg2="true" />
+			<then>
+				<execute action="PGDocumentsandmedia#assertVisible" locator-key1="DOCUMENT_MENULIST_CHECKOUT" value1="Checkout" />
+			</then>
+			<elseif>
+				<equals arg1="${viewCheckoutOption}" arg2="false" />
+				<then>
+					<execute action="PGDocumentsandmedia#assertNotVisible" locator-key1="DOCUMENT_MENULIST_CHECKOUT" value1="Checkout" />
+				</then>
+			</elseif>
+		</if>
+	</command>
+
 	<command name="viewDocumentDetailsCmdPG">
 		<execute action="PGDocumentsandmediaDocument#assertElementPresent" locator-key1="DOCUMENT_INFO_DATE" />
 		<execute action="PGDocumentsandmediaDocument#assertElementPresent" locator-key1="DOCUMENT_INFO_WORKFLOW_STATUS" />
@@ -1924,6 +1969,13 @@
 				<for list="${tagNameList}" param="tagName">
 					<execute action="PGDocumentsandmediaDocument#assertTextEquals" locator-key1="DOCUMENT_INFO_TAGS" value1="${tagName}" />
 				</for>
+			</then>
+		</if>
+
+		<if>
+			<isset var="categoryName" />
+			<then>
+				<execute action="PGDocumentsandmediaDocument#assertTextEquals" locator-key1="DOCUMENT_INFO_CATEGORIES" value1="Topic: ${categoryName}" />
 			</then>
 		</if>
 	</command>

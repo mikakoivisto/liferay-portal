@@ -318,6 +318,11 @@
 			<bean class="com.liferay.portal.settings.SettingsFactoryImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.spring.orm.LastSessionRecorderHelperUtil" class="com.liferay.portal.kernel.spring.orm.LastSessionRecorderHelperUtil">
+		<property name="lastSessionRecorderHelper">
+			<bean class="com.liferay.portal.spring.hibernate.LastSessionRecorderHelperImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.spring.util.SpringFactory" class="com.liferay.portal.spring.util.SpringFactoryImpl">
 		<property name="beanDefinitions">
 			<map />
@@ -680,6 +685,11 @@
 		<property name="resourceActions" ref="com.liferay.portal.security.permission.ResourceActions" />
 	</bean>
 	<bean id="com.liferay.portal.security.pwd.PasswordPolicyToolkit" class="com.liferay.portal.security.pwd.PasswordPolicyToolkit" />
+	<bean id="com.liferay.portal.security.xml.SecureXMLBuilderUtil" class="com.liferay.portal.security.xml.SecureXMLBuilderUtil">
+		<property name="secureXMLBuilder">
+			<bean class="com.liferay.portal.security.xml.SecureXMLBuilderImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.service.impl.LayoutLocalServiceHelper" class="com.liferay.portal.service.impl.LayoutLocalServiceHelper" />
 	<bean id="com.liferay.portal.service.permission.AccountPermissionUtil" class="com.liferay.portal.service.permission.AccountPermissionUtil">
 		<property name="accountPermission">
@@ -834,6 +844,7 @@
 	<bean class="com.liferay.portal.verify.model.DLFolderVerifiableModel" />
 	<bean class="com.liferay.portal.verify.model.EmailAddressVerifiableModel" />
 	<bean class="com.liferay.portal.verify.model.GroupVerifiableModel" />
+	<bean class="com.liferay.portal.verify.model.GroupVerifiableResourcedModel" />
 	<bean class="com.liferay.portal.verify.model.JournalArticleResourceVerifiableModel" />
 	<bean class="com.liferay.portal.verify.model.JournalArticleVerifiableModel" />
 	<bean class="com.liferay.portal.verify.model.JournalFeedVerifiableModel" />
@@ -1037,10 +1048,9 @@
 	<bean id="com.liferay.portlet.dynamicdatamapping.storage.StorageAdapterRegistryUtil" class="com.liferay.portlet.dynamicdatamapping.storage.StorageAdapterRegistryUtil">
 		<property name="storageAdapterRegistry" ref="com.liferay.portlet.dynamicdatamapping.storage.StorageAdapterRegistry" />
 	</bean>
+	<bean id="com.liferay.portlet.dynamicdatamapping.storage.StorageEngine" class="com.liferay.portlet.dynamicdatamapping.storage.StorageEngineImpl" />
 	<bean id="com.liferay.portlet.dynamicdatamapping.storage.StorageEngineUtil" class="com.liferay.portlet.dynamicdatamapping.storage.StorageEngineUtil">
-		<property name="storageEngine">
-			<bean class="com.liferay.portlet.dynamicdatamapping.storage.StorageEngineImpl" />
-		</property>
+		<property name="storageEngine" ref="com.liferay.portlet.dynamicdatamapping.storage.StorageEngine" />
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryUtil" class="com.liferay.portlet.dynamicdatamapping.storage.query.ConditionFactoryUtil">
 		<property name="conditionFactory">

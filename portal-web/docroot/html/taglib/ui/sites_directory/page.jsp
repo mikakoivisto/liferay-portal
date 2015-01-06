@@ -228,7 +228,7 @@ private void _buildSitesList(Group rootGroup, Group curGroup, List<Group> branch
 
 		if (childGroup.getGroupId() != themeDisplay.getScopeGroupId()) {
 			sb.append("href=\"");
-			sb.append(HtmlUtil.escapeHREF(childGroup.getDisplayURL(themeDisplay, childGroup.hasPublicLayouts())));
+			sb.append(HtmlUtil.escapeHREF(childGroup.getDisplayURL(themeDisplay, !childGroup.hasPublicLayouts())));
 			sb.append("\"");
 		}
 

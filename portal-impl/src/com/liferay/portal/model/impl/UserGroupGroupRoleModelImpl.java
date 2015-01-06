@@ -382,6 +382,8 @@ public class UserGroupGroupRoleModelImpl extends BaseModelImpl<UserGroupGroupRol
 	public CacheModel<UserGroupGroupRole> toCacheModel() {
 		UserGroupGroupRoleCacheModel userGroupGroupRoleCacheModel = new UserGroupGroupRoleCacheModel();
 
+		userGroupGroupRoleCacheModel.userGroupGroupRolePK = getPrimaryKey();
+
 		userGroupGroupRoleCacheModel.mvccVersion = getMvccVersion();
 
 		userGroupGroupRoleCacheModel.userGroupId = getUserGroupId();
