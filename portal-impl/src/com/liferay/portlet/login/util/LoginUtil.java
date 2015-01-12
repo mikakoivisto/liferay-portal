@@ -152,13 +152,11 @@ public class LoginUtil {
 			if (authResult != Authenticator.SUCCESS) {
 				User user = UserLocalServiceUtil.fetchUser(userId);
 
-				if ((user != null) && user.isLockout()) {
-					throw new UserLockoutException.PasswordPolicyLockout(
-						user, user.getPasswordPolicy());
+				if (user != null) {
+					UserLocalServiceUtil.checkLockout(user);
 				}
-				else {
-					throw new AuthException();
-				}
+
+				throw new AuthException();
 			}
 		}
 
