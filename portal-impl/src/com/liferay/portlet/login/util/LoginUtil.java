@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.login.util;
 
-import com.liferay.portal.UserLockoutException;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.exception.PortalException;
