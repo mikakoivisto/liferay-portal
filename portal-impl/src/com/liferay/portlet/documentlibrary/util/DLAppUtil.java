@@ -15,20 +15,49 @@
 package com.liferay.portlet.documentlibrary.util;
 
 import com.liferay.portal.kernel.repository.model.FileVersion;
-import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Alexander Chow
  */
 public class DLAppUtil {
 
+	public static String fixExtension(
+		String fileName, String extension, String mimeTypeExtension) {
+
+		if (Validator.isNotNull(mimeTypeExtension) &&
+			!mimeTypeExtension.equals(extension) &&
+			Validator.isNotNull(fileName)) {
+
+			return StringUtil.replaceLast(
+				fileName, "."+ extension, "." + mimeTypeExtension);
+		}
+
+		return fileName;
+	}
+
 	public static String getExtension(String title, String sourceFileName) {
+		return getExtension(title, sourceFileName, null);
+	}
+
+	public static String getExtension(
+		String title, String sourceFileName, String mimeType) {
+
+		if (Validator.isNotNull(mimeType) &&
+			_extensionsMap.containsKey(mimeType)) {
+
+			return _extensionsMap.get(mimeType);
+		}
+
 		String extension = FileUtil.getExtension(sourceFileName);
 
 		if (Validator.isNull(extension)) {
@@ -41,12 +70,13 @@ public class DLAppUtil {
 	public static String getMimeType(
 		String sourceFileName, String mimeType, String title, File file) {
 
-		if (Validator.isNull(mimeType) ||
-			mimeType.equals(ContentTypes.APPLICATION_OCTET_STREAM)) {
+		String extension = getExtension(title, sourceFileName);
 
-			String extension = getExtension(title, sourceFileName);
+		String fileMimeType = MimeTypesUtil.getContentType(
+			file, "A." + extension);
 
-			mimeType = MimeTypesUtil.getContentType(file, "A." + extension);
+		if (Validator.isNotNull(fileMimeType)) {
+			return fileMimeType;
 		}
 
 		return mimeType;
@@ -61,6 +91,20 @@ public class DLAppUtil {
 			previousFileVersion.getVersion());
 
 		return (currentVersion - previousVersion) >= 1;
+	}
+
+	private static final Map<String, String> _extensionsMap = new HashMap<>();
+
+	static {
+		_extensionsMap.put("application/pdf", "pdf");
+		_extensionsMap.put("application/x-pdf", "pdf");
+		_extensionsMap.put("application/x-shockwave-flash", "swf");
+		_extensionsMap.put("image/gif", "gif");
+		_extensionsMap.put("image/jpg", "jpg");
+		_extensionsMap.put("image/png", "png");
+		_extensionsMap.put("video/quicktime", "mov");
+		_extensionsMap.put("video/x-flv", "flv");
+		_extensionsMap.put("video/x-ms-wmv", "wmv");
 	}
 
 }
