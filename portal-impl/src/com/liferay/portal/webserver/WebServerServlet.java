@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.template.URLTemplateResource;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.DigesterUtil;
@@ -101,6 +102,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PushbackInputStream;
 
 import java.net.URL;
 
@@ -1014,6 +1016,25 @@ public class WebServerServlet extends HttpServlet {
 					converted = true;
 				}
 			}
+			else {
+				PushbackInputStream pbis = new PushbackInputStream(
+					inputStream, 3);
+
+				byte[] magicBytes = new byte[3];
+
+				pbis.read(magicBytes);
+				pbis.unread(magicBytes);
+
+				inputStream = pbis;
+
+				if (ArrayUtil.containsAll(_flashMagicBytes[0], magicBytes) ||
+					ArrayUtil.containsAll(_flashMagicBytes[2], magicBytes) ||
+					ArrayUtil.containsAll(_flashMagicBytes[2], magicBytes)) {
+
+					fileName = FileUtil.stripExtension(fileName).concat(
+						StringPool.PERIOD).concat("swf");
+				}
+			}
 		}
 
 		// Determine proper content type
@@ -1351,6 +1372,8 @@ public class WebServerServlet extends HttpServlet {
 		PropsValues.WEB_SERVER_SERVLET_ACCEPT_RANGES_MIME_TYPES);
 	private static final Format _dateFormat =
 		FastDateFormatFactoryUtil.getSimpleDateFormat("d MMM yyyy HH:mm z");
+	private static final byte[][] _flashMagicBytes =
+		{ {0x46, 0x57, 0x53}, {0x43, 0x57, 0x53}, {0x5a, 0x57, 0x53} };
 
 	private boolean _lastModified = true;
 	private TemplateResource _templateResource;
