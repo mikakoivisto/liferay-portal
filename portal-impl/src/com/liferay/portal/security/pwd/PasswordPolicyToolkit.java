@@ -300,13 +300,13 @@ public class PasswordPolicyToolkit extends BasicToolkit {
 	private final char[] _generatorAlphanumericCharsetArray;
 	//private final String _completeCharset;
 	private final String _generatorCompleteCharset;
-	private final char[] _lowerCaseCharsetArray;
 	private final char[] _generatorLowerCaseCharsetArray;
-	private final char[] _numbersCharsetArray;
 	private final char[] _generatorNumbersCharsetArray;
-	private final char[] _symbolsCharsetArray;
 	private final char[] _generatorSymbolsCharsetArray;
-	private final char[] _upperCaseCharsetArray;
 	private final char[] _generatorUpperCaseCharsetArray;
+	private final char[] _lowerCaseCharsetArray;
+	private final char[] _numbersCharsetArray;
+	private final char[] _symbolsCharsetArray;
+	private final char[] _upperCaseCharsetArray;
 
 }
