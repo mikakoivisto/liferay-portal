@@ -1016,25 +1016,24 @@ public class WebServerServlet extends HttpServlet {
 					converted = true;
 				}
 			}
-			else {
-				PushbackInputStream pbis = new PushbackInputStream(
-					inputStream, 3);
+		}
 
-				byte[] magicBytes = new byte[3];
+		PushbackInputStream pbis = new PushbackInputStream(
+			inputStream, 3);
 
-				pbis.read(magicBytes);
-				pbis.unread(magicBytes);
+		byte[] magicBytes = new byte[3];
 
-				inputStream = pbis;
+		pbis.read(magicBytes);
+		pbis.unread(magicBytes);
 
-				if (ArrayUtil.containsAll(_flashMagicBytes[0], magicBytes) ||
-					ArrayUtil.containsAll(_flashMagicBytes[2], magicBytes) ||
-					ArrayUtil.containsAll(_flashMagicBytes[2], magicBytes)) {
+		inputStream = pbis;
 
-					fileName = FileUtil.stripExtension(fileName).concat(
-						StringPool.PERIOD).concat("swf");
-				}
-			}
+		if (ArrayUtil.containsAll(_flashMagicBytes[0], magicBytes) ||
+			ArrayUtil.containsAll(_flashMagicBytes[1], magicBytes) ||
+			ArrayUtil.containsAll(_flashMagicBytes[2], magicBytes)) {
+
+			fileName = FileUtil.stripExtension(fileName).concat(
+				StringPool.PERIOD).concat("swf");
 		}
 
 		// Determine proper content type
