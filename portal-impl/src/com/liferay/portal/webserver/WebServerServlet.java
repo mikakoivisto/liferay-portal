@@ -1018,8 +1018,7 @@ public class WebServerServlet extends HttpServlet {
 			}
 		}
 
-		PushbackInputStream pbis = new PushbackInputStream(
-			inputStream, 3);
+		PushbackInputStream pbis = new PushbackInputStream(inputStream, 3);
 
 		byte[] magicBytes = new byte[3];
 
