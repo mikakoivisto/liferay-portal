@@ -389,6 +389,15 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
 
+		mimeType = DLAppUtil.getMimeType(fileName, mimeType, fileName, file);
+
+		String extension = DLAppUtil.getExtension(fileName, fileName);
+		String mimeTypeExtension = DLAppUtil.getExtension(
+			fileName, fileName, mimeType);
+
+		fileName = DLAppUtil.fixExtension(
+			fileName, extension, mimeTypeExtension);
+
 		return TempFileEntryUtil.addTempFileEntry(
 			groupId, getUserId(), folderName, fileName, file, mimeType);
 	}
@@ -423,6 +432,24 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 		DLFolderPermission.check(
 			getPermissionChecker(), groupId, folderId, ActionKeys.ADD_DOCUMENT);
+
+		if (inputStream != null) {
+			File file = null;
+
+			try {
+				file = FileUtil.createTempFile(inputStream);
+
+				return addTempFileEntry(
+					groupId, folderId, folderName, fileName, file, mimeType);
+			}
+			catch (IOException ioe) {
+				throw new SystemException(
+					"Unable to write temporary file", ioe);
+			}
+			finally {
+				FileUtil.delete(file);
+			}
+		}
 
 		return TempFileEntryUtil.addTempFileEntry(
 			groupId, getUserId(), folderName, fileName, inputStream, mimeType);
