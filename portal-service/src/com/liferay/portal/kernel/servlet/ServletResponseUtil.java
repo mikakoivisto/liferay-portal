@@ -349,7 +349,7 @@ public class ServletResponseUtil {
 							range.getContentRange());
 					servletOutputStream.println();
 
-					copyRange(
+					inputStream = copyRange(
 						inputStream, outputStream, range.getStart(),
 						range.getLength());
 				}
@@ -589,7 +589,7 @@ public class ServletResponseUtil {
 		}
 	}
 
-	protected static void copyRange(
+	protected static InputStream copyRange(
 			InputStream inputStream, OutputStream outputStream, long start,
 			long length)
 		throws IOException {
@@ -601,6 +601,8 @@ public class ServletResponseUtil {
 
 			fileChannel.transferTo(
 				start, length, Channels.newChannel(outputStream));
+
+			return fileInputStream;
 		}
 		else if (inputStream instanceof ByteArrayInputStream) {
 			ByteArrayInputStream byteArrayInputStream =
@@ -609,15 +611,23 @@ public class ServletResponseUtil {
 			byteArrayInputStream.skip(start);
 
 			StreamUtil.transfer(byteArrayInputStream, outputStream, length);
+
+			return byteArrayInputStream;
 		}
-		else {
+		else if (inputStream instanceof RandomAccessInputStream) {
 			RandomAccessInputStream randomAccessInputStream =
-				new RandomAccessInputStream(inputStream);
+				(RandomAccessInputStream)inputStream;
 
 			randomAccessInputStream.seek(start);
 
 			StreamUtil.transfer(randomAccessInputStream, outputStream, length);
+
+			return randomAccessInputStream;
 		}
+
+		return copyRange(
+			new RandomAccessInputStream(inputStream), outputStream, start,
+			length);
 	}
 
 	protected static void setHeaders(
