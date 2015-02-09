@@ -620,7 +620,9 @@ public class ServletResponseUtil {
 
 			randomAccessInputStream.seek(start);
 
-			StreamUtil.transfer(randomAccessInputStream, outputStream, length);
+			StreamUtil.transfer(
+				randomAccessInputStream, outputStream, StreamUtil.BUFFER_SIZE,
+				false, length);
 
 			return randomAccessInputStream;
 		}
