@@ -100,6 +100,7 @@ public class ServletResponseUtilRangeTest extends PowerMockito {
 
 		String rangeHeader = "bytes=-500";
 		setupRange(request, rangeHeader);
+
 		List<Range> ranges = ServletResponseUtil.getRanges(
 			request, response, length);
 
@@ -108,7 +109,9 @@ public class ServletResponseUtilRangeTest extends PowerMockito {
 
 		rangeHeader = "bytes=9500-";
 		setupRange(request, rangeHeader);
+
 		ranges = ServletResponseUtil.getRanges(request, response, length);
+
 		Assert.assertEquals(ranges.size(), 1);
 		assertRange(ranges.get(0), 9500, 9999, 500);
 
@@ -117,7 +120,9 @@ public class ServletResponseUtilRangeTest extends PowerMockito {
 
 		rangeHeader = "bytes=0-0,-1";
 		setupRange(request, rangeHeader);
+
 		ranges = ServletResponseUtil.getRanges(request, response, length);
+
 		Assert.assertEquals(ranges.size(), 2);
 		assertRange(ranges.get(0), 0, 0, 1);
 		assertRange(ranges.get(1), 9999, 9999, 1);
@@ -129,14 +134,18 @@ public class ServletResponseUtilRangeTest extends PowerMockito {
 
 		rangeHeader = "bytes=500-600,601-999";
 		setupRange(request, rangeHeader);
+
 		ranges = ServletResponseUtil.getRanges(request, response, length);
+
 		Assert.assertEquals(ranges.size(), 2);
 		assertRange(ranges.get(0), 500, 600, 101);
 		assertRange(ranges.get(1), 601, 999, 399);
 
 		rangeHeader = "bytes=500-700,601-999";
 		setupRange(request, rangeHeader);
+
 		ranges = ServletResponseUtil.getRanges(request, response, length);
+
 		Assert.assertEquals(ranges.size(), 2);
 		assertRange(ranges.get(0), 500, 700, 201);
 		assertRange(ranges.get(1), 601, 999, 399);
@@ -205,6 +214,7 @@ public class ServletResponseUtilRangeTest extends PowerMockito {
 					throws Throwable {
 
 					String name = String.valueOf(System.currentTimeMillis());
+
 					return File.createTempFile(name, null);
 				}
 			}
@@ -220,6 +230,7 @@ public class ServletResponseUtilRangeTest extends PowerMockito {
 
 					Object[] args = invocation.getArguments();
 					File file = (File)args[0];
+
 					return file.delete();
 				}
 			}
