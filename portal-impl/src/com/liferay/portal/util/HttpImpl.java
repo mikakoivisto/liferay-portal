@@ -731,6 +731,62 @@ public class HttpImpl implements Http {
 	}
 
 	@Override
+	public String normalizePath(String uri) {
+		if (Validator.isNull(uri)) {
+			return uri;
+		}
+
+		String path = null;
+		String queryString = null;
+
+		int pos = uri.indexOf('?');
+
+		if (pos != -1) {
+			path = uri.substring(0, pos);
+			queryString = uri.substring(pos + 1);
+		}
+		else {
+			path = uri;
+		}
+
+		path = decodePath(path);
+
+		String[] uriParts = StringUtil.split(
+			path.substring(1), StringPool.SLASH);
+
+		List<String> parts = new ArrayList<>(uriParts.length);
+
+		for (int i = 0; i < uriParts.length; i++) {
+			String uriPart = uriParts[i];
+
+			if (uriPart.equals(StringPool.DOUBLE_PERIOD)) {
+				if (!uriParts[i - 1].equals(StringPool.PERIOD)) {
+					parts.remove(parts.size() - 1);
+				}
+			}
+			else if ((uriPart.length() > 0) &&
+					 !uriPart.equals(StringPool.PERIOD)) {
+
+				parts.add(uriPart);
+			}
+		}
+
+		StringBundler sb = new StringBundler(parts.size() * 2 + 2);
+
+		for (String part : parts) {
+			sb.append(StringPool.SLASH);
+			sb.append(part);
+		}
+
+		if (Validator.isNotNull(queryString)) {
+			sb.append(StringPool.QUESTION);
+			sb.append(queryString);
+		}
+
+		return removePathParameters(sb.toString());
+	}
+
+	@Override
 	public Map<String, String[]> parameterMapFromString(String queryString) {
 		Map<String, String[]> parameterMap = new LinkedHashMap<>();
 
@@ -996,6 +1052,9 @@ public class HttpImpl implements Http {
 			if (pos == -1) {
 				sb.append(StringPool.SLASH);
 				sb.append(uriPart);
+			}
+			else if (pos == 0) {
+				continue;
 			}
 			else {
 				sb.append(StringPool.SLASH);
