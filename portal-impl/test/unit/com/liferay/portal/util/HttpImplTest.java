@@ -136,12 +136,30 @@ public class HttpImplTest extends PowerMockito {
 	@Test
 	public void testNormalizePath() {
 		Assert.assertEquals(
+			"/api/%2f/axis",
+			_httpImpl.normalizePath("/api/%2f/;x=aaa_%2f_y/axis"));
+
+		Assert.assertEquals(
+			"/api/axis", _httpImpl.normalizePath("/api/;x=aaa_%2f_y/axis"));
+
+		Assert.assertEquals(
+			"/api/axis", _httpImpl.normalizePath("/api/;x=aaa_%5b_y/axis"));
+
+		Assert.assertEquals(
+			"/api/axis",
+			_httpImpl.normalizePath("/api/;x=aaa_LIFERAY_TEMP_SLASH_y/axis"));
+
+		Assert.assertEquals(
 			"/api/axis",
 			_httpImpl.normalizePath("/api///////%2e/../;x=y/axis"));
 
 		Assert.assertEquals(
 			"/api/axis",
 			_httpImpl.normalizePath("/////api///////%2e/a/../;x=y/axis"));
+
+		Assert.assertEquals(
+			"/api/axis",
+			_httpImpl.normalizePath("/////api///////%2e/../;x=y/axis"));
 
 		Assert.assertEquals(
 			"/api/axis", _httpImpl.normalizePath("/api///////%2e/axis"));

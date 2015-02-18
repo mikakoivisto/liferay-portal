@@ -736,6 +736,8 @@ public class HttpImpl implements Http {
 			return uri;
 		}
 
+		uri = removePathParameters(uri);
+
 		String path = null;
 		String queryString = null;
 
@@ -749,25 +751,28 @@ public class HttpImpl implements Http {
 			path = uri;
 		}
 
-		path = decodePath(path);
-
 		String[] uriParts = StringUtil.split(
 			path.substring(1), StringPool.SLASH);
 
 		List<String> parts = new ArrayList<>(uriParts.length);
 
 		for (int i = 0; i < uriParts.length; i++) {
-			String uriPart = uriParts[i];
+			String curUriPart = URLCodec.decodeURL(uriParts[i]);
+			String prevUriPart = null;
 
-			if (uriPart.equals(StringPool.DOUBLE_PERIOD)) {
-				if (!uriParts[i - 1].equals(StringPool.PERIOD)) {
+			if (i > 0) {
+				prevUriPart = URLCodec.decodeURL(uriParts[i - 1]);
+			}
+
+			if (curUriPart.equals(StringPool.DOUBLE_PERIOD)) {
+				if (!prevUriPart.equals(StringPool.PERIOD)) {
 					parts.remove(parts.size() - 1);
 				}
 			}
-			else if ((uriPart.length() > 0) &&
-					 !uriPart.equals(StringPool.PERIOD)) {
+			else if ((curUriPart.length() > 0) &&
+					 !curUriPart.equals(StringPool.PERIOD)) {
 
-				parts.add(uriPart);
+				parts.add(uriParts[i]);
 			}
 		}
 
@@ -783,7 +788,7 @@ public class HttpImpl implements Http {
 			sb.append(queryString);
 		}
 
-		return removePathParameters(sb.toString());
+		return sb.toString();
 	}
 
 	@Override
