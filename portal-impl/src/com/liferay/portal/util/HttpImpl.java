@@ -772,7 +772,7 @@ public class HttpImpl implements Http {
 			else if ((curUriPart.length() > 0) &&
 					 !curUriPart.equals(StringPool.PERIOD)) {
 
-				parts.add(uriParts[i]);
+				parts.add(URLCodec.encodeURL(curUriPart));
 			}
 		}
 
