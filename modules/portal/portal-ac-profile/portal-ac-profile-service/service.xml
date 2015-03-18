@@ -24,6 +24,7 @@
 		<column name="title" type="String" localized="true" />
 
 		<!-- Finder methods -->
+
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>

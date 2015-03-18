@@ -49,12 +49,11 @@ public class ServiceACProfileLocalServiceImpl
 	extends ServiceACProfileLocalServiceBaseImpl {
 
 	public ServiceACProfile addServiceACProfile(
-			long companyId, long userId, String allowedServices, 
-			String name, Map<Locale, String> titleMap,
-			ServiceContext serviceContext)
+			long companyId, long userId, String allowedServices, String name,
+			Map<Locale, String> titleMap, ServiceContext serviceContext)
 		throws PortalException {
 
-		if (getServiceACProfile(companyId, name) != null){ 
+		if (getServiceACProfile(companyId, name) != null) {
 			throw new DuplicateNameException();
 		}
 
@@ -122,6 +121,15 @@ public class ServiceACProfileLocalServiceImpl
 			guestPermissions);
 	}
 
+	public ServiceACProfile deleteServiceACProfile(long serviceACProfileId)
+		throws PortalException {
+
+		ServiceACProfile serviceACProfile =
+			serviceACProfilePersistence.findByPrimaryKey(serviceACProfileId);
+
+		return deleteServiceACProfile(serviceACProfile);
+	}
+
 	public ServiceACProfile deleteServiceACProfile(
 		ServiceACProfile serviceACProfile) throws PortalException {
 
@@ -133,15 +141,6 @@ public class ServiceACProfileLocalServiceImpl
 			serviceACProfile.getServiceACProfileId());
 
 		return serviceACProfile;
-	}
-
-	public ServiceACProfile deleteServiceACProfile(long serviceACProfileId)
-		throws PortalException {
-
-		ServiceACProfile serviceACProfile =
-			serviceACProfilePersistence.findByPrimaryKey(serviceACProfileId);
-
-		return deleteServiceACProfile(serviceACProfile);
 	}
 
 	public List<ServiceACProfile> getCompanyServiceACProfiles(
@@ -170,9 +169,8 @@ public class ServiceACProfileLocalServiceImpl
 	}
 
 	public ServiceACProfile updateServiceACProfile(
-			long serviceACProfileId, String allowedServices,
-			String name, Map<Locale, String> titleMap,
-			ServiceContext serviceContext)
+			long serviceACProfileId, String allowedServices, String name,
+			Map<Locale, String> titleMap, ServiceContext serviceContext)
 		throws PortalException {
 
 		ServiceACProfile serviceACProfile =
@@ -209,4 +207,5 @@ public class ServiceACProfileLocalServiceImpl
 			serviceACProfile.getServiceACProfileId(), groupPermissions,
 			guestPermissions);
 	}
+
 }
