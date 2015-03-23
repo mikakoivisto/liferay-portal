@@ -42,6 +42,16 @@ public class ServiceACProfileLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.ac.profile.service.impl.ServiceACProfileLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.portal.ac.profile.model.ServiceACProfile addServiceACProfile(
+		long companyId, long userId, java.lang.String allowedServices,
+		java.lang.String name,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addServiceACProfile(companyId, userId, allowedServices,
+			name, titleMap, serviceContext);
+	}
 
 	/**
 	* Adds the service a c profile to the database. Also notifies the appropriate model listeners.
@@ -52,6 +62,24 @@ public class ServiceACProfileLocalServiceUtil {
 	public static com.liferay.portal.ac.profile.model.ServiceACProfile addServiceACProfile(
 		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile) {
 		return getService().addServiceACProfile(serviceACProfile);
+	}
+
+	public static void addServiceACProfileResources(
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService()
+			.addServiceACProfileResources(serviceACProfile,
+			addGroupPermissions, addGuestPermissions);
+	}
+
+	public static void addServiceACProfileResources(
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService()
+			.addServiceACProfileResources(serviceACProfile, groupPermissions,
+			guestPermissions);
 	}
 
 	/**
@@ -79,9 +107,11 @@ public class ServiceACProfileLocalServiceUtil {
 	*
 	* @param serviceACProfile the service a c profile
 	* @return the service a c profile that was removed
+	* @throws PortalException
 	*/
 	public static com.liferay.portal.ac.profile.model.ServiceACProfile deleteServiceACProfile(
-		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile) {
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile)
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().deleteServiceACProfile(serviceACProfile);
 	}
 
@@ -207,6 +237,22 @@ public class ServiceACProfileLocalServiceUtil {
 		return getService().getBeanIdentifier();
 	}
 
+	public static java.util.List<com.liferay.portal.ac.profile.model.ServiceACProfile> getCompanyServiceACProfiles(
+		long companyId, int start, int end) {
+		return getService().getCompanyServiceACProfiles(companyId, start, end);
+	}
+
+	public static java.util.List<com.liferay.portal.ac.profile.model.ServiceACProfile> getCompanyServiceACProfiles(
+		long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portal.ac.profile.model.ServiceACProfile> obc) {
+		return getService()
+				   .getCompanyServiceACProfiles(companyId, start, end, obc);
+	}
+
+	public static int getCompanyServiceACProfilesCount(long companyId) {
+		return getService().getCompanyServiceACProfilesCount(companyId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
 		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
 		return getService().getExportActionableDynamicQuery(portletDataContext);
@@ -216,6 +262,12 @@ public class ServiceACProfileLocalServiceUtil {
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static com.liferay.portal.ac.profile.model.ServiceACProfile getServiceACProfile(
+		long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getServiceACProfile(companyId, name);
 	}
 
 	/**
@@ -289,6 +341,26 @@ public class ServiceACProfileLocalServiceUtil {
 	public static com.liferay.portal.ac.profile.model.ServiceACProfile updateServiceACProfile(
 		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile) {
 		return getService().updateServiceACProfile(serviceACProfile);
+	}
+
+	public static com.liferay.portal.ac.profile.model.ServiceACProfile updateServiceACProfile(
+		long serviceACProfileId, java.lang.String allowedServices,
+		java.lang.String name,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .updateServiceACProfile(serviceACProfileId, allowedServices,
+			name, titleMap, serviceContext);
+	}
+
+	public static void updateServiceACProfileResources(
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService()
+			.updateServiceACProfileResources(serviceACProfile,
+			groupPermissions, guestPermissions);
 	}
 
 	public static ServiceACProfileLocalService getService() {

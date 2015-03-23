@@ -47,6 +47,12 @@ public interface ServiceACProfileLocalService extends BaseLocalService,
 	 *
 	 * Never modify or reference this interface directly. Always use {@link ServiceACProfileLocalServiceUtil} to access the service a c profile local service. Add custom service methods to {@link com.liferay.portal.ac.profile.service.impl.ServiceACProfileLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public com.liferay.portal.ac.profile.model.ServiceACProfile addServiceACProfile(
+		long companyId, long userId, java.lang.String allowedServices,
+		java.lang.String name,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
 	* Adds the service a c profile to the database. Also notifies the appropriate model listeners.
@@ -57,6 +63,16 @@ public interface ServiceACProfileLocalService extends BaseLocalService,
 	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.liferay.portal.ac.profile.model.ServiceACProfile addServiceACProfile(
 		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile);
+
+	public void addServiceACProfileResources(
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	public void addServiceACProfileResources(
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
 	* Creates a new service a c profile with the primary key. Does not add the service a c profile to the database.
@@ -80,10 +96,12 @@ public interface ServiceACProfileLocalService extends BaseLocalService,
 	*
 	* @param serviceACProfile the service a c profile
 	* @return the service a c profile that was removed
+	* @throws PortalException
 	*/
 	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.DELETE)
 	public com.liferay.portal.ac.profile.model.ServiceACProfile deleteServiceACProfile(
-		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile);
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
 	* Deletes the service a c profile with the primary key from the database. Also notifies the appropriate model listeners.
@@ -188,6 +206,18 @@ public interface ServiceACProfileLocalService extends BaseLocalService,
 	public java.lang.String getBeanIdentifier();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.ac.profile.model.ServiceACProfile> getCompanyServiceACProfiles(
+		long companyId, int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.ac.profile.model.ServiceACProfile> getCompanyServiceACProfiles(
+		long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.portal.ac.profile.model.ServiceACProfile> obc);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getCompanyServiceACProfilesCount(long companyId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
 		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext);
 
@@ -195,6 +225,11 @@ public interface ServiceACProfileLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.ac.profile.model.ServiceACProfile getServiceACProfile(
+		long companyId, java.lang.String name)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
@@ -261,4 +296,16 @@ public interface ServiceACProfileLocalService extends BaseLocalService,
 	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.liferay.portal.ac.profile.model.ServiceACProfile updateServiceACProfile(
 		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile);
+
+	public com.liferay.portal.ac.profile.model.ServiceACProfile updateServiceACProfile(
+		long serviceACProfileId, java.lang.String allowedServices,
+		java.lang.String name,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	public void updateServiceACProfileResources(
+		com.liferay.portal.ac.profile.model.ServiceACProfile serviceACProfile,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException;
 }
