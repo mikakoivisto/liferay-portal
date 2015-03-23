@@ -121,11 +121,12 @@ public abstract class ServiceACProfileLocalServiceBaseImpl
 	 *
 	 * @param serviceACProfile the service a c profile
 	 * @return the service a c profile that was removed
+	 * @throws PortalException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public ServiceACProfile deleteServiceACProfile(
-		ServiceACProfile serviceACProfile) {
+		ServiceACProfile serviceACProfile) throws PortalException {
 		return serviceACProfilePersistence.remove(serviceACProfile);
 	}
 
