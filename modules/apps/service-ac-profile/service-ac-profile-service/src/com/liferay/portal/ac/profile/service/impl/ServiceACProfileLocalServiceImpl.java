@@ -131,7 +131,8 @@ public class ServiceACProfileLocalServiceImpl
 	}
 
 	public ServiceACProfile deleteServiceACProfile(
-		ServiceACProfile serviceACProfile) throws PortalException {
+			ServiceACProfile serviceACProfile)
+		throws PortalException {
 
 		serviceACProfilePersistence.remove(serviceACProfile);
 
