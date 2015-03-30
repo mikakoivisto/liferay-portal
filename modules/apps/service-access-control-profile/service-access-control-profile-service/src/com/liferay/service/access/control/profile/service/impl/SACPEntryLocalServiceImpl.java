@@ -54,6 +54,7 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 
 		SACPEntry sacpEntry = sacpEntryPersistence.create(sacpEntryId);
 
+		sacpEntry.setAllowedServices(allowedServices);
 		sacpEntry.setCompanyId(companyId);
 		sacpEntry.setCreateDate(now);
 		sacpEntry.setModifiedDate(now);
@@ -162,6 +163,7 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 		SACPEntry sacpEntry = sacpEntryPersistence.findByPrimaryKey(
 			sacpEntryId);
 
+		sacpEntry.setAllowedServices(allowedServices);
 		sacpEntry.setName(name);
 		sacpEntry.setTitleMap(titleMap);
 
