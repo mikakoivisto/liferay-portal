@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.service.access.control.profile.exception;
+package com.liferay.service.access.control.profile;
 
 import com.liferay.portal.kernel.exception.PortalException;
 

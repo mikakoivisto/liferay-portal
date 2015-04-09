@@ -12,30 +12,27 @@
  * details.
  */
 
-package com.liferay.service.access.control.profile.exception;
+package com.liferay.service.access.control.profile;
 
-import aQute.bnd.annotation.ProviderType;
-
-import com.liferay.portal.NoSuchModelException;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Tomas Polesovsky
  */
-@ProviderType
-public class NoSuchEntryException extends NoSuchModelException {
+public class SACPEntryTitleException extends PortalException {
 
-	public NoSuchEntryException() {
+	public SACPEntryTitleException() {
 	}
 
-	public NoSuchEntryException(String msg) {
+	public SACPEntryTitleException(String msg) {
 		super(msg);
 	}
 
-	public NoSuchEntryException(String msg, Throwable cause) {
+	public SACPEntryTitleException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public NoSuchEntryException(Throwable cause) {
+	public SACPEntryTitleException(Throwable cause) {
 		super(cause);
 	}
 
