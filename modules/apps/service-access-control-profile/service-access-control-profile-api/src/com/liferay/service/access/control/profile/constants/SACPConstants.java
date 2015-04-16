@@ -12,31 +12,20 @@
  * details.
  */
 
-package com.liferay.service.access.control.profile.exception;
-
-import aQute.bnd.annotation.ProviderType;
-
-import com.liferay.portal.NoSuchModelException;
+package com.liferay.service.access.control.profile.constants;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Mika Koivisto
  */
-@ProviderType
-public class NoSuchEntryException extends NoSuchModelException {
+public interface SACPConstants {
 
-	public NoSuchEntryException() {
-	}
+	public static String ACTION_ADD_SACP_ENTRY = "ADD_SACP_ENTRY";
 
-	public NoSuchEntryException(String msg) {
-		super(msg);
-	}
+	public static String PORTLET_ID =
+		"com_liferay_service_access_control_profile_web_portlet_SACPPortlet";
 
-	public NoSuchEntryException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public NoSuchEntryException(Throwable cause) {
-		super(cause);
-	}
+	public static String SACP_ENTRY_NAME_ALLOWED_CHARACTERS =
+		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+			"#:@-./_";
 
 }
