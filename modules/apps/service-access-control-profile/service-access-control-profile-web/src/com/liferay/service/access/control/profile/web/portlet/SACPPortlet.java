@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.service.access.control.profile.service.SACPEntryLocalService;
 import com.liferay.service.access.control.profile.service.SACPEntryService;
 
 import java.util.Locale;
@@ -64,7 +63,7 @@ public class SACPPortlet extends MVCPortlet {
 
 		long sacpEntryId = ParamUtil.getLong(actionRequest, "sacpEntryId");
 
-		_sacpEntryLocalService.deleteSACPEntry(sacpEntryId);
+		_sacpEntryService.deleteSACPEntry(sacpEntryId);
 	}
 
 	public void updateSACPEntry(
@@ -82,7 +81,7 @@ public class SACPPortlet extends MVCPortlet {
 			actionRequest);
 
 		if (sacpEntryId > 0) {
-			_sacpEntryLocalService.updateSACPEntry(
+			_sacpEntryService.updateSACPEntry(
 				sacpEntryId, allowedServices, name, titleMap, serviceContext);
 		}
 		else {
@@ -93,18 +92,10 @@ public class SACPPortlet extends MVCPortlet {
 	}
 
 	@Reference(unbind = "-")
-	protected void setSACPEntryLocalService(
-		SACPEntryLocalService sacpEntryLocalService) {
-
-		_sacpEntryLocalService = sacpEntryLocalService;
-	}
-
-	@Reference(unbind = "-")
 	protected void setSACPEntryService(SACPEntryService sacpEntryService) {
 		_sacpEntryService = sacpEntryService;
 	}
 
-	private SACPEntryLocalService _sacpEntryLocalService;
 	private SACPEntryService _sacpEntryService;
 
 }
