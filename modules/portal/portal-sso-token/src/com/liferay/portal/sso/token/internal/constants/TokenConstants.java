@@ -19,6 +19,6 @@ package com.liferay.portal.sso.token.internal.constants;
  */
 public class TokenConstants {
 
-	public static final String SERVICE_NAME = "com.liferay.sso.token";
+	public static final String SERVICE_NAME = "com.liferay.portal.sso.token";
 
 }
