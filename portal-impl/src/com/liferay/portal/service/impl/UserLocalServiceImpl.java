@@ -1217,22 +1217,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			return 0;
 		}
 
-		if (user.isDefaultUser()) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
-					"Basic authentication is disabled for the default " +
-						"user");
-			}
-
-			return 0;
-		}
-		else if (!user.isActive()) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
-					"Basic authentication is disabled for inactive user " +
-						user.getUserId());
-			}
-
+		if (!isUserAllowedToAuthenticate(user)) {
 			return 0;
 		}
 
@@ -1252,6 +1237,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		if (userPassword.equals(password) || userPassword.equals(encPassword)) {
 			return user.getUserId();
 		}
+
+		handleAuthenticationFailure(
+			login, authType, user, new HashMap<String, String[]>(),
+			new HashMap<String, String[]>());
 
 		return 0;
 	}
