@@ -3522,7 +3522,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		throws PortalException {
 
 		return searchUsers(
-			companyId, keywords, status, params, start, end, new Sort[] {sort});
+			companyId, keywords, status, params, start, end, new Sort[]{sort});
 	}
 
 	@Override
@@ -5849,20 +5849,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			return Authenticator.DNE;
 		}
 
-		if (user.isDefaultUser()) {
-			if (_log.isInfoEnabled()) {
-				_log.info("Authentication is disabled for the default user");
-			}
-
-			return Authenticator.DNE;
-		}
-		else if (!user.isActive()) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
-					"Authentication is disabled for inactive user " +
-						user.getUserId());
-			}
-
+		if (!isUserAllowedToAuthenticate(user)) {
 			return Authenticator.FAILURE;
 		}
 
@@ -5872,13 +5859,6 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 			userPersistence.update(user);
 		}
-
-		// Check password policy to see if the is account locked out or if the
-		// password is expired
-
-		checkLockout(user);
-
-		checkPasswordExpired(user);
 
 		// Authenticate against the User_ table
 
@@ -5948,74 +5928,121 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// Execute code triggered by authentication failure
 
 		if (authResult == Authenticator.FAILURE) {
-			try {
-				if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
-					AuthPipeline.onFailureByEmailAddress(
-						PropsKeys.AUTH_FAILURE, companyId, login, headerMap,
-						parameterMap);
-				}
-				else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
-					AuthPipeline.onFailureByScreenName(
-						PropsKeys.AUTH_FAILURE, companyId, login, headerMap,
-						parameterMap);
-				}
-				else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
-					AuthPipeline.onFailureByUserId(
-						PropsKeys.AUTH_FAILURE, companyId, userId, headerMap,
-						parameterMap);
-				}
-
-				user = userPersistence.fetchByPrimaryKey(user.getUserId());
-
-				if (user == null) {
-					return Authenticator.DNE;
-				}
-
-				// Let LDAP handle max failure event
-
-				if (!LDAPSettingsUtil.isPasswordPolicyEnabled(
-						user.getCompanyId())) {
-
-					PasswordPolicy passwordPolicy = user.getPasswordPolicy();
-
-					user = userPersistence.fetchByPrimaryKey(user.getUserId());
-
-					int failedLoginAttempts = user.getFailedLoginAttempts();
-					int maxFailures = passwordPolicy.getMaxFailure();
-
-					if ((failedLoginAttempts >= maxFailures) &&
-						(maxFailures != 0)) {
-
-						if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
-							AuthPipeline.onMaxFailuresByEmailAddress(
-								PropsKeys.AUTH_MAX_FAILURES, companyId, login,
-								headerMap, parameterMap);
-						}
-						else if (authType.equals(
-									CompanyConstants.AUTH_TYPE_SN)) {
-
-							AuthPipeline.onMaxFailuresByScreenName(
-								PropsKeys.AUTH_MAX_FAILURES, companyId, login,
-								headerMap, parameterMap);
-						}
-						else if (authType.equals(
-									CompanyConstants.AUTH_TYPE_ID)) {
-
-							AuthPipeline.onMaxFailuresByUserId(
-								PropsKeys.AUTH_MAX_FAILURES, companyId, userId,
-								headerMap, parameterMap);
-						}
-					}
-				}
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
+			authResult = handleAuthenticationFailure(
+				login, authType, user, headerMap, parameterMap);
 		}
 
 		// PLACEHOLDER 02
 
 		return authResult;
+	}
+
+	protected boolean isUserAllowedToAuthenticate(User user)
+		throws PortalException {
+
+		if (user.isDefaultUser()) {
+			if (_log.isInfoEnabled()) {
+				_log.info("Authentication is disabled for the default user");
+			}
+
+			return false;
+		}
+		else if (!user.isActive()) {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Authentication is disabled for inactive user " +
+						user.getUserId());
+			}
+
+			return false;
+		}
+
+		// Check password policy to see if the is account locked out or if the
+		// password is expired
+
+		checkLockout(user);
+
+		checkPasswordExpired(user);
+
+		return true;
+	}
+
+	protected int handleAuthenticationFailure(
+		String login, String authType, User user,
+		Map<String, String[]> headerMap, Map<String, String[]> parameterMap) {
+
+		if (user == null) {
+			return Authenticator.DNE;
+		}
+
+		long companyId = user.getCompanyId();
+		long userId = user.getUserId();
+
+		try {
+			if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+				AuthPipeline.onFailureByEmailAddress(
+					PropsKeys.AUTH_FAILURE, companyId, login, headerMap,
+					parameterMap);
+			}
+			else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+				AuthPipeline.onFailureByScreenName(
+					PropsKeys.AUTH_FAILURE, companyId, login, headerMap,
+					parameterMap);
+			}
+			else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+				AuthPipeline.onFailureByUserId(
+					PropsKeys.AUTH_FAILURE, companyId, userId, headerMap,
+					parameterMap);
+			}
+
+			user = userPersistence.fetchByPrimaryKey(user.getUserId());
+
+			if (user == null) {
+				return Authenticator.DNE;
+			}
+
+			// Let LDAP handle max failure event
+
+			if (!LDAPSettingsUtil.isPasswordPolicyEnabled(
+				user.getCompanyId())) {
+
+				PasswordPolicy passwordPolicy = user.getPasswordPolicy();
+
+				user = userPersistence.fetchByPrimaryKey(user.getUserId());
+
+				int failedLoginAttempts = user.getFailedLoginAttempts();
+				int maxFailures = passwordPolicy.getMaxFailure();
+
+				if ((failedLoginAttempts >= maxFailures) &&
+					(maxFailures != 0)) {
+
+					if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+						AuthPipeline.onMaxFailuresByEmailAddress(
+							PropsKeys.AUTH_MAX_FAILURES, companyId, login,
+							headerMap, parameterMap);
+					}
+					else if (authType.equals(
+						CompanyConstants.AUTH_TYPE_SN)) {
+
+						AuthPipeline.onMaxFailuresByScreenName(
+							PropsKeys.AUTH_MAX_FAILURES, companyId, login,
+							headerMap, parameterMap);
+					}
+					else if (authType.equals(
+						CompanyConstants.AUTH_TYPE_ID)) {
+
+						AuthPipeline.onMaxFailuresByUserId(
+							PropsKeys.AUTH_MAX_FAILURES, companyId, userId,
+							headerMap, parameterMap);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		return Authenticator.FAILURE;
 	}
 
 	protected SearchContext buildSearchContext(
