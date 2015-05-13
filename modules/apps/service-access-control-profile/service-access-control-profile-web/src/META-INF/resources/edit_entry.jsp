@@ -18,6 +18,7 @@
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
+
 long sacpEntryId = ParamUtil.getLong(request, "sacpEntryId");
 
 SACPEntry sacpEntry = null;
