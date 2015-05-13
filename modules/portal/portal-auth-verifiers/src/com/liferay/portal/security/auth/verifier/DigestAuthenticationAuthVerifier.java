@@ -40,10 +40,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	property = {
-		"hosts.allowed=",
-		"urls.includes=N/A"
-	}
+	property = {"hosts.allowed=", "urls.includes=N/A"}
 )
 public class DigestAuthenticationAuthVerifier implements AuthVerifier {
 
