@@ -21,7 +21,8 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
-import com.liferay.service.access.control.profile.constants.SACPConstants;
+import com.liferay.service.access.control.profile.constants.SACPActionKeys;
+import com.liferay.service.access.control.profile.constants.SACPPortletKeys;
 import com.liferay.service.access.control.profile.model.SACPEntry;
 import com.liferay.service.access.control.profile.service.base.SACPEntryServiceBaseImpl;
 import com.liferay.service.access.control.profile.service.permission.SACPEntryPermission;
@@ -43,8 +44,8 @@ public class SACPEntryServiceImpl extends SACPEntryServiceBaseImpl {
 		throws PortalException {
 
 		PortletPermissionUtil.check(
-			getPermissionChecker(), SACPConstants.PORTLET_ID,
-			SACPConstants.ACTION_ADD_SACP_ENTRY);
+			getPermissionChecker(), SACPPortletKeys.PORTLET_ID,
+			SACPActionKeys.ACTION_ADD_SACP_ENTRY);
 
 		return sacpEntryLocalService.addSACPEntry(
 			getUserId(), allowedServices, name, titleMap, serviceContext);

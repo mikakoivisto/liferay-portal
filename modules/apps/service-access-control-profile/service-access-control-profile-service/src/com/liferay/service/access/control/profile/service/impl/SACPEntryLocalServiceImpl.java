@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.service.access.control.profile.constants.SACPConstants;
+import com.liferay.service.access.control.profile.constants.SACPEntryConstants;
 import com.liferay.service.access.control.profile.exception.DuplicateSACPEntryNameException;
 import com.liferay.service.access.control.profile.exception.SACPEntryNameException;
 import com.liferay.service.access.control.profile.exception.SACPEntryTitleException;
@@ -182,7 +182,7 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 		for (int i = 0; i < name.length(); i++) {
 			char character = name.charAt(i);
 
-			if (SACPConstants.SACP_ENTRY_NAME_ALLOWED_CHARACTERS.indexOf(
+			if (SACPEntryConstants.NAME_ALLOWED_CHARACTERS.indexOf(
 					character) < 0) {
 
 				throw new SACPEntryNameException(
