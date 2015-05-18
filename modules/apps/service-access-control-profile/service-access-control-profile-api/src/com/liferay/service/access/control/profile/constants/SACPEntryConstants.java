@@ -17,14 +17,9 @@ package com.liferay.service.access.control.profile.constants;
 /**
  * @author Mika Koivisto
  */
-public interface SACPConstants {
+public interface SACPEntryConstants {
 
-	public static String ACTION_ADD_SACP_ENTRY = "ADD_SACP_ENTRY";
-
-	public static String PORTLET_ID =
-		"com_liferay_service_access_control_profile_web_portlet_SACPPortlet";
-
-	public static String SACP_ENTRY_NAME_ALLOWED_CHARACTERS =
+	public static String NAME_ALLOWED_CHARACTERS =
 		"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
 			"#:@./_-";
 
