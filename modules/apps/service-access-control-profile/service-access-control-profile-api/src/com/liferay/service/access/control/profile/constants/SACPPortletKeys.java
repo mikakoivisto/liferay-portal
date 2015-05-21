@@ -19,7 +19,7 @@ package com.liferay.service.access.control.profile.constants;
  */
 public class SACPPortletKeys {
 
-	public static String PORTLET_ID =
+	public static String SERVICE_ACCESS_CONTROL_PROFILE =
 		"com_liferay_service_access_control_profile_web_portlet_SACPPortlet";
 
 }
