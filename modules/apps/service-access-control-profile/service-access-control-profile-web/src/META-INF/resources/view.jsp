@@ -63,7 +63,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 		/>
 	</liferay-ui:search-container-row>
 
-	<c:if test="<%= PortletPermissionUtil.contains(permissionChecker, SACPPortletKeys.PORTLET_ID, SACPActionKeys.ACTION_ADD_SACP_ENTRY) %>">
+	<c:if test="<%= PortletPermissionUtil.contains(permissionChecker, SACPPortletKeys.SERVICE_ACCESS_CONTROL_PROFILE, SACPActionKeys.ACTION_ADD_SACP_ENTRY) %>">
 		<portlet:renderURL var="addSACPEntryURL">
 			<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
