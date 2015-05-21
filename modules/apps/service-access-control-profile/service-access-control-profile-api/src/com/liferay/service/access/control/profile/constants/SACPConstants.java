@@ -17,9 +17,9 @@ package com.liferay.service.access.control.profile.constants;
 /**
  * @author Mika Koivisto
  */
-public class SACPPortletKeys {
+public class SACPConstants {
 
-	public static String SERVICE_ACCESS_CONTROL_PROFILE =
-		"com_liferay_service_access_control_profile_web_portlet_SACPPortlet";
+	public static final String SERVICE_NAME =
+		"com.liferay.service.access.control.profile";
 
 }
