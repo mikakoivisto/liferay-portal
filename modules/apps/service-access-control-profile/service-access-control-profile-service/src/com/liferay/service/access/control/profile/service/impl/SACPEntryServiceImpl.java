@@ -44,7 +44,8 @@ public class SACPEntryServiceImpl extends SACPEntryServiceBaseImpl {
 		throws PortalException {
 
 		PortletPermissionUtil.check(
-			getPermissionChecker(), SACPPortletKeys.PORTLET_ID,
+			getPermissionChecker(),
+			SACPPortletKeys.SERVICE_ACCESS_CONTROL_PROFILE,
 			SACPActionKeys.ACTION_ADD_SACP_ENTRY);
 
 		return sacpEntryLocalService.addSACPEntry(
