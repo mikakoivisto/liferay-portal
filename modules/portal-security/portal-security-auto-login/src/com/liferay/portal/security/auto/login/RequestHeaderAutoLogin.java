@@ -19,17 +19,19 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auto.login.AutoLogin;
 import com.liferay.portal.kernel.security.auto.login.BaseAutoLogin;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
-import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
+import com.liferay.portal.kernel.settings.SettingsException;
+import com.liferay.portal.kernel.settings.SettingsFactory;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.auto.login.configuration.RequestHeaderAutoLoginConfiguration;
+import com.liferay.portal.security.auto.login.constants.AutoLoginConstants;
 import com.liferay.portal.security.exportimport.UserImporterUtil;
 import com.liferay.portal.security.sso.SSOUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PrefsPropsUtil;
-import com.liferay.portal.util.PropsValues;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -40,12 +42,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Wesley Gong
  */
 @Component(
+	configurationPid = "com.liferay.portal.security.auto.login.configuration.RequestHeaderAutoLoginConfiguration",
 	immediate = true,
 	property = {"request.header.auth.hosts.allowed=255.255.255.255"},
 	service = AutoLogin.class
@@ -92,10 +96,7 @@ public class RequestHeaderAutoLogin extends BaseAutoLogin {
 
 		User user = null;
 
-		if (PrefsPropsUtil.getBoolean(
-				companyId, PropsKeys.REQUEST_HEADER_AUTH_IMPORT_FROM_LDAP,
-				PropsValues.REQUEST_HEADER_AUTH_IMPORT_FROM_LDAP)) {
-
+		if (isLDAPImportEnabled(companyId)) {
 			try {
 				user = UserImporterUtil.importUser(
 					companyId, StringPool.BLANK, screenName);
@@ -118,9 +119,33 @@ public class RequestHeaderAutoLogin extends BaseAutoLogin {
 		return credentials;
 	}
 
+	protected boolean isLDAPImportEnabled(long companyId) {
+		try {
+			RequestHeaderAutoLoginConfiguration configuration =
+				_settingsFactory.getSettings(
+					RequestHeaderAutoLoginConfiguration.class,
+					new CompanyServiceSettingsLocator(
+						companyId, AutoLoginConstants.SERVICE_NAME));
+
+			return configuration.importFromLDAP();
+		}
+		catch (SettingsException se) {
+			_log.error(
+				"Unable to get RequestHeaderAutoLogin configuration", se);
+		}
+
+		return false;
+	}
+
+	@Reference
+	protected void setSettingsFactory(SettingsFactory settingsFactory) {
+		_settingsFactory = settingsFactory;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		RequestHeaderAutoLogin.class);
 
 	private final Set<String> _hostsAllowed = new HashSet<>();
+	private volatile SettingsFactory _settingsFactory;
 
 }
