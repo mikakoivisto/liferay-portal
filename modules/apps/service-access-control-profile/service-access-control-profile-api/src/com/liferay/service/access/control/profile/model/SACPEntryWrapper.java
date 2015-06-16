@@ -61,6 +61,7 @@ public class SACPEntryWrapper implements SACPEntry, ModelWrapper<SACPEntry> {
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("allowedServiceSignatures", getAllowedServiceSignatures());
+		attributes.put("defaultProfile", getDefaultProfile());
 		attributes.put("name", getName());
 		attributes.put("title", getTitle());
 
@@ -116,6 +117,12 @@ public class SACPEntryWrapper implements SACPEntry, ModelWrapper<SACPEntry> {
 
 		if (allowedServiceSignatures != null) {
 			setAllowedServiceSignatures(allowedServiceSignatures);
+		}
+
+		Boolean defaultProfile = (Boolean)attributes.get("defaultProfile");
+
+		if (defaultProfile != null) {
+			setDefaultProfile(defaultProfile);
 		}
 
 		String name = (String)attributes.get("name");
@@ -185,6 +192,16 @@ public class SACPEntryWrapper implements SACPEntry, ModelWrapper<SACPEntry> {
 	@Override
 	public java.lang.String getDefaultLanguageId() {
 		return _sacpEntry.getDefaultLanguageId();
+	}
+
+	/**
+	* Returns the default profile of this s a c p entry.
+	*
+	* @return the default profile of this s a c p entry
+	*/
+	@Override
+	public boolean getDefaultProfile() {
+		return _sacpEntry.getDefaultProfile();
 	}
 
 	@Override
@@ -364,6 +381,16 @@ public class SACPEntryWrapper implements SACPEntry, ModelWrapper<SACPEntry> {
 		return _sacpEntry.isCachedModel();
 	}
 
+	/**
+	* Returns <code>true</code> if this s a c p entry is default profile.
+	*
+	* @return <code>true</code> if this s a c p entry is default profile; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isDefaultProfile() {
+		return _sacpEntry.isDefaultProfile();
+	}
+
 	@Override
 	public boolean isEscapedModel() {
 		return _sacpEntry.isEscapedModel();
@@ -426,6 +453,16 @@ public class SACPEntryWrapper implements SACPEntry, ModelWrapper<SACPEntry> {
 	@Override
 	public void setCreateDate(Date createDate) {
 		_sacpEntry.setCreateDate(createDate);
+	}
+
+	/**
+	* Sets whether this s a c p entry is default profile.
+	*
+	* @param defaultProfile the default profile of this s a c p entry
+	*/
+	@Override
+	public void setDefaultProfile(boolean defaultProfile) {
+		_sacpEntry.setDefaultProfile(defaultProfile);
 	}
 
 	@Override
