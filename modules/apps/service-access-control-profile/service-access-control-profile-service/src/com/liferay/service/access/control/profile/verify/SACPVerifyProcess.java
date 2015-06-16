@@ -12,12 +12,13 @@
  * details.
  */
 
-package com.liferay.service.access.control.profile;
+package com.liferay.service.access.control.profile.verify;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.util.PortalInstances;
+import com.liferay.portal.verify.VerifyProcess;
 import com.liferay.service.access.control.profile.service.SACPEntryLocalService;
 
 import javax.servlet.ServletContext;
@@ -25,15 +26,21 @@ import javax.servlet.ServletContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.springframework.context.ApplicationContext;
 
 /**
  * @author Mika Koivisto
  */
-@Component(immediate = true)
-public class DefaultProfileChecker {
+@Component(immediate = true, service = SACPVerifyProcess.class)
+public class SACPVerifyProcess extends VerifyProcess {
 
 	@Activate
-	protected void activate() {
+	@Override
+	protected void doVerify() throws Exception {
+		verifyDefaultProfile();
+	}
+
+	protected void verifyDefaultProfile() {
 		for (long companyId : PortalInstances.getCompanyIds()) {
 			try {
 				_sacpEntryLocalService.checkDefaultProfile(companyId);
@@ -44,6 +51,16 @@ public class DefaultProfileChecker {
 					"for companyId " + companyId, pe);
 			}
 		}
+	}
+
+	@Reference(
+		target =
+			"(org.springframework.context.service.name=" +
+				"com.liferay.service.access.control.profile.service)",
+		unbind = "-"
+	)
+	protected void setApplicationContext(
+		ApplicationContext applicationContext) {
 	}
 
 	@Reference
@@ -58,7 +75,7 @@ public class DefaultProfileChecker {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		DefaultProfileChecker.class);
+		SACPVerifyProcess.class);
 
 	private SACPEntryLocalService _sacpEntryLocalService;
 
