@@ -106,7 +106,8 @@ public class CreateAccountAction extends PortletAction {
 		Company company = themeDisplay.getCompany();
 
 		if (!company.isStrangers()) {
-			throw new PrincipalException();
+			throw new PrincipalException(
+				"Company does not allow strangers to access portal");
 		}
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
@@ -357,7 +358,8 @@ public class CreateAccountAction extends PortletAction {
 			themeDisplay.getCompanyId(), emailAddress);
 
 		if (anonymousUser.getStatus() != WorkflowConstants.STATUS_INCOMPLETE) {
-			throw new PrincipalException();
+			throw new PrincipalException(
+				"User status incomplete {status=" + anonymousUser.getStatus() + "}");
 		}
 
 		UserLocalServiceUtil.deleteUser(anonymousUser.getUserId());
