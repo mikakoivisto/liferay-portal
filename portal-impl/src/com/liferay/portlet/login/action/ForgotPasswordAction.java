@@ -71,8 +71,7 @@ public class ForgotPasswordAction extends PortletAction {
 		Company company = themeDisplay.getCompany();
 
 		if (!company.isSendPassword() && !company.isSendPasswordResetLink()) {
-			throw new PrincipalException(
-				"Company password request not allowed");
+			throw new PrincipalException("Unable to reset password");
 		}
 
 		try {
@@ -226,7 +225,7 @@ public class ForgotPasswordAction extends PortletAction {
 
 		if (!user.isActive()) {
 			throw new UserActiveException(
-				"User " + user.getScreenName() +" is not active");
+				"User {uuid=" + user.getUuid() +"} is not active");
 		}
 
 		UserLocalServiceUtil.checkLockout(user);
