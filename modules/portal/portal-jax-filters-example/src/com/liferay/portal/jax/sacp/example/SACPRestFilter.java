@@ -19,6 +19,9 @@ import org.osgi.service.component.annotations.Component;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
+
+import com.liferay.portal.kernel.security.access.control.AccessControlThreadLocal;
+
 import java.io.IOException;
 
 /**
@@ -41,6 +44,8 @@ public class SACPRestFilter implements ContainerRequestFilter {
 		String path = requestContext.getUriInfo().getPath();
 
 		String operationName = method + " -> " + path;
+
+		AccessControlThreadLocal.setRemoteAccess(true);
 
 		System.out.println("OPERATION NAME: " + operationName);
 	}

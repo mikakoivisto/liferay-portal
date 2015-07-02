@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Component;
 	immediate = true,
 	property = {
 		"auth.verifier.PortalSessionAuthVerifier.hosts.allowed=",
-		"auth.verifier.PortalSessionAuthVerifier.urls.includes=/api/json/*,/api/jsonws/*,/c/portal/json_service/*"
+		"auth.verifier.PortalSessionAuthVerifier.urls.includes=/api/json/*,/api/jsonws/*,/c/portal/json_service/*,/o/ws-example/*"
 	}
 )
 public class PortalSessionAuthVerifier implements AuthVerifier {

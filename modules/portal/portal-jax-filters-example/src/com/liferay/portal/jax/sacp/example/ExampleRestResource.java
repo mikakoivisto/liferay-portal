@@ -14,11 +14,18 @@
 
 package com.liferay.portal.jax.sacp.example;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserService;
+import com.liferay.portal.service.UserServiceUtil;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Carlos Sierra Andrés
@@ -28,8 +35,8 @@ public class ExampleRestResource {
 
 	@GET
 	@Produces("text/plain")
-	public String exampleGet() {
-		return "Hey... a GET";
+	public String exampleGet() throws PortalException {
+		return "Hey... a GET " + UserServiceUtil.getUserByScreenName(20142, "joebloggs");
 	}
 
 	@POST
@@ -37,4 +44,11 @@ public class ExampleRestResource {
 	public String examplePost(String body) {
 		return "wow... a POST";
 	}
+
+	@Reference
+	public void setUserService(UserService userService) {
+		_userService = userService;
+	}
+
+	private volatile UserService _userService;
 }
