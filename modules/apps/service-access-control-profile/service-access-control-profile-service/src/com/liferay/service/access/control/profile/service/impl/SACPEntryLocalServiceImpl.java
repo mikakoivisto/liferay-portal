@@ -99,26 +99,46 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 			new CompanyServiceSettingsLocator(
 				companyId, SACPConstants.SERVICE_NAME));
 
+		SACPEntry appSacpEntry = sacpEntryPersistence.fetchByC_N(
+			companyId, sacpConfiguration.defaultApplicationSACPEntryName());
+
 		SACPEntry sacpEntry = sacpEntryPersistence.fetchByC_N(
 			companyId, sacpConfiguration.defaultSACPEntryName());
 
-		if (sacpEntry != null) {
+		if ((appSacpEntry != null) && (sacpEntry != null)) {
 			return;
 		}
 
 		long defaultUserId = userLocalService.getDefaultUserId(companyId);
 
-		Map<Locale, String> titleMap = new HashMap<>();
+		if (appSacpEntry == null) {
+			Map<Locale, String> titleMap = new HashMap<>();
 
-		titleMap.put(
-			LocaleUtil.getDefault(),
-			sacpConfiguration.defaultSACPEntryDescription());
+			titleMap.put(
+				LocaleUtil.getDefault(),
+				sacpConfiguration.defaultApplicationSACPEntryDescription());
 
-		addSACPEntry(
-			defaultUserId,
-			sacpConfiguration.defaultSACPEntryServiceSignatures(), true,
-			sacpConfiguration.defaultSACPEntryName(), titleMap,
-			new ServiceContext());
+			addSACPEntry(
+				defaultUserId,
+				sacpConfiguration.
+					defaultApplicationSACPEntryServiceSignatures(),
+				true, sacpConfiguration.defaultApplicationSACPEntryName(),
+				titleMap, new ServiceContext());
+		}
+
+		if (sacpEntry == null) {
+			Map<Locale, String> titleMap = new HashMap<>();
+
+			titleMap.put(
+				LocaleUtil.getDefault(),
+				sacpConfiguration.defaultSACPEntryDescription());
+
+			addSACPEntry(
+				defaultUserId,
+				sacpConfiguration.defaultSACPEntryServiceSignatures(), true,
+				sacpConfiguration.defaultSACPEntryName(), titleMap,
+				new ServiceContext());
+		}
 	}
 
 	@Override
