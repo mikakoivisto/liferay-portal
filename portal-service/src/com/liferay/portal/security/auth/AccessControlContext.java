@@ -28,6 +28,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AccessControlContext {
 
+	public boolean isTokenAuthentication() {
+		return _tokenAuthentication;
+	}
+
 	public AuthVerifierResult getAuthVerifierResult() {
 		return _authVerifierResult;
 	}
@@ -56,9 +60,14 @@ public class AccessControlContext {
 		_response = response;
 	}
 
+	public void setTokenAuthentication(boolean tokenAuthentication) {
+		_tokenAuthentication = tokenAuthentication;
+	}
+
 	private AuthVerifierResult _authVerifierResult;
 	private HttpServletRequest _request;
 	private HttpServletResponse _response;
 	private final Map<String, Object> _settings = new HashMap<>();
+	private boolean _tokenAuthentication;
 
 }
