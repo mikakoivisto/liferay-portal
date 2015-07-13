@@ -30,8 +30,8 @@
 	<classpathentry kind="lib" path="/portal-master/util-java/util-java.jar" />
 	<classpathentry kind="lib" path="/portal-master/util-taglib/util-taglib.jar" />
 	<classpathentry kind="lib" path="lib/com.liferay.portal.spring.extender.jar" />
-	<classpathentry kind="lib" path="lib/com.liferay.service.access.control.profile.api.jar" />
-	<classpathentry kind="lib" path="lib/com.liferay.service.access.control.profile.service.jar" />
+	<classpathentry kind="lib" path="lib/com.liferay.service.access.policy.api.jar" />
+	<classpathentry kind="lib" path="lib/com.liferay.service.access.policy.service.jar" />
 	<classpathentry kind="lib" path="lib/org.osgi.core.jar" />
 	<classpathentry kind="lib" path="/portal-master/.ivy/cache/com.liferay/aQute.bnd/jars/aQute.bnd-2.3.0.jar" />
 	<classpathentry kind="lib" path="/portal-master/.ivy/cache/org.jboss.arquillian.core/arquillian-core-api/jars/arquillian-core-api-1.1.7.Final.jar" />
