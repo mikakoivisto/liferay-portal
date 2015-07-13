@@ -31,7 +31,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 	/>
 
 	<liferay-ui:search-container-row
-		className="com.liferay.service.access.control.profile.model.SACPEntry"
+		className="com.liferay.service.access.policy.model.SACPEntry"
 		escapedModel="<%= true %>"
 		keyProperty="sacpEntryId"
 		modelVar="sacpEntry"

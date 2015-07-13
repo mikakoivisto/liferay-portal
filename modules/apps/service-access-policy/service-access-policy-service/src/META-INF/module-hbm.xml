@@ -2,8 +2,8 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false" auto-import="false">
-	<import class="com.liferay.service.access.control.profile.model.SACPEntry" />
-	<class name="com.liferay.service.access.control.profile.model.impl.SACPEntryImpl" table="SACPEntry">
+	<import class="com.liferay.service.access.policy.model.SACPEntry" />
+	<class name="com.liferay.service.access.policy.model.impl.SACPEntryImpl" table="SACPEntry">
 		<id name="sacpEntryId" type="long">
 			<generator class="assigned" />
 		</id>
