@@ -1,5 +1,5 @@
-Bundle-Name: Liferay Service Access Control Profile Service
-Bundle-SymbolicName: com.liferay.service.access.control.profile.service
+Bundle-Name: Liferay Service Access Policy Service
+Bundle-SymbolicName: com.liferay.service.access.policy.service
 Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.service.access.control.profile.service.permission

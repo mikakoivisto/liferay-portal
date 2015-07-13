@@ -20,8 +20,8 @@
 	<classpathentry kind="lib" path="lib/com.liferay.application.list.api.jar" />
 	<classpathentry kind="lib" path="lib/com.liferay.osgi.service.tracker.map.jar" />
 	<classpathentry kind="lib" path="lib/com.liferay.portal.spring.extender.jar" />
-	<classpathentry kind="lib" path="lib/com.liferay.service.access.control.profile.api.jar" />
-	<classpathentry kind="lib" path="lib/com.liferay.service.access.control.profile.service.jar" />
+	<classpathentry kind="lib" path="lib/com.liferay.service.access.policy.api.jar" />
+	<classpathentry kind="lib" path="lib/com.liferay.service.access.policy.service.jar" />
 	<classpathentry kind="lib" path="lib/org.apache.felix.dependencymanager.jar" />
 	<classpathentry kind="lib" path="lib/org.apache.felix.dependencymanager.shell.jar" />
 	<classpathentry kind="lib" path="lib/org.apache.felix.gogo.runtime.jar" />
