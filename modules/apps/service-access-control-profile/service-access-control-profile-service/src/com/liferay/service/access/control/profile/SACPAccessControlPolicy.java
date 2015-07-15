@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.security.access.control.AccessControlUtil;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.security.access.control.BaseAccessControlPolicy;
 import com.liferay.portal.kernel.security.access.control.profile.ServiceAccessControlProfileThreadLocal;
+import com.liferay.portal.kernel.security.auth.verifier.AuthVerifierResult;
 import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.SettingsException;
 import com.liferay.portal.kernel.settings.SettingsFactory;
@@ -85,16 +86,28 @@ public class SACPAccessControlPolicy extends BaseAccessControlPolicy {
 						serviceAccessControlProfileNames);
 			}
 
+			boolean passwordBasedAuthentication = false;
+
 			AccessControlContext accessControlContext =
 				AccessControlUtil.getAccessControlContext();
 
-			if (accessControlContext.isTokenAuthentication()) {
+			if (accessControlContext != null) {
+				AuthVerifierResult authVerifierResult =
+					accessControlContext.getAuthVerifierResult();
+
+				if (authVerifierResult != null) {
+					passwordBasedAuthentication =
+						authVerifierResult.isPasswordBasedAuthentication();
+				}
+			}
+
+			if (passwordBasedAuthentication) {
 				serviceAccessControlProfileNames.add(
-					sacpConfiguration.defaultApplicationSACPEntryName());
+					sacpConfiguration.defaultSACPEntryName());
 			}
 			else {
 				serviceAccessControlProfileNames.add(
-					sacpConfiguration.defaultSACPEntryName());
+					sacpConfiguration.defaultApplicationSACPEntryName());
 			}
 		}
 

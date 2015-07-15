@@ -44,10 +44,6 @@ public class AccessControlContext {
 		return _settings;
 	}
 
-	public boolean isTokenAuthentication() {
-		return _tokenAuthentication;
-	}
-
 	public void setAuthVerifierResult(AuthVerifierResult authVerifierResult) {
 		_authVerifierResult = authVerifierResult;
 	}
@@ -60,14 +56,9 @@ public class AccessControlContext {
 		_response = response;
 	}
 
-	public void setTokenAuthentication(boolean tokenAuthentication) {
-		_tokenAuthentication = tokenAuthentication;
-	}
-
 	private AuthVerifierResult _authVerifierResult;
 	private HttpServletRequest _request;
 	private HttpServletResponse _response;
 	private final Map<String, Object> _settings = new HashMap<>();
-	private boolean _tokenAuthentication;
 
 }
