@@ -25,8 +25,11 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.service.access.control.profile.configuration.SACPConfiguration;
 import com.liferay.service.access.control.profile.constants.SACPConstants;
@@ -111,6 +114,9 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 
 		long defaultUserId = userLocalService.getDefaultUserId(companyId);
 
+		Role guestRole = roleLocalService.getRole(
+			companyId, RoleConstants.GUEST);
+
 		if (appSacpEntry == null) {
 			Map<Locale, String> titleMap = new HashMap<>();
 
@@ -118,12 +124,18 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 				LocaleUtil.getDefault(),
 				sacpConfiguration.defaultApplicationSACPEntryDescription());
 
-			addSACPEntry(
+			appSacpEntry = addSACPEntry(
 				defaultUserId,
 				sacpConfiguration.
 					defaultApplicationSACPEntryServiceSignatures(),
 				true, sacpConfiguration.defaultApplicationSACPEntryName(),
 				titleMap, new ServiceContext());
+
+			resourcePermissionLocalService.setResourcePermissions(
+				appSacpEntry.getCompanyId(), SACPEntry.class.getName(),
+				ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(appSacpEntry.getSacpEntryId()),
+				guestRole.getRoleId(), new String[] {ActionKeys.VIEW});
 		}
 
 		if (userSacpEntry == null) {
@@ -133,11 +145,17 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 				LocaleUtil.getDefault(),
 				sacpConfiguration.defaultUserSACPEntryDescription());
 
-			addSACPEntry(
+			userSacpEntry = addSACPEntry(
 				defaultUserId,
 				sacpConfiguration.defaultUserSACPEntryServiceSignatures(), true,
 				sacpConfiguration.defaultUserSACPEntryName(), titleMap,
 				new ServiceContext());
+
+			resourcePermissionLocalService.setResourcePermissions(
+				userSacpEntry.getCompanyId(), SACPEntry.class.getName(),
+				ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(userSacpEntry.getSacpEntryId()),
+				guestRole.getRoleId(), new String[] {ActionKeys.VIEW});
 		}
 	}
 
