@@ -26,7 +26,8 @@ import aQute.bnd.annotation.metatype.Meta;
 public interface SACPConfiguration {
 
 	@Meta.AD(
-		deflt = "Default Application Service Access Profile", required = false
+		deflt = "Default Service Access Profile for Applications",
+		required = false
 	)
 	public String defaultApplicationSACPEntryDescription();
 
@@ -36,14 +37,16 @@ public interface SACPConfiguration {
 	@Meta.AD(deflt = "", required = false)
 	public String defaultApplicationSACPEntryServiceSignatures();
 
-	@Meta.AD(deflt = "Default Service Access Profile", required = false)
-	public String defaultSACPEntryDescription();
+	@Meta.AD(
+		deflt = "Default Service Access Profile for User", required = false
+	)
+	public String defaultUserSACPEntryDescription();
 
-	@Meta.AD(deflt = "DEFAULT", required = false)
-	public String defaultSACPEntryName();
+	@Meta.AD(deflt = "DEFAULT_USER", required = false)
+	public String defaultUserSACPEntryName();
 
 	@Meta.AD(deflt = "*", required = false)
-	public String defaultSACPEntryServiceSignatures();
+	public String defaultUserSACPEntryServiceSignatures();
 
 	@Meta.AD(deflt = "true", required = false)
 	public boolean requireDefaultSACPEntry();

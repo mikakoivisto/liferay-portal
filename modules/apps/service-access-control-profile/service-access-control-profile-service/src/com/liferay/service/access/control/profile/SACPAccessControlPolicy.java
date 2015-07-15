@@ -103,7 +103,7 @@ public class SACPAccessControlPolicy extends BaseAccessControlPolicy {
 
 			if (passwordBasedAuthentication) {
 				serviceAccessControlProfileNames.add(
-					sacpConfiguration.defaultSACPEntryName());
+					sacpConfiguration.defaultUserSACPEntryName());
 			}
 			else {
 				serviceAccessControlProfileNames.add(

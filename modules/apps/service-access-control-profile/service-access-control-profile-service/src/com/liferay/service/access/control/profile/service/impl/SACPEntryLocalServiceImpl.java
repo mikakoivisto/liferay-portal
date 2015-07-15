@@ -102,10 +102,10 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 		SACPEntry appSacpEntry = sacpEntryPersistence.fetchByC_N(
 			companyId, sacpConfiguration.defaultApplicationSACPEntryName());
 
-		SACPEntry sacpEntry = sacpEntryPersistence.fetchByC_N(
-			companyId, sacpConfiguration.defaultSACPEntryName());
+		SACPEntry userSacpEntry = sacpEntryPersistence.fetchByC_N(
+			companyId, sacpConfiguration.defaultUserSACPEntryName());
 
-		if ((appSacpEntry != null) && (sacpEntry != null)) {
+		if ((appSacpEntry != null) && (userSacpEntry != null)) {
 			return;
 		}
 
@@ -126,17 +126,17 @@ public class SACPEntryLocalServiceImpl extends SACPEntryLocalServiceBaseImpl {
 				titleMap, new ServiceContext());
 		}
 
-		if (sacpEntry == null) {
+		if (userSacpEntry == null) {
 			Map<Locale, String> titleMap = new HashMap<>();
 
 			titleMap.put(
 				LocaleUtil.getDefault(),
-				sacpConfiguration.defaultSACPEntryDescription());
+				sacpConfiguration.defaultUserSACPEntryDescription());
 
 			addSACPEntry(
 				defaultUserId,
-				sacpConfiguration.defaultSACPEntryServiceSignatures(), true,
-				sacpConfiguration.defaultSACPEntryName(), titleMap,
+				sacpConfiguration.defaultUserSACPEntryServiceSignatures(), true,
+				sacpConfiguration.defaultUserSACPEntryName(), titleMap,
 				new ServiceContext());
 		}
 	}
