@@ -220,46 +220,6 @@
 
 	<definition name="portlet.dockbar.view" path="/portlet/dockbar/view.jsp" />
 
-	<!-- Export Import -->
-
-	<definition name="portlet.export_import" extends="portlet" />
-
-	<definition name="portlet.export_import.confirmation" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/confirmation.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.error" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/error.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.export_import" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/export_import.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.export_layouts" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/export_layouts.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.import_layouts" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/import_layouts.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.publish_layouts" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/publish_layouts.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.publish_layouts_simple" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/publish_layouts_simple.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.staging" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/publish_portlet.jsp" />
-	</definition>
-
-	<definition name="portlet.export_import.view" extends="portlet.export_import">
-		<put name="portlet_content" value="/portlet/export_import/view.jsp" />
-	</definition>
-
 	<!-- Flags -->
 
 	<definition name="portlet.flags.edit_entry" path="/portlet/flags/edit_entry.jsp" />
@@ -470,26 +430,6 @@
 		<put name="portlet_content" value="/portlet/our_activities/view.jsp" />
 	</definition>
 
-	<!-- Page Comments -->
-
-	<definition name="portlet.page_comments" extends="portlet" />
-
-	<definition name="portlet.page_comments.error" extends="portlet.page_comments">
-		<put name="portlet_content" value="/portlet/page_comments/error.jsp" />
-	</definition>
-
-	<definition name="portlet.page_comments.view" extends="portlet.page_comments">
-		<put name="portlet_content" value="/portlet/page_comments/view.jsp" />
-	</definition>
-
-	<!-- Page Flags -->
-
-	<definition name="portlet.page_flags" extends="portlet" />
-
-	<definition name="portlet.page_flags.view" extends="portlet.page_flags">
-		<put name="portlet_content" value="/portlet/page_flags/view.jsp" />
-	</definition>
-
 	<!-- Page Ratings -->
 
 	<definition name="portlet.page_ratings" extends="portlet" />
@@ -566,18 +506,6 @@
 
 	<definition name="portlet.recent_documents.view" extends="portlet.recent_documents">
 		<put name="portlet_content" value="/portlet/recent_documents/view.jsp" />
-	</definition>
-
-	<!-- Requests -->
-
-	<definition name="portlet.requests" extends="portlet" />
-
-	<definition name="portlet.requests.error" extends="portlet.requests">
-		<put name="portlet_content" value="/portlet/requests/error.jsp" />
-	</definition>
-
-	<definition name="portlet.requests.view" extends="portlet.requests">
-		<put name="portlet_content" value="/portlet/requests/view.jsp" />
 	</definition>
 
 	<!-- Shopping -->

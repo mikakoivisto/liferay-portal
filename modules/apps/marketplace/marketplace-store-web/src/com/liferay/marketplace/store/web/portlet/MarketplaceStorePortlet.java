@@ -17,13 +17,13 @@ package com.liferay.marketplace.store.web.portlet;
 import com.liferay.marketplace.model.App;
 import com.liferay.marketplace.service.AppLocalServiceUtil;
 import com.liferay.marketplace.service.AppServiceUtil;
-import com.liferay.marketplace.store.web.configuration.MarketplaceWebConfigurationValues;
+import com.liferay.marketplace.store.web.configuration.MarketplaceStoreWebConfigurationValues;
 import com.liferay.marketplace.store.web.constants.MarketplaceStorePortletKeys;
+import com.liferay.marketplace.store.web.oauth.util.OAuthManager;
 import com.liferay.marketplace.store.web.util.MarketplaceLicenseUtil;
 import com.liferay.marketplace.util.MarketplaceUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -51,6 +51,7 @@ import javax.portlet.Portlet;
 import javax.portlet.PortletException;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Ryan Park
@@ -81,7 +82,7 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = {Portlet.class}
 )
-public class MarketplaceStorePortlet extends MVCPortlet {
+public class MarketplaceStorePortlet extends RemoteMVCPortlet {
 
 	public void downloadApp(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -96,7 +97,7 @@ public class MarketplaceStorePortlet extends MVCPortlet {
 		String version = ParamUtil.getString(actionRequest, "version");
 
 		if (!url.startsWith(
-				MarketplaceWebConfigurationValues.MARKETPLACE_URL)) {
+				MarketplaceStoreWebConfigurationValues.MARKETPLACE_URL)) {
 
 			JSONObject jsonObject = getAppJSONObject(remoteAppId);
 
@@ -268,7 +269,7 @@ public class MarketplaceStorePortlet extends MVCPortlet {
 			actionRequest, "productEntryName");
 
 		if (!url.startsWith(
-				MarketplaceWebConfigurationValues.MARKETPLACE_URL)) {
+				MarketplaceStoreWebConfigurationValues.MARKETPLACE_URL)) {
 
 			JSONObject jsonObject = getAppJSONObject(remoteAppId);
 
@@ -445,6 +446,19 @@ public class MarketplaceStorePortlet extends MVCPortlet {
 			url, portletNameSpace.concat("token"), token);
 
 		return url;
+	}
+
+	@Override
+	protected String getRemotePortletURL() {
+		return
+			MarketplaceStoreWebConfigurationValues.MARKETPLACE_URL +
+				"/osb-portlet/mp_server";
+	}
+
+	@Override
+	@Reference
+	protected void setOAuthManager(OAuthManager oAuthManager) {
+		super.setOAuthManager(oAuthManager);
 	}
 
 	private static final String _OSB_PORTLET_ID = "12_WAR_osbportlet";

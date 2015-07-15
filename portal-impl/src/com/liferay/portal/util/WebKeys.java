@@ -111,8 +111,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String EXPANDO_COLUMN = "EXPANDO_COLUMN";
 
-	public static final String EXPORT_IMPORT_CONFIGURATION_ID = "EXPORT_IMPORT_CONFIGURATION_ID";
-
 	public static final String FACEBOOK_CANVAS_PAGE_URL = "FACEBOOK_CANVAS_PAGE_URL";
 
 	public static final String FORM_NAME = "FORM_NAME";
@@ -359,8 +357,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String SITE_ADMINISTRATION_CATEGORIES_MAP = "SITES_ADMINISTRATION_CATEGORIES_MAP";
 
 	public static final String SOCIAL_ACTIVITY_SETTINGS_MAP = "SOCIAL_ACTIVITY_SETTINGS_MAP";
-
-	public static final String SOCIAL_REQUESTS = "SOCIAL_REQUESTS";
 
 	public static final String SOFTWARE_CATALOG_FRAMEWORK_VERSION = "SOFTWARE_CATALOG_FRAMEWORK_VERSION";
 

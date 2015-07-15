@@ -117,9 +117,7 @@ public class PermissionsURLTag extends TagSupport {
 			portletURL.setWindowState(WindowState.MAXIMIZED);
 		}
 
-		portletURL.setParameter(
-			"mvcPath",
-			"/html/portlet/portlet_configuration/edit_permissions.jsp");
+		portletURL.setParameter("mvcPath", "/edit_permissions.jsp");
 
 		if (Validator.isNotNull(redirect)) {
 			portletURL.setParameter("redirect", redirect);
@@ -128,6 +126,9 @@ public class PermissionsURLTag extends TagSupport {
 				portletURL.setParameter("returnToFullPageURL", redirect);
 			}
 		}
+
+		portletURL.setParameter(
+			"portletConfiguration", Boolean.TRUE.toString());
 
 		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
 

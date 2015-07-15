@@ -31,11 +31,11 @@ public class PortletKeys {
 
 	public static final String BACKGROUND_TASK = "189";
 
-	public static final String BLOGS = "33";
+	public static final String BLOGS =
+		"com_liferay_blogs_web_portlet_BlogsPortlet";
 
-	public static final String BLOGS_ADMIN = "161";
-
-	public static final String BLOGS_AGGREGATOR = "115";
+	public static final String BLOGS_AGGREGATOR =
+		"com_liferay_blogs_web_portlet_BlogsAgreggatorPortlet";
 
 	public static final String CALENDAR = "8";
 
@@ -60,7 +60,8 @@ public class PortletKeys {
 	public static final String EXPANDO =
 		"com_liferay_expando_web_portlet_ExpandoPortlet";
 
-	public static final String EXPORT_IMPORT = "200";
+	public static final String EXPORT_IMPORT =
+		"com_liferay_exportimport_web_portlet_ExportImportPortlet";
 
 	public static final String FAST_LOGIN = "164";
 
@@ -120,19 +121,13 @@ public class PortletKeys {
 	public static final String NESTED_PORTLETS =
 		"com_liferay_nested_portlets_web_portlet_NestedPortletsPortlet";
 
-	public static final String PAGE_COMMENTS = "107";
-
 	public static final String PAGE_RATINGS = "108";
 
 	public static final String PLUGINS_ADMIN = "132";
 
 	public static final String PORTAL = "90";
 
-	public static final String PORTAL_INSTANCES = "135";
-
 	public static final String PORTAL_SETTINGS = "130";
-
-	public static final String PORTLET_CONFIGURATION = "86";
 
 	public static final String PORTLET_DISPLAY_TEMPLATE =
 		"com_liferay_dynamic_data_mapping_web_portlet_" +
@@ -155,8 +150,6 @@ public class PortletKeys {
 	public static final int PREFS_OWNER_TYPE_USER = 4;
 
 	public static final long PREFS_PLID_SHARED = 0;
-
-	public static final String RECENT_BLOGGERS = "114";
 
 	public static final String RECENT_DOCUMENTS = "64";
 

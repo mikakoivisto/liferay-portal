@@ -60,6 +60,16 @@ public abstract class BaseMVCResourceCommand implements MVCResourceCommand {
 		return PortletConfigFactoryUtil.get(portletId);
 	}
 
+	protected PortletRequestDispatcher getPortletRequestDispatcher(
+		ResourceRequest resourceRequest, String path) {
+
+		PortletConfig portletConfig = getPortletConfig(resourceRequest);
+
+		PortletContext portletContext = portletConfig.getPortletContext();
+
+		return portletContext.getRequestDispatcher(path);
+	}
+
 	protected void include(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			String jspPath)

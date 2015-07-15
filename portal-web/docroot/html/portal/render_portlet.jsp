@@ -420,7 +420,7 @@ PortletURL urlConfiguration = PortletProviderUtil.getPortletURL(request, Portlet
 urlConfiguration.setWindowState(LiferayWindowState.POP_UP);
 
 if (portlet.getConfigurationActionInstance() != null) {
-	urlConfiguration.setParameter("mvcPath", "/html/portlet/portlet_configuration/edit_configuration.jsp");
+	urlConfiguration.setParameter("mvcPath", "/edit_configuration.jsp");
 
 	String settingsScope = (String)request.getAttribute(WebKeys.SETTINGS_SCOPE);
 
@@ -429,14 +429,15 @@ if (portlet.getConfigurationActionInstance() != null) {
 	}
 }
 else if (PortletPermissionUtil.contains(permissionChecker, layout, portletDisplay.getId(), ActionKeys.PERMISSIONS)) {
-	urlConfiguration.setParameter("mvcPath", "/html/portlet/portlet_configuration/edit_permissions.jsp");
+	urlConfiguration.setParameter("mvcPath", "/edit_permissions.jsp");
 }
 else {
-	urlConfiguration.setParameter("mvcPath", "/html/portlet/portlet_configuration/edit_sharing.jsp");
+	urlConfiguration.setParameter("mvcPath", "/edit_sharing.jsp");
 }
 
 urlConfiguration.setParameter("redirect", currentURL);
 urlConfiguration.setParameter("returnToFullPageURL", currentURL);
+urlConfiguration.setParameter("portletConfiguration", Boolean.TRUE.toString());
 urlConfiguration.setParameter("portletResource", portletDisplay.getId());
 urlConfiguration.setParameter("resourcePrimKey", PortletPermissionUtil.getPrimaryKey(plid, portlet.getPortletId()));
 
@@ -540,7 +541,7 @@ PortletURLImpl urlExportImport = new PortletURLImpl(request, PortletKeys.EXPORT_
 
 urlExportImport.setWindowState(LiferayWindowState.POP_UP);
 
-urlExportImport.setParameter("struts_action", "/export_import/export_import");
+urlExportImport.setParameter("mvcRenderCommandName", "exportImport");
 urlExportImport.setParameter("redirect", currentURL);
 urlExportImport.setParameter("returnToFullPageURL", currentURL);
 urlExportImport.setParameter("portletResource", portletDisplay.getId());
@@ -664,7 +665,7 @@ PortletURLImpl urlStaging = new PortletURLImpl(request, PortletKeys.EXPORT_IMPOR
 
 urlStaging.setWindowState(LiferayWindowState.POP_UP);
 
-urlStaging.setParameter("struts_action", "/export_import/staging");
+urlStaging.setParameter("mvcRenderCommandName", "staging");
 urlStaging.setParameter("cmd", Constants.PUBLISH_TO_LIVE);
 urlStaging.setParameter("redirect", currentURL);
 urlStaging.setParameter("returnToFullPageURL", currentURL);
