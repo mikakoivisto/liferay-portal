@@ -45,6 +45,7 @@ import com.liferay.portal.upgrade.v7_0_0.UpgradePortletDisplayTemplatePreference
 import com.liferay.portal.upgrade.v7_0_0.UpgradePortletSettings;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeRatings;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeRepositoryEntry;
+import com.liferay.portal.upgrade.v7_0_0.UpgradeResourcePermission;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeSchema;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeShopping;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeShoppingPreferences;
@@ -96,6 +97,7 @@ public class UpgradeProcess_7_0_0 extends UpgradeProcess {
 		upgrade(UpgradeShoppingPreferences.class);
 		upgrade(UpgradeSubscription.class);
 		upgrade(UpgradeWebsite.class);
+		upgrade(UpgradeResourcePermission.class);
 
 		// This must be the last upgrade process. Otherwise, upgrades based on
 		// BaseUpgradePortletPreferences will fail because the portlet
