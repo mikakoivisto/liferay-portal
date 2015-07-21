@@ -18,7 +18,7 @@ import com.liferay.application.list.BaseControlPanelEntryPanelApp;
 import com.liferay.application.list.PanelApp;
 import com.liferay.application.list.constants.PanelCategoryKeys;
 import com.liferay.portal.service.PortletLocalService;
-import com.liferay.service.access.policy.web.constants.SACPPortletKeys;
+import com.liferay.service.access.policy.web.constants.ServiceAccessPolicyPortletKeys;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -44,7 +44,7 @@ public class ServiceAccessControlProfilePanelApp
 
 	@Override
 	public String getPortletId() {
-		return SACPPortletKeys.SACP;
+		return ServiceAccessPolicyPortletKeys.SERVICE_ACCESS_POLICY;
 	}
 
 	@Reference(unbind = "-")

@@ -22,10 +22,10 @@ import com.liferay.portal.kernel.security.access.control.profile.ServiceAccessCo
 import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.SettingsException;
 import com.liferay.portal.kernel.settings.SettingsFactory;
-import com.liferay.service.access.policy.configuration.SACPConfiguration;
-import com.liferay.service.access.policy.constants.SACPConstants;
-import com.liferay.service.access.policy.model.SACPEntry;
-import com.liferay.service.access.policy.service.SACPEntryService;
+import com.liferay.service.access.policy.configuration.ServiceAccessPolicyConfiguration;
+import com.liferay.service.access.policy.constants.ServiceAccessPolicyConstants;
+import com.liferay.service.access.policy.model.ServiceAccessPolicy;
+import com.liferay.service.access.policy.service.ServiceAccessPolicyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +44,12 @@ public class ServiceAccessControlProfileManagerImpl
 	public String getDefaultApplicationServiceAccessControlProfileName(
 		long companyId) {
 
-		SACPConfiguration sacpConfiguration = getSACPConfiguration(companyId);
+		ServiceAccessPolicyConfiguration serviceAccessPolicyConfiguration =
+			getServiceAccessPolicyConfiguration(companyId);
 
-		if (sacpConfiguration != null) {
-			return sacpConfiguration.defaultApplicationSACPEntryName();
+		if (serviceAccessPolicyConfiguration != null) {
+			return serviceAccessPolicyConfiguration.
+				defaultApplicationServiceAccessPolicyName();
 		}
 
 		return null;
@@ -57,10 +59,12 @@ public class ServiceAccessControlProfileManagerImpl
 	public String getDefaultUserServiceAccessControlProfileName(
 		long companyId) {
 
-		SACPConfiguration sacpConfiguration = getSACPConfiguration(companyId);
+		ServiceAccessPolicyConfiguration serviceAccessPolicyConfiguration =
+			getServiceAccessPolicyConfiguration(companyId);
 
-		if (sacpConfiguration != null) {
-			return sacpConfiguration.defaultUserSACPEntryName();
+		if (serviceAccessPolicyConfiguration != null) {
+			return serviceAccessPolicyConfiguration.
+				defaultUserServiceAccessPolicyName();
 		}
 
 		return null;
@@ -72,7 +76,8 @@ public class ServiceAccessControlProfileManagerImpl
 
 		try {
 			return toServiceAccessControlProfile(
-				_sacpEntryService.getSACPEntry(companyId, name));
+				_serviceAccessPolicyService.getServiceAccessPolicy(
+					companyId, name));
 		}
 		catch (PortalException e) {
 			return null;
@@ -84,24 +89,29 @@ public class ServiceAccessControlProfileManagerImpl
 		long companyId, int start, int end) {
 
 		return toServiceAccessControlProfiles(
-			_sacpEntryService.getCompanySACPEntries(companyId, start, end));
+			_serviceAccessPolicyService.getCompanyServiceAccessPolicies(
+				companyId, start, end));
 	}
 
 	@Override
 	public int getServiceAccessControlProfilesCount(long companyId) {
-		return _sacpEntryService.getCompanySACPEntriesCount(companyId);
+		return _serviceAccessPolicyService.getCompanyServiceAccessPoliciesCount(
+			companyId);
 	}
 
-	protected SACPConfiguration getSACPConfiguration(long companyId) {
+	protected ServiceAccessPolicyConfiguration
+		getServiceAccessPolicyConfiguration(long companyId) {
+
 		try {
 			return _settingsFactory.getSettings(
-				SACPConfiguration.class,
+				ServiceAccessPolicyConfiguration.class,
 				new CompanyServiceSettingsLocator(
-					companyId, SACPConstants.SERVICE_NAME));
+					companyId, ServiceAccessPolicyConstants.SERVICE_NAME));
 		}
 		catch (SettingsException se) {
 			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to get SACP configuration", se);
+				_log.warn(
+					"Unable to get Service Access Policy configuration", se);
 			}
 
 			return null;
@@ -109,8 +119,10 @@ public class ServiceAccessControlProfileManagerImpl
 	}
 
 	@Reference(unbind = "-")
-	protected void setSACPEntryService(SACPEntryService sacpEntryService) {
-		_sacpEntryService = sacpEntryService;
+	protected void setServiceAccessPolicyService(
+		ServiceAccessPolicyService serviceAccessPolicyService) {
+
+		_serviceAccessPolicyService = serviceAccessPolicyService;
 	}
 
 	@Reference
@@ -119,28 +131,28 @@ public class ServiceAccessControlProfileManagerImpl
 	}
 
 	protected ServiceAccessControlProfile toServiceAccessControlProfile(
-		SACPEntry sacpEntry) {
+		ServiceAccessPolicy serviceAccessPolicy) {
 
-		if (sacpEntry != null) {
-			return new ServiceAccessControlProfileImpl(sacpEntry);
+		if (serviceAccessPolicy != null) {
+			return new ServiceAccessControlProfileImpl(serviceAccessPolicy);
 		}
 
 		return null;
 	}
 
 	protected List<ServiceAccessControlProfile> toServiceAccessControlProfiles(
-		List<SACPEntry> sacpEntries) {
+		List<ServiceAccessPolicy> serviceAccessPolicies) {
 
-		if (sacpEntries == null) {
+		if (serviceAccessPolicies == null) {
 			return null;
 		}
 
 		List<ServiceAccessControlProfile> serviceAccessControlProfiles =
-			new ArrayList<>(sacpEntries.size());
+			new ArrayList<>(serviceAccessPolicies.size());
 
-		for (SACPEntry sacpEntry : sacpEntries) {
+		for (ServiceAccessPolicy serviceAccessPolicy : serviceAccessPolicies) {
 			serviceAccessControlProfiles.add(
-				toServiceAccessControlProfile(sacpEntry));
+				toServiceAccessControlProfile(serviceAccessPolicy));
 		}
 
 		return serviceAccessControlProfiles;
@@ -149,7 +161,7 @@ public class ServiceAccessControlProfileManagerImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		ServiceAccessControlProfileManagerImpl.class);
 
-	private SACPEntryService _sacpEntryService;
+	private ServiceAccessPolicyService _serviceAccessPolicyService;
 	private volatile SettingsFactory _settingsFactory;
 
 }

@@ -20,8 +20,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.PasswordPolicy;
-import com.liferay.service.access.policy.model.SACPEntry;
-import com.liferay.service.access.policy.service.SACPEntryLocalService;
+import com.liferay.service.access.policy.model.ServiceAccessPolicy;
+import com.liferay.service.access.policy.service.ServiceAccessPolicyLocalService;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class PasswordPolicyModelListener
 		}
 
 		try {
-			_sacpEntryLocalService.checkDefaultSACPEntry(
+			_serviceAccessPolicyLocalService.checkDefaultServiceAccessPolicy(
 				passwordPolicy.getCompanyId());
 		}
 		catch (PortalException pe) {
@@ -61,13 +61,17 @@ public class PasswordPolicyModelListener
 		}
 
 		try {
-			List<SACPEntry> sacpEntries =
-				_sacpEntryLocalService.getCompanySACPEntries(
-					passwordPolicy.getCompanyId(), QueryUtil.ALL_POS,
-					QueryUtil.ALL_POS);
+			List<ServiceAccessPolicy> serviceAccessPolicies =
+				_serviceAccessPolicyLocalService.
+					getCompanyServiceAccessPolicies(
+						passwordPolicy.getCompanyId(), QueryUtil.ALL_POS,
+						QueryUtil.ALL_POS);
 
-			for (SACPEntry sacpEntry : sacpEntries) {
-				_sacpEntryLocalService.deleteSACPEntry(sacpEntry);
+			for (ServiceAccessPolicy serviceAccessPolicy :
+					serviceAccessPolicies) {
+
+				_serviceAccessPolicyLocalService.deleteServiceAccessPolicy(
+					serviceAccessPolicy);
 			}
 		}
 		catch (PortalException pe) {
@@ -76,12 +80,12 @@ public class PasswordPolicyModelListener
 	}
 
 	@Reference(unbind = "-")
-	protected void setSACPEntryLocalService(
-		SACPEntryLocalService sacpEntryLocalService) {
+	protected void setServiceAccessPolicyLocalService(
+		ServiceAccessPolicyLocalService serviceAccessPolicyLocalService) {
 
-		_sacpEntryLocalService = sacpEntryLocalService;
+		_serviceAccessPolicyLocalService = serviceAccessPolicyLocalService;
 	}
 
-	protected SACPEntryLocalService _sacpEntryLocalService;
+	protected ServiceAccessPolicyLocalService _serviceAccessPolicyLocalService;
 
 }
