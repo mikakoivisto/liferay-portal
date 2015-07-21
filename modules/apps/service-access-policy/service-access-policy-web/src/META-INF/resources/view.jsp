@@ -21,7 +21,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 %>
 
 <liferay-ui:search-container
-	emptyResultsMessage="there-are-no-service-access-control-profiles"
+	emptyResultsMessage="there-are-no-service-access-policies"
 	headerNames="name"
 	iteratorURL="<%= portletURL %>"
 	total="<%= ServiceAccessPolicyServiceUtil.getCompanyServiceAccessPoliciesCount(company.getCompanyId()) %>"
