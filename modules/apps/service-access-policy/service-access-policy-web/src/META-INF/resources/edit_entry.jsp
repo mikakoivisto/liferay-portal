@@ -36,7 +36,7 @@ if (serviceAccessPolicy != null) {
 
 <liferay-ui:header
 	backURL="<%= redirect %>"
-	title='<%= (serviceAccessPolicy != null) ? serviceAccessPolicy.getTitle(locale) : "new-service-access-control-profile" %>'
+	title='<%= (serviceAccessPolicy != null) ? serviceAccessPolicy.getTitle(locale) : "new-service-access-policy" %>'
 />
 
 <portlet:actionURL name="updateServiceAccessPolicy" var="updateServiceAccessPolicyURL">
@@ -47,9 +47,9 @@ if (serviceAccessPolicy != null) {
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="serviceAccessPolicyId" type="hidden" value="<%= serviceAccessPolicyId %>" />
 
-	<liferay-ui:error exception="<%= DuplicateServiceAccessPolicyNameException.class %>" message="please-enter-a-unique-service-access-control-profile-name" />
-	<liferay-ui:error exception="<%= ServiceAccessPolicyNameException.class %>" message="service-access-control-profile-name-is-required" />
-	<liferay-ui:error exception="<%= ServiceAccessPolicyTitleException.class %>" message="service-access-control-profile-title-is-required" />
+	<liferay-ui:error exception="<%= DuplicateServiceAccessPolicyNameException.class %>" message="please-enter-a-unique-service-access-policy-name" />
+	<liferay-ui:error exception="<%= ServiceAccessPolicyNameException.class %>" message="service-access-policy-name-is-required" />
+	<liferay-ui:error exception="<%= ServiceAccessPolicyTitleException.class %>" message="service-access-policy-title-is-required" />
 
 	<aui:model-context bean="<%= serviceAccessPolicy %>" model="<%= ServiceAccessPolicy.class %>" />
 
