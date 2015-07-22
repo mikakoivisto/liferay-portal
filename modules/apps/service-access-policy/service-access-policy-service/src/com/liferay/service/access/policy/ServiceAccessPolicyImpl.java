@@ -14,8 +14,7 @@
 
 package com.liferay.service.access.policy;
 
-import com.liferay.portal.kernel.security.access.control.profile.ServiceAccessControlProfile;
-import com.liferay.service.access.policy.model.ServiceAccessPolicy;
+import com.liferay.portal.kernel.security.access.control.policy.ServiceAccessPolicy;
 
 import java.util.List;
 import java.util.Locale;
@@ -23,11 +22,14 @@ import java.util.Locale;
 /**
  * @author Mika Koivisto
  */
-public class ServiceAccessControlProfileImpl
-	implements ServiceAccessControlProfile {
+public class ServiceAccessPolicyImpl implements ServiceAccessPolicy {
 
-	public ServiceAccessControlProfileImpl(
-		ServiceAccessPolicy serviceAccessPolicy) {
+	public ServiceAccessPolicyImpl(
+		com.
+			liferay.
+				service.
+					access.
+						policy.model.ServiceAccessPolicy serviceAccessPolicy) {
 
 		_serviceAccessPolicy = serviceAccessPolicy;
 	}
@@ -47,6 +49,7 @@ public class ServiceAccessControlProfileImpl
 		return _serviceAccessPolicy.getTitle(locale);
 	}
 
-	private final ServiceAccessPolicy _serviceAccessPolicy;
+	private final com.liferay.service.access.policy.model.ServiceAccessPolicy
+		_serviceAccessPolicy;
 
 }
