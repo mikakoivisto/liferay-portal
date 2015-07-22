@@ -17,14 +17,13 @@ package com.liferay.service.access.policy;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.security.access.control.profile.ServiceAccessControlProfile;
-import com.liferay.portal.kernel.security.access.control.profile.ServiceAccessControlProfileManager;
+import com.liferay.portal.kernel.security.access.control.policy.ServiceAccessPolicy;
+import com.liferay.portal.kernel.security.access.control.policy.ServiceAccessPolicyManager;
 import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.SettingsException;
 import com.liferay.portal.kernel.settings.SettingsFactory;
 import com.liferay.service.access.policy.configuration.ServiceAccessPolicyConfiguration;
 import com.liferay.service.access.policy.constants.ServiceAccessPolicyConstants;
-import com.liferay.service.access.policy.model.ServiceAccessPolicy;
 import com.liferay.service.access.policy.service.ServiceAccessPolicyService;
 
 import java.util.ArrayList;
@@ -36,14 +35,12 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Mika Koivisto
  */
-@Component(immediate = true, service = ServiceAccessControlProfileManager.class)
-public class ServiceAccessControlProfileManagerImpl
-	implements ServiceAccessControlProfileManager {
+@Component(immediate = true, service = ServiceAccessPolicyManager.class)
+public class ServiceAccessPolicyManagerImpl
+	implements ServiceAccessPolicyManager {
 
 	@Override
-	public String getDefaultApplicationServiceAccessControlProfileName(
-		long companyId) {
-
+	public String getDefaultApplicationServiceAccessPolicyName(long companyId) {
 		ServiceAccessPolicyConfiguration serviceAccessPolicyConfiguration =
 			getServiceAccessPolicyConfiguration(companyId);
 
@@ -56,9 +53,7 @@ public class ServiceAccessControlProfileManagerImpl
 	}
 
 	@Override
-	public String getDefaultUserServiceAccessControlProfileName(
-		long companyId) {
-
+	public String getDefaultUserServiceAccessPolicyName(long companyId) {
 		ServiceAccessPolicyConfiguration serviceAccessPolicyConfiguration =
 			getServiceAccessPolicyConfiguration(companyId);
 
@@ -71,32 +66,32 @@ public class ServiceAccessControlProfileManagerImpl
 	}
 
 	@Override
-	public ServiceAccessControlProfile getServiceAccessControlProfile(
+	public List<ServiceAccessPolicy> getServiceAccessPolicies(
+		long companyId, int start, int end) {
+
+		return toServiceAccessPolicies(
+			_serviceAccessPolicyService.getCompanyServiceAccessPolicies(
+				companyId, start, end));
+	}
+
+	@Override
+	public int getServiceAccessPoliciesCount(long companyId) {
+		return _serviceAccessPolicyService.getCompanyServiceAccessPoliciesCount(
+			companyId);
+	}
+
+	@Override
+	public ServiceAccessPolicy getServiceAccessPolicy(
 		long companyId, String name) {
 
 		try {
-			return toServiceAccessControlProfile(
+			return toServiceAccessPolicy(
 				_serviceAccessPolicyService.getServiceAccessPolicy(
 					companyId, name));
 		}
 		catch (PortalException e) {
 			return null;
 		}
-	}
-
-	@Override
-	public List<ServiceAccessControlProfile> getServiceAccessControlProfiles(
-		long companyId, int start, int end) {
-
-		return toServiceAccessControlProfiles(
-			_serviceAccessPolicyService.getCompanyServiceAccessPolicies(
-				companyId, start, end));
-	}
-
-	@Override
-	public int getServiceAccessControlProfilesCount(long companyId) {
-		return _serviceAccessPolicyService.getCompanyServiceAccessPoliciesCount(
-			companyId);
 	}
 
 	protected ServiceAccessPolicyConfiguration
@@ -130,36 +125,40 @@ public class ServiceAccessControlProfileManagerImpl
 		_settingsFactory = settingsFactory;
 	}
 
-	protected ServiceAccessControlProfile toServiceAccessControlProfile(
-		ServiceAccessPolicy serviceAccessPolicy) {
-
-		if (serviceAccessPolicy != null) {
-			return new ServiceAccessControlProfileImpl(serviceAccessPolicy);
-		}
-
-		return null;
-	}
-
-	protected List<ServiceAccessControlProfile> toServiceAccessControlProfiles(
-		List<ServiceAccessPolicy> serviceAccessPolicies) {
+	protected List<ServiceAccessPolicy> toServiceAccessPolicies(
+		List<com.liferay.service.access.policy.model.ServiceAccessPolicy>
+			serviceAccessPolicies) {
 
 		if (serviceAccessPolicies == null) {
 			return null;
 		}
 
-		List<ServiceAccessControlProfile> serviceAccessControlProfiles =
+		List<ServiceAccessPolicy> serviceAccessControlProfiles =
 			new ArrayList<>(serviceAccessPolicies.size());
 
-		for (ServiceAccessPolicy serviceAccessPolicy : serviceAccessPolicies) {
+		for (com.liferay.service.access.policy.model.ServiceAccessPolicy
+				serviceAccessPolicy : serviceAccessPolicies) {
+
 			serviceAccessControlProfiles.add(
-				toServiceAccessControlProfile(serviceAccessPolicy));
+				toServiceAccessPolicy(serviceAccessPolicy));
 		}
 
 		return serviceAccessControlProfiles;
 	}
 
+	protected ServiceAccessPolicy toServiceAccessPolicy(
+		com.liferay.service.access.policy.model.ServiceAccessPolicy
+			serviceAccessPolicy) {
+
+		if (serviceAccessPolicy != null) {
+			return new ServiceAccessPolicyImpl(serviceAccessPolicy);
+		}
+
+		return null;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
-		ServiceAccessControlProfileManagerImpl.class);
+		ServiceAccessPolicyManagerImpl.class);
 
 	private ServiceAccessPolicyService _serviceAccessPolicyService;
 	private volatile SettingsFactory _settingsFactory;

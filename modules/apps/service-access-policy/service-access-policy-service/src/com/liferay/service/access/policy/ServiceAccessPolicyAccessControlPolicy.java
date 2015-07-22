@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.security.access.control.AccessControlPolicy;
 import com.liferay.portal.kernel.security.access.control.AccessControlUtil;
 import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.security.access.control.BaseAccessControlPolicy;
-import com.liferay.portal.kernel.security.access.control.profile.ServiceAccessControlProfileThreadLocal;
+import com.liferay.portal.kernel.security.access.control.policy.ServiceAccessPolicyThreadLocal;
 import com.liferay.portal.kernel.security.auth.verifier.AuthVerifierResult;
 import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.settings.SettingsException;
@@ -57,9 +57,8 @@ public class ServiceAccessPolicyAccessControlPolicy
 			AccessControlled accessControlled)
 		throws SecurityException {
 
-		List<String> serviceAccessControlProfileNames =
-			ServiceAccessControlProfileThreadLocal.
-				getActiveServiceAccessControlProfileNames();
+		List<String> serviceAccessPolicyNames =
+			ServiceAccessPolicyThreadLocal.getActiveServiceAccessPolicyNames();
 
 		ServiceAccessPolicyConfiguration serviceAccessPolicyConfiguration =
 			null;
@@ -79,14 +78,13 @@ public class ServiceAccessPolicyAccessControlPolicy
 
 		if (serviceAccessPolicyConfiguration.requireDefaultServiceAccessPolicy(
 				) ||
-			(serviceAccessControlProfileNames == null)) {
+			(serviceAccessPolicyNames == null)) {
 
-			if (serviceAccessControlProfileNames == null) {
-				serviceAccessControlProfileNames = new ArrayList<>();
+			if (serviceAccessPolicyNames == null) {
+				serviceAccessPolicyNames = new ArrayList<>();
 
-				ServiceAccessControlProfileThreadLocal.
-					setActiveServiceAccessControlProfileNames(
-						serviceAccessControlProfileNames);
+				ServiceAccessPolicyThreadLocal.
+					setActiveServiceAccessPolicyNames(serviceAccessPolicyNames);
 			}
 
 			boolean passwordBasedAuthentication = false;
@@ -105,12 +103,12 @@ public class ServiceAccessPolicyAccessControlPolicy
 			}
 
 			if (passwordBasedAuthentication) {
-				serviceAccessControlProfileNames.add(
+				serviceAccessPolicyNames.add(
 					serviceAccessPolicyConfiguration.
 						defaultUserServiceAccessPolicyName());
 			}
 			else {
-				serviceAccessControlProfileNames.add(
+				serviceAccessPolicyNames.add(
 					serviceAccessPolicyConfiguration.
 						defaultApplicationServiceAccessPolicyName());
 			}
@@ -120,7 +118,7 @@ public class ServiceAccessPolicyAccessControlPolicy
 
 		Set<String> allowedServiceSignatures = new HashSet<>();
 
-		for (String name : serviceAccessControlProfileNames) {
+		for (String name : serviceAccessPolicyNames) {
 			try {
 				ServiceAccessPolicy serviceAccessPolicy =
 					_serviceAccessPolicyLocalService.getServiceAccessPolicy(

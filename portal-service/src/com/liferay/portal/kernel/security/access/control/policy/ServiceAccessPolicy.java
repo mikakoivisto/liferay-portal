@@ -12,26 +12,20 @@
  * details.
  */
 
-package com.liferay.portal.kernel.security.access.control.profile;
+package com.liferay.portal.kernel.security.access.control.policy;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Mika Koivisto
  */
-public interface ServiceAccessControlProfileManager {
+public interface ServiceAccessPolicy {
 
-	public String getDefaultApplicationServiceAccessControlProfileName(
-		long companyId);
+	public List<String> getAllowedServiceSignaturesList();
 
-	public String getDefaultUserServiceAccessControlProfileName(long companyId);
+	public String getName();
 
-	public ServiceAccessControlProfile getServiceAccessControlProfile(
-		long companyId, String name);
-
-	public List<ServiceAccessControlProfile> getServiceAccessControlProfiles(
-		long companyId, int start, int end);
-
-	public int getServiceAccessControlProfilesCount(long companyId);
+	public String getTitle(Locale locale);
 
 }
