@@ -78,11 +78,11 @@ public class TunnelingServletAuthVerifier implements AuthVerifier {
 				authVerifierResult.setState(AuthVerifierResult.State.SUCCESS);
 				authVerifierResult.setUserId(Long.valueOf(credentials[0]));
 
-				String profileName = (String) _properties.get(
+				String serviceAccessPolicyName = (String) _properties.get(
 					"service.access.policy.name");
 
 				ServiceAccessPolicyThreadLocal.addActiveServiceAccessPolicyName(
-					profileName);
+					serviceAccessPolicyName);
 			}
 		}
 		catch (AuthException ae) {
