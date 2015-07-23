@@ -19,44 +19,44 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-long sacpEntryId = ParamUtil.getLong(request, "sacpEntryId");
+long serviceAccessPolicyId = ParamUtil.getLong(request, "serviceAccessPolicyId");
 
-SACPEntry sacpEntry = null;
+ServiceAccessPolicy serviceAccessPolicy = null;
 
-if (sacpEntryId > 0) {
-	sacpEntry = SACPEntryServiceUtil.getSACPEntry(sacpEntryId);
+if (serviceAccessPolicyId > 0) {
+	serviceAccessPolicy = ServiceAccessPolicyServiceUtil.getServiceAccessPolicy(serviceAccessPolicyId);
 }
 
-boolean defaultSACPEntry = false;
+boolean defaultServiceAccessPolicy = false;
 
-if (sacpEntry != null) {
-	defaultSACPEntry = sacpEntry.isDefaultSACPEntry();
+if (serviceAccessPolicy != null) {
+	defaultServiceAccessPolicy = serviceAccessPolicy.isDefaultServiceAccessPolicy();
 }
 %>
 
 <liferay-ui:header
 	backURL="<%= redirect %>"
-	title='<%= (sacpEntry != null) ? sacpEntry.getTitle(locale) : "new-service-access-control-profile" %>'
+	title='<%= (serviceAccessPolicy != null) ? serviceAccessPolicy.getTitle(locale) : "new-service-access-control-profile" %>'
 />
 
-<portlet:actionURL name="updateSACPEntry" var="updateSACPEntryURL">
+<portlet:actionURL name="updateServiceAccessPolicy" var="updateServiceAccessPolicyURL">
 	<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 </portlet:actionURL>
 
-<aui:form action="<%= updateSACPEntryURL %>">
+<aui:form action="<%= updateServiceAccessPolicyURL %>">
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-	<aui:input name="sacpEntryId" type="hidden" value="<%= sacpEntryId %>" />
+	<aui:input name="serviceAccessPolicyId" type="hidden" value="<%= serviceAccessPolicyId %>" />
 
-	<liferay-ui:error exception="<%= DuplicateSACPEntryNameException.class %>" message="please-enter-a-unique-service-access-control-profile-name" />
-	<liferay-ui:error exception="<%= SACPEntryNameException.class %>" message="service-access-control-profile-name-is-required" />
-	<liferay-ui:error exception="<%= SACPEntryTitleException.class %>" message="service-access-control-profile-title-is-required" />
+	<liferay-ui:error exception="<%= DuplicateServiceAccessPolicyNameException.class %>" message="please-enter-a-unique-service-access-control-profile-name" />
+	<liferay-ui:error exception="<%= ServiceAccessPolicyNameException.class %>" message="service-access-control-profile-name-is-required" />
+	<liferay-ui:error exception="<%= ServiceAccessPolicyTitleException.class %>" message="service-access-control-profile-title-is-required" />
 
-	<aui:model-context bean="<%= sacpEntry %>" model="<%= SACPEntry.class %>" />
+	<aui:model-context bean="<%= serviceAccessPolicy %>" model="<%= ServiceAccessPolicy.class %>" />
 
-	<aui:input disabled="<%= defaultSACPEntry %>" name="name" required="<%= true %>">
+	<aui:input disabled="<%= defaultServiceAccessPolicy %>" name="name" required="<%= true %>">
 		<aui:validator errorMessage="this-field-is-required-and-must-contain-only-following-characters" name="custom">
 			function(val, fieldNode, ruleValue) {
-				var allowedCharacters = '<%= HtmlUtil.escapeJS(SACPEntryConstants.NAME_ALLOWED_CHARACTERS) %>';
+				var allowedCharacters = '<%= HtmlUtil.escapeJS(ServiceAccessPolicyConstants.NAME_ALLOWED_CHARACTERS) %>';
 
 				val = val.trim();
 

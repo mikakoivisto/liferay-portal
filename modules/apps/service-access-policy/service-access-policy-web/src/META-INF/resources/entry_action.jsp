@@ -19,15 +19,15 @@
 <%
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
-SACPEntry sacpEntry = (SACPEntry)row.getObject();
+ServiceAccessPolicy serviceAccessPolicy = (ServiceAccessPolicy)row.getObject();
 %>
 
 <liferay-ui:icon-menu icon="<%= StringPool.BLANK %>" message="<%= StringPool.BLANK %>">
-	<c:if test="<%= SACPEntryPermission.contains(permissionChecker, sacpEntry, ActionKeys.UPDATE) %>">
+	<c:if test="<%= ServiceAccessPolicyPermission.contains(permissionChecker, serviceAccessPolicy, ActionKeys.UPDATE) %>">
 		<portlet:renderURL var="editURL">
 			<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
-			<portlet:param name="sacpEntryId" value="<%= String.valueOf(sacpEntry.getSacpEntryId()) %>" />
+			<portlet:param name="serviceAccessPolicyId" value="<%= String.valueOf(serviceAccessPolicy.getServiceAccessPolicyId()) %>" />
 		</portlet:renderURL>
 
 		<liferay-ui:icon
@@ -37,11 +37,11 @@ SACPEntry sacpEntry = (SACPEntry)row.getObject();
 		/>
 	</c:if>
 
-	<c:if test="<%= SACPEntryPermission.contains(permissionChecker, sacpEntry, ActionKeys.PERMISSIONS) %>">
+	<c:if test="<%= ServiceAccessPolicyPermission.contains(permissionChecker, serviceAccessPolicy, ActionKeys.PERMISSIONS) %>">
 		<liferay-security:permissionsURL
-			modelResource="<%= SACPEntry.class.getName() %>"
-			modelResourceDescription="<%= sacpEntry.getTitle(locale) %>"
-			resourcePrimKey="<%= String.valueOf(sacpEntry.getSacpEntryId()) %>"
+			modelResource="<%= ServiceAccessPolicy.class.getName() %>"
+			modelResourceDescription="<%= serviceAccessPolicy.getTitle(locale) %>"
+			resourcePrimKey="<%= String.valueOf(serviceAccessPolicy.getServiceAccessPolicyId()) %>"
 			var="permissionsURL"
 			windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 		/>
@@ -55,10 +55,10 @@ SACPEntry sacpEntry = (SACPEntry)row.getObject();
 		/>
 	</c:if>
 
-	<c:if test="<%= !sacpEntry.isDefaultSACPEntry() && SACPEntryPermission.contains(permissionChecker, sacpEntry, ActionKeys.DELETE) %>">
-		<portlet:actionURL name="deleteSACPEntry" var="deleteURL">
+	<c:if test="<%= !serviceAccessPolicy.isDefaultServiceAccessPolicy() && ServiceAccessPolicyPermission.contains(permissionChecker, serviceAccessPolicy, ActionKeys.DELETE) %>">
+		<portlet:actionURL name="deleteServiceAccessPolicy" var="deleteURL">
 			<portlet:param name="redirect" value="<%= currentURL %>" />
-			<portlet:param name="sacpEntryId" value="<%= String.valueOf(sacpEntry.getSacpEntryId()) %>" />
+			<portlet:param name="serviceAccessPolicyId" value="<%= String.valueOf(serviceAccessPolicy.getServiceAccessPolicyId()) %>" />
 		</portlet:actionURL>
 
 		<liferay-ui:icon-delete url="<%= deleteURL %>" />
