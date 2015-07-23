@@ -25,11 +25,8 @@ import java.util.Locale;
 public class ServiceAccessPolicyImpl implements ServiceAccessPolicy {
 
 	public ServiceAccessPolicyImpl(
-		com.
-			liferay.
-				service.
-					access.
-						policy.model.ServiceAccessPolicy serviceAccessPolicy) {
+		com.liferay.service.access.policy.model.ServiceAccessPolicy
+			serviceAccessPolicy) {
 
 		_serviceAccessPolicy = serviceAccessPolicy;
 	}
