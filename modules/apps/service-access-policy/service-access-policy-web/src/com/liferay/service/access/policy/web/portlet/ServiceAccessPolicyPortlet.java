@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Reference;
 	property = {
 		"com.liferay.portlet.control-panel-entry-category=configuration",
 		"com.liferay.portlet.control-panel-entry-weight=11",
-		"com.liferay.portlet.css-class-wrapper=service-access-control-profile-portlet",
+		"com.liferay.portlet.css-class-wrapper=service-access-policy-portlet",
 		"com.liferay.portlet.display-category=category.hidden",
 		"com.liferay.portlet.instanceable=false",
 		"javax.portlet.display-name=Service Access Policy",

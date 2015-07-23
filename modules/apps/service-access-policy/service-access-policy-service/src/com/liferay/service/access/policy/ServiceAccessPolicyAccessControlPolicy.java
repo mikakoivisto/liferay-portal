@@ -72,7 +72,7 @@ public class ServiceAccessPolicyAccessControlPolicy
 		}
 		catch (SettingsException se) {
 			throw new SecurityException(
-				"Unable to determine default service access control profile",
+				"Unable to get service access policy configuration",
 				se);
 		}
 
