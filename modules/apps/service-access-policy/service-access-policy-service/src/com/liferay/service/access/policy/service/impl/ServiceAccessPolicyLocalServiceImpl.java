@@ -257,8 +257,6 @@ public class ServiceAccessPolicyLocalServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		// Service access policy
-
 		ServiceAccessPolicy serviceAccessPolicy =
 			serviceAccessPolicyPersistence.findByPrimaryKey(
 				serviceAccessPolicyId);
