@@ -24,22 +24,22 @@ PortletURL portletURL = renderResponse.createRenderURL();
 	emptyResultsMessage="there-are-no-service-access-control-profiles"
 	headerNames="name"
 	iteratorURL="<%= portletURL %>"
-	total="<%= SACPEntryServiceUtil.getCompanySACPEntriesCount(company.getCompanyId()) %>"
+	total="<%= ServiceAccessPolicyServiceUtil.getCompanyServiceAccessPoliciesCount(company.getCompanyId()) %>"
 >
 	<liferay-ui:search-container-results
-		results="<%= SACPEntryServiceUtil.getCompanySACPEntries(company.getCompanyId(), searchContainer.getStart(), searchContainer.getEnd()) %>"
+		results="<%= ServiceAccessPolicyServiceUtil.getCompanyServiceAccessPolicies(company.getCompanyId(), searchContainer.getStart(), searchContainer.getEnd()) %>"
 	/>
 
 	<liferay-ui:search-container-row
-		className="com.liferay.service.access.control.profile.model.SACPEntry"
+		className="com.liferay.service.access.policy.model.ServiceAccessPolicy"
 		escapedModel="<%= true %>"
-		keyProperty="sacpEntryId"
-		modelVar="sacpEntry"
+		keyProperty="serviceAccessPolicyId"
+		modelVar="serviceAccessPolicy"
 	>
 		<portlet:renderURL var="rowURL">
 			<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
-			<portlet:param name="sacpEntryId" value="<%= String.valueOf(sacpEntry.getSacpEntryId()) %>" />
+			<portlet:param name="serviceAccessPolicyId" value="<%= String.valueOf(serviceAccessPolicy.getServiceAccessPolicyId()) %>" />
 		</portlet:renderURL>
 
 		<liferay-ui:search-container-column-text
@@ -51,7 +51,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 		<liferay-ui:search-container-column-text
 			href="<%= rowURL %>"
 			name="title"
-			value="<%= sacpEntry.getTitle(locale) %>"
+			value="<%= serviceAccessPolicy.getTitle(locale) %>"
 
 		/>
 
@@ -63,14 +63,14 @@ PortletURL portletURL = renderResponse.createRenderURL();
 		/>
 	</liferay-ui:search-container-row>
 
-	<c:if test="<%= PortletPermissionUtil.contains(permissionChecker, SACPConstants.SERVICE_NAME, SACPActionKeys.ACTION_ADD_SACP_ENTRY) %>">
-		<portlet:renderURL var="addSACPEntryURL">
+	<c:if test="<%= PortletPermissionUtil.contains(permissionChecker, ServiceAccessPolicyConstants.SERVICE_NAME, ServiceAccessPolicyActionKeys.ACTION_ADD_SERVICE_ACCESS_POLICY) %>">
+		<portlet:renderURL var="addServiceAccessPolicyURL">
 			<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 		</portlet:renderURL>
 
 		<aui:button-row>
-			<aui:button href="<%= addSACPEntryURL %>" value="add" />
+			<aui:button href="<%= addServiceAccessPolicyURL %>" value="add" />
 		</aui:button-row>
 	</c:if>
 
