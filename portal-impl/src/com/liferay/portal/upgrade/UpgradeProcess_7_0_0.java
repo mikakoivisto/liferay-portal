@@ -93,11 +93,11 @@ public class UpgradeProcess_7_0_0 extends UpgradeProcess {
 		upgrade(UpgradePortletDisplayTemplatePreferences.class);
 		upgrade(UpgradeRatings.class);
 		upgrade(UpgradeRepositoryEntry.class);
+		upgrade(UpgradeResourcePermission.class);
 		upgrade(UpgradeShopping.class);
 		upgrade(UpgradeShoppingPreferences.class);
 		upgrade(UpgradeSubscription.class);
 		upgrade(UpgradeWebsite.class);
-		upgrade(UpgradeResourcePermission.class);
 
 		// This must be the last upgrade process. Otherwise, upgrades based on
 		// BaseUpgradePortletPreferences will fail because the portlet
