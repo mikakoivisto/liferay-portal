@@ -2191,17 +2191,19 @@ Vaadin 6.x is out dated. Everyone should use Vaadin 7.x
 
 ---------------------------------------
 
-+## Removed support for filterFindBy generation or InlinePermissionUtil usage for tables which primary key type is not long
+### Removed support for filterFindBy generation or InlinePermissionUtil usage for tables which primary key type is not long
 - **Date:** 2015-Jul-21
 - **JIRA Ticket:** LPS-54590
 
 #### What changed?
 
-Removed ServiceBuilder and inline permission filter support other than long primary key types.
+Removed ServiceBuilder and inline permission filter support other than long
+primary key types.
 
 #### Who is affected?
 
-This is affecting the code that is using integer, float, double, boolean, short type primary keys at service.xml with inline permissions.
+This is affecting the code that is using integer, float, double, boolean, short
+type primary keys at service.xml with inline permissions.
 
 #### How should I update my code?
 
@@ -2209,6 +2211,7 @@ Change primary key to be long
 
 #### Why was this change made?
 
-Inline permission was using join between two different data types and that did cause significant performance degration with filterFindBy queries.
+Inline permission was using join between two different data types and that
+caused significant performance degradation with filterFindBy queries.
 
 ---------------------------------------
