@@ -265,9 +265,15 @@ public class ClpSerializer {
 		String className = clazz.getName();
 
 		<#list exceptions as exception>
+			<#if osgiModule>
+			if (className.equals("${packagePath}.exception.${exception}Exception")) {
+				return new ${packagePath}.exception.${exception}Exception(throwable.getMessage(), throwable.getCause());
+			}			
+			<#else>
 			if (className.equals("${packagePath}.${exception}Exception")) {
 				return new ${packagePath}.${exception}Exception(throwable.getMessage(), throwable.getCause());
 			}
+			</#if>
 		</#list>
 
 		return throwable;
