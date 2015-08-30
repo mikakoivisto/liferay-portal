@@ -142,6 +142,11 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		 */
 </#if>
 
+	<#if osgiModule>	
+		public ${entity.name}${sessionTypeName}ServiceBaseImpl() {
+			_classLoader = getClass().getClassLoader();
+		}
+	</#if>
 	<#if (sessionTypeName == "Local") && entity.hasColumns()>
 		<#assign serviceBaseExceptions = serviceBuilder.getServiceBaseExceptions(methods, "add" + entity.name, [packagePath + ".model." + entity.name], [])>
 
@@ -1047,7 +1052,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 		_beanIdentifier = beanIdentifier;
 	}
 
-	<#if pluginName != "">
+	<#if pluginName != "" || osgiModule>
 		@Override
 		public Object invokeMethod(
 				String name, String[] parameterTypes, Object[] arguments)
@@ -1150,7 +1155,7 @@ import ${packagePath}.service.${entity.name}${sessionTypeName}Service;
 
 	private String _beanIdentifier;
 
-	<#if pluginName != "">
+	<#if pluginName != "" || osgiModule>
 		private ClassLoader _classLoader;
 		private ${entity.name}${sessionTypeName}ServiceClpInvoker _clpInvoker = new ${entity.name}${sessionTypeName}ServiceClpInvoker();
 	</#if>

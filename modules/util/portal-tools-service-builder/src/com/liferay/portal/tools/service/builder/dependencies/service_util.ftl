@@ -5,6 +5,7 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.service.Invokable${sessionTypeName}Service;
 
 import com.liferay.registry.Registry;
@@ -127,7 +128,13 @@ public class ${entity.name}${sessionTypeName}ServiceUtil {
 
 	public static ${entity.name}${sessionTypeName}Service getService() {
 		<#if osgiModule>
-			return _serviceTracker.getService();
+			Invokable${sessionTypeName}Service invokable${sessionTypeName}Service = (Invokable${sessionTypeName}Service) _serviceTracker.getService();
+	
+			if (invokable${sessionTypeName}Service instanceof ${entity.name}${sessionTypeName}Service) {
+	            return (${entity.name}${sessionTypeName}Service) invokable${sessionTypeName}Service;
+	        } else {
+	            return new ${entity.name}${sessionTypeName}ServiceClp(invokable${sessionTypeName}Service);
+	        }
 		<#else>
 			if (_service == null) {
 				<#if pluginName != "">
