@@ -56,6 +56,11 @@ public class WebLogicIncludeFilter
 		return response;
 	}
 
+	@Override
+	public boolean isFilterEnabled() {
+		return ServerDetector.isWebLogic();
+	}
+
 	protected boolean isWrap(HttpServletResponse response) {
 		if (response instanceof WebLogicIncludeServletResponse) {
 			return false;
