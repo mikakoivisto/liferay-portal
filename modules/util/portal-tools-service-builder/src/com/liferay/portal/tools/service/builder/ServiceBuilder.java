@@ -2267,7 +2267,7 @@ public class ServiceBuilder {
 	}
 
 	private void _createModelClp(Entity entity) throws Exception {
-		if (Validator.isNull(_pluginName)) {
+		if (Validator.isNull(_pluginName) && !_osgiModule) {
 			return;
 		}
 
@@ -2814,7 +2814,7 @@ public class ServiceBuilder {
 	private void _createServiceClp(Entity entity, int sessionType)
 		throws Exception {
 
-		if (Validator.isNull(_pluginName)) {
+		if (Validator.isNull(_pluginName) && !_osgiModule) {
 			return;
 		}
 
@@ -2846,7 +2846,7 @@ public class ServiceBuilder {
 	private void _createServiceClpInvoker(Entity entity, int sessionType)
 		throws Exception {
 
-		if (Validator.isNull(_pluginName)) {
+		if (Validator.isNull(_pluginName) && !_osgiModule) {
 			return;
 		}
 
@@ -2893,7 +2893,7 @@ public class ServiceBuilder {
 	}
 
 	private void _createServiceClpMessageListener() throws Exception {
-		if (Validator.isNull(_pluginName)) {
+		if (Validator.isNull(_pluginName) && !_osgiModule) {
 			return;
 		}
 
@@ -2917,7 +2917,7 @@ public class ServiceBuilder {
 	private void _createServiceClpSerializer(List<String> exceptions)
 		throws Exception {
 
-		if (Validator.isNull(_pluginName)) {
+		if (Validator.isNull(_pluginName) && !_osgiModule) {
 			return;
 		}
 

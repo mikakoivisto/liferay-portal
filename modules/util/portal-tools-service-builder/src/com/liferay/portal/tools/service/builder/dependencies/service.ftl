@@ -78,7 +78,7 @@ public interface ${entity.name}${sessionTypeName}Service
 
 	<#assign overrideMethodNames = []>
 
-	<#if pluginName != "">
+	<#if pluginName != "" || osgiModule>
 		, Invokable${sessionTypeName}Service
 
 		<#assign overrideMethodNames = overrideMethodNames + ["invokeMethod"]>

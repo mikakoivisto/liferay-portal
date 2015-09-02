@@ -32,15 +32,17 @@ public class ClpMessageListener extends BaseMessageListener {
 		if (command.equals("undeploy") &&
 			servletContextName.equals(getServletContextName())) {
 
-			<#list entities as entity>
-				<#if entity.hasLocalService()>
-					${entity.name}LocalServiceUtil.clearService();
-				</#if>
-
-				<#if entity.hasRemoteService()>
-					${entity.name}ServiceUtil.clearService();
-				</#if>
-			</#list>
+			<#if !osgiModule>
+				<#list entities as entity>
+					<#if entity.hasLocalService()>
+						${entity.name}LocalServiceUtil.clearService();
+					</#if>
+	
+					<#if entity.hasRemoteService()>
+						${entity.name}ServiceUtil.clearService();
+					</#if>
+				</#list>
+			</#if>
 		}
 	}
 

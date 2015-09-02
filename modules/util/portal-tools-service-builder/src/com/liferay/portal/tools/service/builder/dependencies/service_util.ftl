@@ -5,11 +5,12 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.service.Invokable${sessionTypeName}Service;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.util.tracker.ServiceTracker;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 <#if sessionTypeName == "Local">
 /**
@@ -127,7 +128,13 @@ public class ${entity.name}${sessionTypeName}ServiceUtil {
 
 	public static ${entity.name}${sessionTypeName}Service getService() {
 		<#if osgiModule>
-			return _serviceTracker.getService();
+			Invokable${sessionTypeName}Service invokable${sessionTypeName}Service = (Invokable${sessionTypeName}Service) _serviceTracker.getService();
+	
+			if (invokable${sessionTypeName}Service instanceof ${entity.name}${sessionTypeName}Service) {
+	            return (${entity.name}${sessionTypeName}Service) invokable${sessionTypeName}Service;
+	        } else {
+	            return new ${entity.name}${sessionTypeName}ServiceClp(invokable${sessionTypeName}Service);
+	        }
 		<#else>
 			if (_service == null) {
 				<#if pluginName != "">
@@ -161,9 +168,10 @@ public class ${entity.name}${sessionTypeName}ServiceUtil {
 		private static ServiceTracker<${entity.name}${sessionTypeName}Service, ${entity.name}${sessionTypeName}Service> _serviceTracker;
 
 		static {
-			Bundle bundle = FrameworkUtil.getBundle(${entity.name}${sessionTypeName}ServiceUtil.class);
-
-			_serviceTracker = new ServiceTracker<${entity.name}${sessionTypeName}Service, ${entity.name}${sessionTypeName}Service>(bundle.getBundleContext(), ${entity.name}${sessionTypeName}Service.class, null);
+			Registry registry = RegistryUtil.getRegistry();
+			
+			_serviceTracker = registry.trackServices(
+				${entity.name}${sessionTypeName}Service.class);
 
 			_serviceTracker.open();
 		}
