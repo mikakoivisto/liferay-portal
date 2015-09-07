@@ -71,7 +71,44 @@ if (sapEntry != null) {
 
 	<aui:input helpMessage="allowed-service-signatures-help" name="allowedServiceSignatures" />
 
+	<aui:input helpMessage="disallowed-service-signatures-help" name="disallowedServiceSignatures" />
+
 	<aui:button-row>
 		<aui:button type="submit" value="save" />
 	</aui:button-row>
 </aui:form>
+
+<portlet:resourceURL var="getServicesURL">
+	<portlet:param name="<%= ActionRequest.ACTION_NAME %>" value="getServices" />
+	<portlet:param name="mvcPath" value="<%= StringPool.SPACE %>" />
+</portlet:resourceURL>
+
+<aui:script sandbox="<% true %>" use="liferay-autocomplete-textarea">
+	new Liferay.AutoCompleteTextarea(
+		{
+			inputNode: '#<portlet:namespace />allowedServiceSignatures',
+			trigger: [
+				{
+					resultTextLocator: 'serviceClass',
+					source: '<%= getServicesURL %>',
+					term: '+',
+					tplResults: '{serviceClass}'
+				}
+			]
+		}
+	).render();
+
+	new Liferay.AutoCompleteTextarea(
+		{
+			inputNode: '#<portlet:namespace />disallowedServiceSignatures',
+			trigger: [
+				{
+					resultTextLocator: 'serviceClass',
+					source: '<%= getServicesURL %>',
+					term: '-',
+					tplResults: '{serviceClass}'
+				}
+			]
+		}
+	).render();
+</aui:script>

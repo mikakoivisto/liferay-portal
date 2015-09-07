@@ -28,6 +28,7 @@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
+page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.portal.security.permission.ActionKeys" %><%@
 page import="com.liferay.portal.service.permission.PortletPermissionUtil" %><%@
@@ -43,6 +44,7 @@ page import="com.liferay.service.access.policy.service.SAPEntryServiceUtil" %><%
 page import="com.liferay.service.access.policy.service.permission.SAPEntryPermission" %><%@
 page import="com.liferay.taglib.search.ResultRow" %>
 
+<%@ page import="javax.portlet.ActionRequest" %>
 <%@ page import="javax.portlet.PortletURL" %>
 
 <portlet:defineObjects />
