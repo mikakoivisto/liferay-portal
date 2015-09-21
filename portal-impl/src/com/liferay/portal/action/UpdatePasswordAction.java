@@ -14,6 +14,7 @@
 
 package com.liferay.portal.action;
 
+import com.liferay.portal.NoSuchTicketException;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.UserLockoutException;
 import com.liferay.portal.UserPasswordException;
@@ -33,7 +34,6 @@ import com.liferay.portal.security.pwd.PwdToolkitUtilThreadLocal;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.struts.ActionConstants;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
@@ -66,8 +66,7 @@ public class UpdatePasswordAction extends Action {
 		Ticket ticket = getTicket(request);
 
 		if (!themeDisplay.isSignedIn() && (ticket == null)) {
-			return actionMapping.findForward(
-				ActionConstants.COMMON_REFERER_JSP);
+			return actionMapping.findForward("portal.update_password");
 		}
 
 		String cmd = ParamUtil.getString(request, Constants.CMD);
@@ -146,8 +145,13 @@ public class UpdatePasswordAction extends Action {
 			}
 
 			TicketLocalServiceUtil.deleteTicket(ticket);
+
+			throw new NoSuchTicketException();
 		}
 		catch (Exception e) {
+			if (e instanceof NoSuchTicketException) {
+				SessionErrors.add(request, e.getClass(), e);
+			}
 		}
 
 		return null;
