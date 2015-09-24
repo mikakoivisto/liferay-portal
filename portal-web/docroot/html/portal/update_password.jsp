@@ -21,6 +21,8 @@ String currentURL = PortalUtil.getCurrentURL(request);
 
 String referer = ParamUtil.getString(request, WebKeys.REFERER, currentURL);
 
+Ticket ticket = (Ticket)request.getAttribute(WebKeys.TICKET);
+
 String ticketKey = ParamUtil.getString(request, "ticketKey");
 
 if (referer.startsWith(themeDisplay.getPathMain() + "/portal/update_password") && Validator.isNotNull(ticketKey)) {
@@ -31,8 +33,8 @@ PasswordPolicy passwordPolicy = user.getPasswordPolicy();
 %>
 
 <c:choose>
-	<c:when test="<%= SessionErrors.contains(request, NoSuchTicketException.class.getName()) %>">
-		<h3 class="alert alert-warning">
+	<c:when test="<%= !themeDisplay.isSignedIn() && (ticket == null) %>">
+		<div class="alert alert-warning">
 			<liferay-ui:message key="your-password-reset-link-is-no-longer-valid" />
 
 			<%
@@ -45,7 +47,7 @@ PasswordPolicy passwordPolicy = user.getPasswordPolicy();
 			<div>
 				<aui:a href="<%= portletURL.toString() %>" label="click-here-to-request-a-new-password-reset-link"></aui:a>
 			</div>
-		</h3>
+		</div>
 	</c:when>
 	<c:when test="<%= SessionErrors.contains(request, UserLockoutException.LDAPLockout.class.getName()) %>">
 		<div class="alert alert-danger">
