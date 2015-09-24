@@ -31,6 +31,22 @@ PasswordPolicy passwordPolicy = user.getPasswordPolicy();
 %>
 
 <c:choose>
+	<c:when test="<%= SessionErrors.contains(request, NoSuchTicketException.class.getName()) %>">
+		<h3 class="alert alert-warning">
+			<liferay-ui:message key="your-password-reset-link-is-no-longer-valid" />
+
+			<%
+			PortletURL portletURL = new PortletURLImpl(request, PortletKeys.LOGIN, plid, PortletRequest.RENDER_PHASE);
+
+			portletURL.setWindowState(WindowState.MAXIMIZED);
+			portletURL.setParameter("mvcRenderCommandName", "/login/forgot_password");
+			%>
+
+			<div>
+				<aui:a href="<%= portletURL.toString() %>" label="click-here-to-request-a-new-password-reset-link"></aui:a>
+			</div>
+		</h3>
+	</c:when>
 	<c:when test="<%= SessionErrors.contains(request, UserLockoutException.LDAPLockout.class.getName()) %>">
 		<div class="alert alert-danger">
 			<liferay-ui:message key="this-account-is-locked" />
