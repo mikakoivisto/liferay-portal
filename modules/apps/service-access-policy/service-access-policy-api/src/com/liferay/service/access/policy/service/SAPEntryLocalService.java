@@ -174,6 +174,10 @@ public interface SAPEntryLocalService extends BaseLocalService,
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.service.access.policy.model.SAPEntry fetchSAPEntry(
+		long companyId, java.lang.String name) throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.service.access.policy.model.SAPEntry fetchSAPEntry(
 		long sapEntryId);
 
 	/**
