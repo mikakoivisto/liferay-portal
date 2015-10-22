@@ -195,6 +195,12 @@ public class SAPEntryLocalServiceUtil {
 	}
 
 	public static com.liferay.service.access.policy.model.SAPEntry fetchSAPEntry(
+		long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().fetchSAPEntry(companyId, name);
+	}
+
+	public static com.liferay.service.access.policy.model.SAPEntry fetchSAPEntry(
 		long sapEntryId) {
 		return getService().fetchSAPEntry(sapEntryId);
 	}

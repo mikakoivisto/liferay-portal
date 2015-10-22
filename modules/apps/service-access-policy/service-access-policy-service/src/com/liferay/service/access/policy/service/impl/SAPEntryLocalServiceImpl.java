@@ -168,9 +168,7 @@ public class SAPEntryLocalServiceImpl extends SAPEntryLocalServiceBaseImpl {
 
 	@Override
 	public SAPEntry deleteSAPEntry(SAPEntry sapEntry) throws PortalException {
-		if (sapEntry.isDefaultSAPEntry() &&
-			!CompanyThreadLocal.isDeleteInProcess()) {
-
+		if (sapEntry.isSystem() && !CompanyThreadLocal.isDeleteInProcess()) {
 			throw new RequiredSAPEntryException();
 		}
 
@@ -181,6 +179,13 @@ public class SAPEntryLocalServiceImpl extends SAPEntryLocalServiceBaseImpl {
 			ResourceConstants.SCOPE_INDIVIDUAL, sapEntry.getSapEntryId());
 
 		return sapEntry;
+	}
+
+	@Override
+	public SAPEntry fetchSAPEntry(long companyId, String name)
+		throws PortalException {
+
+		return sapEntryPersistence.fetchByC_N(companyId, name);
 	}
 
 	@Override
