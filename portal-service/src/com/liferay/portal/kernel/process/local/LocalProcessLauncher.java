@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.process.log.ProcessOutputStream;
 import com.liferay.portal.kernel.util.ClassLoaderObjectInputStream;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.SystemProperties;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -45,6 +46,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class LocalProcessLauncher {
 
 	public static void main(String[] arguments) throws IOException {
+		SystemProperties.load(Thread.currentThread().getContextClassLoader());
 		PrintStream oldOutPrintStream = System.out;
 
 		ObjectOutputStream objectOutputStream = null;
