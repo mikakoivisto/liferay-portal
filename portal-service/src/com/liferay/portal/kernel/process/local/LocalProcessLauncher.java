@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.process.local;
 
+import com.liferay.portal.kernel.io.SecureObjectInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedOutputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
@@ -23,6 +24,7 @@ import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.process.log.ProcessOutputStream;
 import com.liferay.portal.kernel.util.ClassLoaderObjectInputStream;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.SystemProperties;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -44,6 +46,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class LocalProcessLauncher {
 
 	public static void main(String[] arguments) throws IOException {
+		SystemProperties.load(Thread.currentThread().getContextClassLoader());
 		PrintStream oldOutPrintStream = System.out;
 
 		ObjectOutputStream objectOutputStream = null;
@@ -83,7 +86,7 @@ public class LocalProcessLauncher {
 
 		try {
 			ObjectInputStream bootstrapObjectInputStream =
-				new ObjectInputStream(System.in);
+				new SecureObjectInputStream(System.in);
 
 			String processCallableName =
 				(String)bootstrapObjectInputStream.readObject();
