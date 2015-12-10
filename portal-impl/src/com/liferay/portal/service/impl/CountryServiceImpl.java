@@ -20,6 +20,7 @@ import com.liferay.portal.CountryIddException;
 import com.liferay.portal.CountryNameException;
 import com.liferay.portal.CountryNumberException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -99,6 +100,7 @@ public class CountryServiceImpl extends CountryServiceBaseImpl {
 		return countryPersistence.findAll();
 	}
 
+	@AccessControlled(guestAccessEnabled = true)
 	@Override
 	public List<Country> getCountries(boolean active) {
 		return countryPersistence.findByActive(active);
