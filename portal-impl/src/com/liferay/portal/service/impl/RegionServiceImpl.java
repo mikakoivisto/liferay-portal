@@ -17,6 +17,7 @@ package com.liferay.portal.service.impl;
 import com.liferay.portal.RegionCodeException;
 import com.liferay.portal.RegionNameException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.security.access.control.AccessControlled;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Region;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -100,6 +101,7 @@ public class RegionServiceImpl extends RegionServiceBaseImpl {
 		return regionPersistence.findByCountryId(countryId);
 	}
 
+	@AccessControlled(guestAccessEnabled = true)
 	@Override
 	public List<Region> getRegions(long countryId, boolean active) {
 		return regionPersistence.findByC_A(countryId, active);
