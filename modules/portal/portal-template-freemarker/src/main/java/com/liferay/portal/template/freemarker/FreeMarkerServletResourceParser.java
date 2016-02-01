@@ -68,6 +68,16 @@ public class FreeMarkerServletResourceParser extends URLResourceParser {
 					servletContextName + " " + servletContext);
 		}
 
+		if (!templateName.endsWith(".ftl")) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					name + " is invalid because the template name does not " +
+						"end with .ftl");
+			}
+
+			return null;
+		}
+
 		URL url = servletContext.getResource(templateName);
 
 		if (url == null) {
