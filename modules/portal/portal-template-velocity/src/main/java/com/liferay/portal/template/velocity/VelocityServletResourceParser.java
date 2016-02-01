@@ -69,6 +69,16 @@ public class VelocityServletResourceParser extends URLResourceParser {
 					servletContextName + " " + servletContext);
 		}
 
+		if (!name.endsWith(".vm")) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					name + " is invalid because the template name does not " +
+						"end with .vm");
+			}
+
+			return null;
+		}
+
 		URL url = servletContext.getResource(name);
 
 		if (url == null) {
