@@ -14,7 +14,6 @@
 
 package com.liferay.util;
 
-import com.liferay.portal.kernel.io.ProtectedObjectInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.util.ProtectedClassLoaderObjectInputStream;
@@ -35,23 +34,9 @@ public class SerializableUtil {
 	}
 
 	public static Object deserialize(byte[] bytes) {
-		ObjectInputStream objectInputStream = null;
+		Thread currentThread = Thread.currentThread();
 
-		try {
-			objectInputStream = new ProtectedObjectInputStream(
-				new UnsyncByteArrayInputStream(bytes));
-
-			return objectInputStream.readObject();
-		}
-		catch (ClassNotFoundException cnfe) {
-			throw new RuntimeException(cnfe);
-		}
-		catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		}
-		finally {
-			StreamUtil.cleanUp(objectInputStream);
-		}
+		return deserialize(bytes, currentThread.getContextClassLoader());
 	}
 
 	public static Object deserialize(byte[] bytes, ClassLoader classLoader) {
