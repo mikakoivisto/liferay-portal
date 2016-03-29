@@ -2335,45 +2335,44 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public String getForwardedHost(HttpServletRequest request) {
-
-		String serverName = request.getServerName();
-
-		if (PropsValues.WEB_SERVER_FORWARD_HOST_ENABLED) {
-			serverName = request.getHeader(
-				PropsValues.WEB_SERVER_FORWARD_HOST_HEADER);
+		if (!PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED) {
+			return request.getServerName();
 		}
+
+		String serverName = GetterUtil.get(
+			request.getHeader(PropsValues.WEB_SERVER_FORWARDED_HOST_HEADER),
+			request.getServerName());
 
 		return serverName;
 	}
 
 	@Override
 	public int getForwardedPort(HttpServletRequest request) {
-		int serverPort = request.getServerPort();
-
-		if (PropsValues.WEB_SERVER_FORWARD_PORT_ENABLED) {
-			serverPort = GetterUtil.getInteger(
-				request.getHeader(PropsValues.WEB_SERVER_FORWARD_PORT_HEADER));
+		if (!PropsValues.WEB_SERVER_FORWARDED_PORT_ENABLED) {
+			return request.getServerPort();
 		}
+
+		int serverPort = GetterUtil.getInteger(
+			request.getHeader(PropsValues.WEB_SERVER_FORWARDED_PORT_HEADER),
+			request.getServerPort());
 
 		return serverPort;
 	}
 
 	@Override
 	public boolean getForwardedSecure(HttpServletRequest request) {
-		boolean secure = request.isSecure();
-
-		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
-			secure = false;
-
+		if (PropsValues.WEB_SERVER_FORWARDED_PROTO_ENABLED) {
 			String forwardedProto = request.getHeader(
-				PropsValues.WEB_SERVER_FORWARD_PROTO_HEADER);
+				PropsValues.WEB_SERVER_FORWARDED_PROTO_HEADER);
 
-			if (Validator.equals(Http.HTTPS, forwardedProto)) {
-				secure = true;
+			if (Validator.isNotNull(forwardedProto) &&
+				Validator.equals(Http.HTTPS, forwardedProto)) {
+
+				return true;
 			}
 		}
 
-		return secure;
+		return request.isSecure();
 	}
 
 	@Override
@@ -6307,8 +6306,8 @@ public class PortalImpl implements Portal {
 
 		boolean secure = false;
 
-		if (PropsValues.WEB_SERVER_FORWARD_PROTO_ENABLED) {
-			return PortalUtil.getForwardedSecure(request);
+		if (PropsValues.WEB_SERVER_FORWARDED_PROTO_ENABLED) {
+			return getForwardedSecure(request);
 		}
 
 		HttpSession session = request.getSession();
