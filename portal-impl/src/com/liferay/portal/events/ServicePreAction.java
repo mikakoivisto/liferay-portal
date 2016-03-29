@@ -742,7 +742,7 @@ public class ServicePreAction extends Action {
 		// Set attributes first that other methods (getCDNBaseURL and
 		// setLookAndFeel) depend on
 
-		boolean secure = PortalUtil.getForwardedSecure(request);
+		boolean secure = PortalUtil.isForwardedSecure(request);
 
 		String serverName = PortalUtil.getForwardedHost(request);
 
