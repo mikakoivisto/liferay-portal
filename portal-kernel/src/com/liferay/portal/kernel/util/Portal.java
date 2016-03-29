@@ -651,8 +651,6 @@ public interface Portal {
 
 	public int getForwardedPort(HttpServletRequest request);
 
-	public boolean getForwardedSecure(HttpServletRequest request);
-
 	public String getFullName(
 		String firstName, String middleName, String lastName);
 
@@ -1219,6 +1217,8 @@ public interface Portal {
 
 	public boolean isControlPanelPortlet(
 		String portletId, ThemeDisplay themeDisplay);
+
+	public boolean isForwardedSecure(HttpServletRequest request);
 
 	public boolean isGroupAdmin(User user, long groupId) throws Exception;
 

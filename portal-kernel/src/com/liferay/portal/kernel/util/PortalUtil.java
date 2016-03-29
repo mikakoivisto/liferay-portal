@@ -920,10 +920,6 @@ public class PortalUtil {
 		return getPortal().getForwardedPort(request);
 	}
 
-	public static boolean getForwardedSecure(HttpServletRequest request) {
-		return getPortal().getForwardedSecure(request);
-	}
-
 	public static String getFullName(
 		String firstName, String middleName, String lastName) {
 
@@ -2015,6 +2011,10 @@ public class PortalUtil {
 		String portletId, ThemeDisplay themeDisplay) {
 
 		return getPortal().isControlPanelPortlet(portletId, themeDisplay);
+	}
+
+	public static boolean isForwardedSecure(HttpServletRequest request) {
+		return getPortal().isForwardedSecure(request);
 	}
 
 	public static boolean isGroupAdmin(User user, long groupId)

@@ -2360,22 +2360,6 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
-	public boolean getForwardedSecure(HttpServletRequest request) {
-		if (PropsValues.WEB_SERVER_FORWARDED_PROTO_ENABLED) {
-			String forwardedProto = request.getHeader(
-				PropsValues.WEB_SERVER_FORWARDED_PROTO_HEADER);
-
-			if (Validator.isNotNull(forwardedProto) &&
-				Validator.equals(Http.HTTPS, forwardedProto)) {
-
-				return true;
-			}
-		}
-
-		return request.isSecure();
-	}
-
-	@Override
 	public String getFullName(
 		String firstName, String middleName, String lastName) {
 
@@ -3981,7 +3965,6 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public String getPortalURL(HttpServletRequest request, boolean secure) {
-
 		String serverName = getForwardedHost(request);
 
 		int serverPort = getForwardedPort(request);
@@ -6155,6 +6138,22 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
+	public boolean isForwardedSecure(HttpServletRequest request) {
+		if (PropsValues.WEB_SERVER_FORWARDED_PROTO_ENABLED) {
+			String forwardedProto = request.getHeader(
+				PropsValues.WEB_SERVER_FORWARDED_PROTO_HEADER);
+
+			if (Validator.isNotNull(forwardedProto) &&
+				Validator.equals(Http.HTTPS, forwardedProto)) {
+
+				return true;
+			}
+		}
+
+		return request.isSecure();
+	}
+
+	@Override
 	public boolean isGroupAdmin(User user, long groupId) throws Exception {
 		PermissionChecker permissionChecker =
 			PermissionCheckerFactoryUtil.create(user);
@@ -6303,11 +6302,10 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public boolean isSecure(HttpServletRequest request) {
-
 		boolean secure = false;
 
 		if (PropsValues.WEB_SERVER_FORWARDED_PROTO_ENABLED) {
-			return getForwardedSecure(request);
+			return isForwardedSecure(request);
 		}
 
 		HttpSession session = request.getSession();
