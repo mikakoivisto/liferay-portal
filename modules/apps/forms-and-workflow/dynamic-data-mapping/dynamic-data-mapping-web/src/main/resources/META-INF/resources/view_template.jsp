@@ -197,7 +197,7 @@ TemplateSearchTerms templateSearchTerms = (TemplateSearchTerms)templateSearch.ge
 						cssClass="structure-column text-column"
 						href="<%= rowHREF %>"
 						name="structure"
-						value="<%= structureName %>"
+						value="<%= HtmlUtil.escape(structureName) %>"
 					/>
 				</c:if>
 
@@ -206,7 +206,7 @@ TemplateSearchTerms templateSearchTerms = (TemplateSearchTerms)templateSearch.ge
 						cssClass="text-column type-column"
 						href="<%= rowHREF %>"
 						name="type"
-						value="<%= ddmDisplay.getTemplateType(template, locale) %>"
+						value="<%= HtmlUtil.escape(ddmDisplay.getTemplateType(template, locale)) %>"
 					/>
 				</c:if>
 
