@@ -50,13 +50,13 @@ public class EncryptorTest extends PowerMockito {
 		when(
 			props.get(Mockito.eq(PropsKeys.COMPANY_ENCRYPTION_ALGORITHM))
 		).thenReturn(
-			"DSA"
+			"AES"
 		);
 
 		when(
 			props.get(Mockito.eq(PropsKeys.COMPANY_ENCRYPTION_KEY_SIZE))
 		).thenReturn(
-			"56"
+			"128"
 		);
 	}
 
