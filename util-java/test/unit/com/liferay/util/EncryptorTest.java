@@ -19,17 +19,15 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.security.Key;
-import java.security.KeyFactory;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mockito;
+
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -45,9 +43,11 @@ public class EncryptorTest extends PowerMockito {
 	public void setUp() {
 		Props props = mock(Props.class);
 
-		PropsUtil propsUtil = new PropsUtil();
+		_propsUtil = new PropsUtil();
 
-		propsUtil.setProps(props);
+		_oldProps = _propsUtil.getProps();
+
+		_propsUtil.setProps(props);
 
 		when(
 			props.get(Mockito.eq(PropsKeys.COMPANY_ENCRYPTION_ALGORITHM))
@@ -62,21 +62,26 @@ public class EncryptorTest extends PowerMockito {
 		);
 	}
 
+	@After
+	public void tearDown() {
+		_propsUtil.setProps(_oldProps);
+	}
+
 	@Test
 	public void testStringToKey() throws Exception {
-		for (Object obj : java.security.Security.getAlgorithms("Cipher")) {
-			  System.out.println(obj);
-			}
 		Key key = Encryptor.generateKey();
 
-		KeyFactory keyFactory = KeyFactory.getInstance(Encryptor.KEY_ALGORITHM);
-		SecretKeySpec secretKeySpec = keyFactory.getKeySpec(key, SecretKeySpec.class);
+		String encryptedString = Encryptor.encrypt(key, "Hello World!");
 
-		byte[] encodedKey = secretKeySpec.getEncoded();
+		String strKey = Encryptor.keyToString(key);
 
-		SecretKey s = new SecretKeySpec(encodedKey, Encryptor.KEY_ALGORITHM);
+		key = Encryptor.stringToKey(strKey);
 
-		String enc = Encryptor.encrypt(key, "Hello world");
-		Assert.assertEquals("Hello World", Encryptor.decrypt(s, enc));
+		Assert.assertEquals(
+			"Hello World!", Encryptor.decrypt(key, encryptedString));
+		Encryptor.encrypt(key, "Hello World!");
 	}
+
+	private Props _oldProps;
+	private PropsUtil _propsUtil;
 }
