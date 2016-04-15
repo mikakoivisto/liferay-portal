@@ -37,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * @author Brian Wing Shun Chan
@@ -243,6 +244,16 @@ public class Encryptor {
 		}
 
 		return (Provider)providerClass.newInstance();
+	}
+
+	public static String keyToString(Key key) {
+		return Base64.encode(key.getEncoded());
+	}
+
+	public static Key stringToKey(String base64String) {
+		byte[] encodedKey = Base64.decode(base64String);
+
+		return new SecretKeySpec(encodedKey, Encryptor.KEY_ALGORITHM);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(Encryptor.class);
