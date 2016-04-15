@@ -35,8 +35,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 /**
  * @author Mika Koivisto
  */
-@RunWith(PowerMockRunner.class)
 @PowerMockIgnore("javax.crypto.*")
+@RunWith(PowerMockRunner.class)
 public class EncryptorTest extends PowerMockito {
 
 	@Before
@@ -83,4 +83,5 @@ public class EncryptorTest extends PowerMockito {
 
 	private Props _oldProps;
 	private PropsUtil _propsUtil;
+
 }
