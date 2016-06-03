@@ -47,12 +47,7 @@ public class ProtectedObjectInputStream extends ObjectInputStream {
 
 		String name = objectStreamClass.getName();
 
-		try {
-			return ClassResolverUtil.resolveByContextClassLoader(name);
-		}
-		catch (Exception e) {
-			return ClassResolverUtil.resolveByPortalClassLoader(name);
-		}
+		return ClassResolverUtil.resolveByContextClassLoader(name);
 	}
 
 	@Override
