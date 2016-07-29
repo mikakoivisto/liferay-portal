@@ -110,7 +110,7 @@ boolean anonymousAccount = ParamUtil.getBoolean(request, "anonymousUser");
 		messageContainer.html(message).removeClass('hide');
 	}
 
-	<c:if test="<%= !company.isStrangers() %>">
+	<c:if test="<%= !company.isStrangers() && Validator.isNull(user) %>">
 		<portlet:namespace />closeDialog();
 	</c:if>
 </aui:script>
