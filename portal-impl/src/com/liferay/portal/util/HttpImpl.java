@@ -1082,9 +1082,6 @@ public class HttpImpl implements Http {
 				sb.append(StringPool.SLASH);
 				sb.append(uriPart);
 			}
-			else if (pos == 0) {
-				continue;
-			}
 			else {
 				sb.append(StringPool.SLASH);
 				sb.append(uriPart.substring(0, pos));
