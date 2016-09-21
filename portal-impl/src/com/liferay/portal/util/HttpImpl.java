@@ -1061,38 +1061,44 @@ public class HttpImpl implements Http {
 			return uri;
 		}
 
-		int pos = uri.indexOf(CharPool.SEMICOLON);
+		int pos = 0;
 
-		if (pos == -1) {
-			return uri;
-		}
+		StringBundler sb = new StringBundler();
 
-		if (pos == 0) {
-			throw new IllegalArgumentException("Unable to handle URI: " + uri);
-		}
+		while (true) {
+			int start = uri.indexOf(CharPool.SEMICOLON, pos);
 
-		String[] uriParts = StringUtil.split(uri.substring(1), CharPool.SLASH);
+			if (start == -1) {
+				if (pos == 0) {
+					return uri;
+				}
 
-		StringBundler sb = new StringBundler(uriParts.length * 2);
+				sb.append(uri.substring(pos));
 
-		for (String uriPart : uriParts) {
-			pos = uriPart.indexOf(CharPool.SEMICOLON);
-
-			if (pos == -1) {
-				sb.append(StringPool.SLASH);
-				sb.append(uriPart);
+				return sb.toString();
 			}
-			else {
-				sb.append(StringPool.SLASH);
-				sb.append(uriPart.substring(0, pos));
+
+			if (start == 0) {
+				throw new IllegalArgumentException(
+					"Unable to handle URI: " + uri);
 			}
-		}
 
-		if (sb.length() == 0) {
-			return StringPool.SLASH;
-		}
+			int end = uri.indexOf(CharPool.SLASH, start);
 
-		return sb.toString();
+			if (end == -1) {
+				if (pos == 0) {
+					return uri.substring(0, start);
+				}
+
+				sb.append(uri.substring(pos, start));
+
+				return sb.toString();
+			}
+
+			sb.append(uri.substring(pos, start));
+
+			pos = end;
+		}
 	}
 
 	@Override
