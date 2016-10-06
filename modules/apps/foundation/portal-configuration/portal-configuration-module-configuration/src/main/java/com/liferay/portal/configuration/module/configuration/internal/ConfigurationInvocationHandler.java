@@ -14,9 +14,12 @@
 
 package com.liferay.portal.configuration.module.configuration.internal;
 
+import aQute.bnd.annotation.metatype.Meta;
+
 import com.liferay.portal.kernel.settings.LocalizedValuesMap;
 import com.liferay.portal.kernel.settings.TypedSettings;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -65,6 +68,57 @@ public class ConfigurationInvocationHandler<S> implements InvocationHandler {
 		}
 	}
 
+	private Object _getValue(
+			Class<?> returnType, String key, boolean getReturnTypeDefault)
+		throws NoSuchMethodException, IllegalAccessException,
+		InvocationTargetException, InstantiationException {
+
+		if (!getReturnTypeDefault &&
+			(returnType.equals(boolean.class) ||
+			 returnType.equals(double.class) ||
+			 returnType.equals(float.class) || returnType.equals(int.class) ||
+			 returnType.equals(LocalizedValuesMap.class) ||
+			 returnType.equals(long.class))) {
+
+			return _typedSettings.getValue(key);
+		}
+		else if (returnType.equals(boolean.class)) {
+			return _typedSettings.getBooleanValue(key);
+		}
+		else if (returnType.equals(double.class)) {
+			return _typedSettings.getDoubleValue(key);
+		}
+		else if (returnType.equals(float.class)) {
+			return _typedSettings.getFloatValue(key);
+		}
+		else if (returnType.equals(int.class)) {
+			return _typedSettings.getIntegerValue(key);
+		}
+		else if (returnType.equals(LocalizedValuesMap.class)) {
+			return _typedSettings.getLocalizedValuesMap(key);
+		}
+		else if (returnType.equals(long.class)) {
+			return _typedSettings.getLongValue(key);
+		}
+		else if (returnType.equals(String.class)) {
+			return _typedSettings.getValue(key);
+		}
+		else if (returnType.equals(String[].class)) {
+			return _typedSettings.getValues(key);
+		}
+		else if (returnType.isEnum()) {
+			Method valueOfMethod = returnType.getDeclaredMethod(
+				"valueOf", String.class);
+
+			return valueOfMethod.invoke(
+				returnType, _typedSettings.getValue(key));
+		}
+
+		Constructor<?> constructor = returnType.getConstructor(String.class);
+
+		return constructor.newInstance(_typedSettings.getValue(key));
+	}
+
 	private Object _invokeConfigurationOverride(Method method, Object[] args)
 		throws IllegalAccessException, InvocationTargetException,
 			   NoSuchMethodException {
@@ -82,43 +136,24 @@ public class ConfigurationInvocationHandler<S> implements InvocationHandler {
 
 		Class<?> returnType = method.getReturnType();
 
-		if (returnType.equals(boolean.class)) {
-			return _typedSettings.getBooleanValue(method.getName());
-		}
-		else if (returnType.equals(double.class)) {
-			return _typedSettings.getDoubleValue(method.getName());
-		}
-		else if (returnType.equals(float.class)) {
-			return _typedSettings.getFloatValue(method.getName());
-		}
-		else if (returnType.equals(int.class)) {
-			return _typedSettings.getIntegerValue(method.getName());
-		}
-		else if (returnType.equals(LocalizedValuesMap.class)) {
-			return _typedSettings.getLocalizedValuesMap(method.getName());
-		}
-		else if (returnType.equals(long.class)) {
-			return _typedSettings.getLongValue(method.getName());
-		}
-		else if (returnType.equals(String.class)) {
-			return _typedSettings.getValue(method.getName());
-		}
-		else if (returnType.equals(String[].class)) {
-			return _typedSettings.getValues(method.getName());
-		}
-		else if (returnType.isEnum()) {
-			Method valueOfMethod = returnType.getDeclaredMethod(
-				"valueOf", String.class);
+		Object value = StringPool.BLANK;
 
-			return valueOfMethod.invoke(
-				returnType, _typedSettings.getValue(method.getName()));
+		Meta.AD annotation = method.getAnnotation(Meta.AD.class);
+
+		if ((annotation != null) && !_NULL_VALUE.equals(annotation.id())) {
+			value = _getValue(returnType, annotation.id(), false);
 		}
 
-		Constructor<?> constructor = returnType.getConstructor(String.class);
+		if (value.equals(StringPool.BLANK) ||
+			value.equals(StringPool.EMPTY_ARRAY)) {
 
-		return constructor.newInstance(
-			_typedSettings.getValue(method.getName()));
+			return _getValue(returnType, method.getName(), true);
+		}
+
+		return value;
 	}
+
+	private static final String _NULL_VALUE = "§NULL§";
 
 	private final Class<S> _clazz;
 	private final Object _configurationOverrideInstance;
