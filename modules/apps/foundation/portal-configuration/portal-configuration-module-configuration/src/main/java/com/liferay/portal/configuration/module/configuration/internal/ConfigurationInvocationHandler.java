@@ -18,13 +18,17 @@ import aQute.bnd.annotation.metatype.Meta;
 
 import com.liferay.portal.kernel.settings.LocalizedValuesMap;
 import com.liferay.portal.kernel.settings.TypedSettings;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
-import com.liferay.portal.kernel.util.StringPool;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Iván Zaera
@@ -77,10 +81,29 @@ public class ConfigurationInvocationHandler<S> implements InvocationHandler {
 			(returnType.equals(boolean.class) ||
 			 returnType.equals(double.class) ||
 			 returnType.equals(float.class) || returnType.equals(int.class) ||
-			 returnType.equals(LocalizedValuesMap.class) ||
 			 returnType.equals(long.class))) {
 
-			return _typedSettings.getValue(key);
+			String value = _typedSettings.getValue(key, null);
+
+			if (value == null) {
+				return value;
+			}
+
+			if (returnType.equals(boolean.class)) {
+				return GetterUtil.getBoolean(value);
+			}
+			else if (returnType.equals(double.class)) {
+				return GetterUtil.getDouble(value);
+			}
+			else if (returnType.equals(float.class)) {
+				return GetterUtil.getFloat(value);
+			}
+			else if (returnType.equals(int.class)) {
+				return GetterUtil.getInteger(value);
+			}
+			else if (returnType.equals(long.class)) {
+				return GetterUtil.getLong(value);
+			}
 		}
 		else if (returnType.equals(boolean.class)) {
 			return _typedSettings.getBooleanValue(key);
@@ -95,23 +118,49 @@ public class ConfigurationInvocationHandler<S> implements InvocationHandler {
 			return _typedSettings.getIntegerValue(key);
 		}
 		else if (returnType.equals(LocalizedValuesMap.class)) {
-			return _typedSettings.getLocalizedValuesMap(key);
+			LocalizedValuesMap value = _typedSettings.getLocalizedValuesMap(
+				key);
+
+			if (getReturnTypeDefault) {
+				return value;
+			}
+
+			Map<Locale, String> valuesMap = value.getValues();
+
+			Collection<String> values = valuesMap.values();
+
+			if (values.isEmpty()) {
+				return null;
+			}
 		}
 		else if (returnType.equals(long.class)) {
 			return _typedSettings.getLongValue(key);
 		}
 		else if (returnType.equals(String.class)) {
-			return _typedSettings.getValue(key);
+			if (getReturnTypeDefault) {
+				return _typedSettings.getValue(key);
+			}
+
+			return _typedSettings.getValue(key, null);
 		}
 		else if (returnType.equals(String[].class)) {
-			return _typedSettings.getValues(key);
+			if (getReturnTypeDefault) {
+				return _typedSettings.getValues(key);
+			}
+
+			return _typedSettings.getValues(key, null);
 		}
 		else if (returnType.isEnum()) {
 			Method valueOfMethod = returnType.getDeclaredMethod(
 				"valueOf", String.class);
 
-			return valueOfMethod.invoke(
-				returnType, _typedSettings.getValue(key));
+			String value = _typedSettings.getValue(key);
+
+			if (value == null) {
+				return value;
+			}
+
+			return valueOfMethod.invoke(returnType, value);
 		}
 
 		Constructor<?> constructor = returnType.getConstructor(String.class);
@@ -136,7 +185,7 @@ public class ConfigurationInvocationHandler<S> implements InvocationHandler {
 
 		Class<?> returnType = method.getReturnType();
 
-		Object value = StringPool.BLANK;
+		Object value = null;
 
 		Meta.AD annotation = method.getAnnotation(Meta.AD.class);
 
@@ -144,9 +193,7 @@ public class ConfigurationInvocationHandler<S> implements InvocationHandler {
 			value = _getValue(returnType, annotation.id(), false);
 		}
 
-		if (value.equals(StringPool.BLANK) ||
-			value.equals(StringPool.EMPTY_ARRAY)) {
-
+		if (value == null) {
 			return _getValue(returnType, method.getName(), true);
 		}
 
