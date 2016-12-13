@@ -115,6 +115,8 @@ public class CharPool {
 
 	public static final char NO_BREAK_SPACE = '\u00a0';
 
+	public static final char NULL_CHAR = '\u0000';
+
 	public static final char NUMBER_0 = '0';
 
 	public static final char NUMBER_1 = '1';

@@ -583,6 +583,10 @@ public class GetterUtil {
 				StringPool.RETURN_NEW_LINE, StringPool.NEW_LINE);
 		}
 
+		if (value.indexOf(CharPool.NULL_CHAR) != -1) {
+			value = value.replaceAll(StringPool.NULL_CHAR, StringPool.BLANK);
+		}
+
 		return value;
 	}
 
