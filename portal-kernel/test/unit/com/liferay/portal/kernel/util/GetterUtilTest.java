@@ -271,4 +271,9 @@ public class GetterUtilTest {
 		Assert.assertEquals("test", GetterUtil.getString("test"));
 	}
 
+	@Test
+	public void testGetStringWithNullChar() {
+		Assert.assertEquals(
+			"test", GetterUtil.getString("te" + StringPool.NULL_CHAR + "st"));
+	}
 }
