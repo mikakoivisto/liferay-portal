@@ -277,7 +277,10 @@ public class FacebookConnectAction extends BaseStrutsAction {
 			user = _userLocalService.fetchUserByFacebookId(
 				companyId, facebookId);
 
-			if ((user != null) &&
+			if ((user != null) && !user.isActive()) {
+				return null;
+			}
+			else if ((user != null) &&
 				(user.getStatus() != WorkflowConstants.STATUS_INCOMPLETE)) {
 
 				session.setAttribute(
@@ -292,7 +295,10 @@ public class FacebookConnectAction extends BaseStrutsAction {
 			user = _userLocalService.fetchUserByEmailAddress(
 				companyId, emailAddress);
 
-			if ((user != null) &&
+			if ((user != null) && !user.isActive()) {
+				return null;
+			}
+			else if ((user != null) &&
 				(user.getStatus() != WorkflowConstants.STATUS_INCOMPLETE)) {
 
 				session.setAttribute(
