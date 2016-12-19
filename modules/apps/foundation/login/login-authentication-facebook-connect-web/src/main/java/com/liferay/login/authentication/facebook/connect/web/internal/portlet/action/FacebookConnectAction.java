@@ -281,7 +281,8 @@ public class FacebookConnectAction extends BaseStrutsAction {
 				return null;
 			}
 			else if ((user != null) &&
-				(user.getStatus() != WorkflowConstants.STATUS_INCOMPLETE)) {
+					 (user.getStatus() !=
+						 WorkflowConstants.STATUS_INCOMPLETE)) {
 
 				session.setAttribute(
 					FacebookConnectWebKeys.FACEBOOK_USER_ID,
@@ -299,7 +300,8 @@ public class FacebookConnectAction extends BaseStrutsAction {
 				return null;
 			}
 			else if ((user != null) &&
-				(user.getStatus() != WorkflowConstants.STATUS_INCOMPLETE)) {
+					 (user.getStatus() !=
+						 WorkflowConstants.STATUS_INCOMPLETE)) {
 
 				session.setAttribute(
 					WebKeys.FACEBOOK_USER_EMAIL_ADDRESS, emailAddress);
